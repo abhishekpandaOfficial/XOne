@@ -1,4 +1,14 @@
-let apiBase = ''
+function configuredWebApiBase(): string {
+  const candidate = String(import.meta.env.VITE_XONE_API_BASE ?? '').trim()
+  if (!candidate) return ''
+  if (!/^https?:\/\//i.test(candidate)) {
+    console.warn('Ignoring VITE_XONE_API_BASE because it is not an HTTP(S) URL.')
+    return ''
+  }
+  return candidate.replace(/\/+$/, '')
+}
+
+let apiBase = configuredWebApiBase()
 
 function detectTauri(): boolean {
   if (typeof window === 'undefined') {

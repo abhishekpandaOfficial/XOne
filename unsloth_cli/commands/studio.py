@@ -1275,11 +1275,11 @@ def _strip_seeded_bootstrap_password_or_exit(*, context: str) -> None:
         bootstrap_file.unlink(missing_ok = True)
     except OSError as exc:
         typer.echo(
-            "Error: refusing to publish Unsloth on a public Cloudflare URL: "
+            "Error: refusing to publish XOne on a public Cloudflare URL: "
             f"could not remove the seeded bootstrap password file ({exc}), so an "
-            f"older Unsloth child could still serve the default credential ({context}). "
-            "Delete it manually or change the admin password (run `unsloth studio` "
-            "locally with a terminal attached, or `unsloth studio reset-password`), "
+            f"an older X1-Studio child could still serve the default credential ({context}). "
+            "Delete it manually or change the admin password (run `xone studio` "
+            "locally with a terminal attached, or `xone studio reset-password`), "
             "then retry.",
             err = True,
         )
@@ -1294,7 +1294,7 @@ def _require_servable_frontend_or_exit(
 
     The gate strips the seeded .bootstrap_password on a headless public launch,
     so if the child then cannot serve the login page the admin is locked out
-    (must_change_password=1, no file, no UI) until `unsloth studio reset-password`.
+    (must_change_password=1, no file, no UI) until `xone studio reset-password`.
     The login page is the ONLY in-band way to change the seeded password, so a
     public non-api-only launch must have a servable dist before the strip.
 
@@ -1464,11 +1464,11 @@ def _enforce_password_change_before_exposure(
         # Refuse rather than risk a child serving the default login; a transient
         # lock clears on retry.
         typer.echo(
-            "Error: refusing to publish Unsloth on a public Cloudflare URL: could "
-            f"not open the Unsloth auth database ({exc}) to confirm the admin "
+            "Error: refusing to publish XOne on a public Cloudflare URL: could "
+            f"not open the XOne auth database ({exc}) to confirm the admin "
             "password was changed. Retry (a transient database lock clears), or "
-            "change the password first (run `unsloth studio` locally with a "
-            "terminal attached, or `unsloth studio reset-password`).",
+            "change the password first (run `xone studio` locally with a "
+            "terminal attached, or `xone studio reset-password`).",
             err = True,
         )
         raise typer.Exit(1)
@@ -1490,11 +1490,11 @@ def _enforce_password_change_before_exposure(
             except OSError:
                 pass
             typer.echo(
-                "Error: refusing to publish Unsloth on a public Cloudflare URL: could "
-                f"not initialize the admin account ({exc}), so a re-exec'd Unsloth "
+                "Error: refusing to publish XOne on a public Cloudflare URL: could "
+                f"not initialize the admin account ({exc}), so a re-exec'd X1-Studio "
                 "child could regenerate and serve a default credential. Retry (a "
                 "transient database lock clears), or change the password first (run "
-                "`unsloth studio` locally with a terminal attached, or `unsloth "
+                "`xone studio` locally with a terminal attached, or `xone "
                 "studio reset-password`).",
                 err = True,
             )
@@ -1515,7 +1515,7 @@ def _enforce_password_change_before_exposure(
             # regenerate; we just couldn't read must_change back. Strip the seeded
             # file so nothing serves it, failing closed if the strip itself fails.
             typer.echo(
-                f"Warning: could not read the Unsloth admin state back ({exc}); "
+                f"Warning: could not read the XOne admin state back ({exc}); "
                 "removing the seeded bootstrap password before public exposure.",
                 err = True,
             )
@@ -1528,12 +1528,12 @@ def _enforce_password_change_before_exposure(
             # the launch: it never arms for api-only, and TIMEOUT=0 disables it.
             if api_only or not _bootstrap_deadline_active():
                 typer.echo(
-                    "Error: refusing to publish Unsloth on a public Cloudflare "
+                    "Error: refusing to publish XOne on a public Cloudflare "
                     "URL: the default admin password was never changed, no "
                     "terminal is attached to change it here, and the bootstrap "
                     "shutdown deadline does not apply to this launch (api-only, "
                     "or UNSLOTH_STUDIO_BOOTSTRAP_TIMEOUT=0). Change the "
-                    "password first (run `unsloth studio` locally and log in, "
+                    "password first (run `xone studio` locally and log in, "
                     "or re-run with a terminal attached), then retry.",
                     err = True,
                 )
@@ -1547,12 +1547,12 @@ def _enforce_password_change_before_exposure(
                 # fails). Keep the file for LOCAL recovery; must_change stays set
                 # and the deadline arms.
                 typer.echo(
-                    "Warning: Unsloth is being exposed publicly while the admin "
+                    "Warning: XOne is being exposed publicly while the admin "
                     "account still uses its auto-generated bootstrap password. The "
                     "login page forces a change and the credential is never served "
-                    "on the public page. Set a new password by running `unsloth "
-                    "studio` locally with a terminal attached, or `unsloth studio "
-                    "reset-password`; Unsloth shuts down after ~1h if the password "
+                    "on the public page. Set a new password by running `xone "
+                    "studio` locally with a terminal attached, or `xone studio "
+                    "reset-password`; X1-Studio shuts down after ~1h if the password "
                     "stays unchanged (UNSLOTH_STUDIO_BOOTSTRAP_TIMEOUT).",
                     err = True,
                 )
@@ -1583,11 +1583,11 @@ def _enforce_password_change_before_exposure(
             # forces a change and the timer still arms; only the on-disk copy goes.
             _strip_seeded_bootstrap_password_or_exit(context = "no terminal to change it")
             typer.echo(
-                "Warning: Unsloth is being exposed publicly while the admin account "
+                "Warning: XOne is being exposed publicly while the admin account "
                 "still uses its auto-generated bootstrap password. The seeded password "
                 "file has been removed so it is not served on the public page. Set a new "
-                "password by running `unsloth studio` locally with a terminal attached, "
-                "or `unsloth studio reset-password`; Unsloth shuts down after ~1h if the "
+                "password by running `xone studio` locally with a terminal attached, "
+                "or `xone studio reset-password`; X1-Studio shuts down after ~1h if the "
                 "password stays unchanged (UNSLOTH_STUDIO_BOOTSTRAP_TIMEOUT).",
                 err = True,
             )
@@ -1777,7 +1777,7 @@ def studio_default(
         help = "Set the INITIAL admin password non-interactively (headless setups), "
         "only when none is set yet. Also reads the UNSLOTH_STUDIO_PASSWORD env var, or "
         "`--password -` to read one line from stdin. A literal value is visible in the "
-        "process list and shell history. Rotate later with `unsloth studio reset-password`.",
+        "process list and shell history. Rotate later with `xone studio reset-password`.",
     ),
 ):
     """Launch the Unsloth Studio server."""
@@ -1977,7 +1977,7 @@ def studio_default(
     if not in_studio_venv:
         if studio_python and run_py:
             if not silent:
-                typer.echo("Launching Unsloth Studio... Please wait...")
+                typer.echo("Launching X1-Studio... Please wait...")
             args = [
                 str(studio_python),
                 str(run_py),
@@ -2435,7 +2435,7 @@ def run(
         help = "Set the INITIAL admin password non-interactively (headless setups), "
         "only when none is set yet. Also reads the UNSLOTH_STUDIO_PASSWORD env var, or "
         "`--password -` to read one line from stdin. A literal value is visible in the "
-        "process list and shell history. Rotate later with `unsloth studio reset-password`.",
+        "process list and shell history. Rotate later with `xone studio reset-password`.",
     ),
 ):
     """Start Unsloth, load a model, print an API key -- one-liner server.
@@ -2874,10 +2874,10 @@ def run(
         typer.echo("")
         typer.echo("=" * 56)
         if secure and _cf_url:
-            typer.echo(f"  Unsloth Studio running (secure) at {_cf_url}")
+            typer.echo(f"  X1-Studio running (secure) at {_cf_url}")
             typer.echo(f"  On this machine only: {base_url}")
         else:
-            typer.echo(f"  Unsloth Studio running at {base_url}")
+            typer.echo(f"  X1-Studio running at {base_url}")
             _emit_run_cloudflare_notice(run_mod, host, display_host, actual_port, secure)
         typer.echo(f"  Model loaded: {loaded_model}{display_variant}")
         if context_length_line:

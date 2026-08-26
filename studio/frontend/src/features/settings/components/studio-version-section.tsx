@@ -8,6 +8,7 @@ import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { SettingsRow } from "./settings-row";
 import { SettingsSection } from "./settings-section";
+import { XONE_BRAND } from "@/xone";
 
 type ApiObject = Record<string, unknown>;
 type StudioVersions = {
@@ -94,7 +95,7 @@ export function StudioVersionSection({
   }, []);
 
   return (
-    <SettingsSection title="Unsloth">
+    <SettingsSection title={XONE_BRAND.name}>
       <SettingsRow label={t("settings.about.studioVersion")}>
         <code className="font-mono text-xs text-muted-foreground">
           {studioVersion}

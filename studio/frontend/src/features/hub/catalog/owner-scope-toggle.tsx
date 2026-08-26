@@ -6,7 +6,7 @@ import { HubOptionMenu } from "./hub-option-menu";
 export type OwnerScope = "unsloth" | "all";
 
 const OPTIONS: { value: OwnerScope; label: string }[] = [
-  { value: "unsloth", label: "Unsloth" },
+  { value: "unsloth", label: "XOne" },
   { value: "all", label: "All" },
 ];
 

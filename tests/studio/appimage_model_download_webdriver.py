@@ -175,7 +175,7 @@ def _write_backend_fixture(home: Path, request_log: Path) -> None:
                     if path in ("/api/liveness", "/api/health"):
                         return self.send_json({{
                             "status": "alive",
-                            "service": "Unsloth UI Backend",
+                            "service": "XOne Backend",
                             "version": {_minimum_backend_version()!r},
                             "desktop_protocol_version": 1,
                             "desktop_manageability_version": 2,
@@ -537,13 +537,13 @@ def main() -> None:
         _wait_for(
             base,
             session_id,
-            "return document.body && document.body.innerText.includes('Starting Unsloth')",
+            "return document.body && document.body.innerText.includes('Starting XOne')",
             "the packaged frontend to render",
         )
         _wait_for(
             base,
             session_id,
-            "return document.body && !document.body.innerText.includes('Starting Unsloth')",
+            "return document.body && !document.body.innerText.includes('Starting XOne')",
             "the deterministic desktop backend handoff",
         )
 

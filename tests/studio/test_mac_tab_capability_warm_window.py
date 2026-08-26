@@ -34,8 +34,8 @@ APPEARANCE_STORE = REPO / "studio/frontend/src/features/settings/stores/appearan
 BASE = "http://127.0.0.1:18893"
 # A settled reply: no hardware_detecting at all. This is the state the runner is in by
 # the time the browser is authenticated, and the one the old code passed vacuously on.
-SETTLED = {"status": "healthy", "service": "Unsloth UI Backend", "device_type": "mac"}
-UNMEASURED = {"status": "healthy", "service": "Unsloth UI Backend", "hardware_detecting": True}
+SETTLED = {"status": "healthy", "service": "XOne Backend", "device_type": "mac"}
+UNMEASURED = {"status": "healthy", "service": "XOne Backend", "hardware_detecting": True}
 
 # Spelled out rather than read off the script, so these cases run unchanged against a
 # build of it that does not define the constant yet. test_inline_row_ids_match_the_

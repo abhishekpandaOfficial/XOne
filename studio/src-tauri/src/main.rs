@@ -5,7 +5,6 @@ mod commands;
 mod desktop_auth;
 mod desktop_backend_owner;
 mod desktop_update_policy;
-mod desktop_updater;
 mod diagnostics;
 mod install;
 mod install_watchdog;
@@ -51,7 +50,7 @@ const IN_APP_RELAUNCH_MARKER_FILE: &str = "in-app-relaunch-v1";
 
 const CLOSE_TO_TRAY_PREFERENCE_FILE: &str = "close-to-tray-v1";
 
-/// The user's answer to "Run Unsloth at login", kept beside the OS entry rather than derived
+/// The user's answer to "Run XOne at login", kept beside the OS entry rather than derived
 /// from it. The Windows entry is one HKCU Run value that outside things delete without asking:
 /// the NSIS uninstaller drops it on any non-update run (installer.nsi), and an antivirus
 /// quarantine or a registry cleaner takes it the same way. Reading the setting back off the
@@ -490,9 +489,7 @@ fn restore_missing_autostart_entry(app: &tauri::AppHandle) -> bool {
             disabled,
         );
         if restore {
-            info!(
-                "The \"Run Unsloth at login\" entry is gone but was last set to on; restoring it."
-            );
+            info!("The \"Run XOne at login\" entry is gone but was last set to on; restoring it.");
         }
         restore
     }
@@ -1084,7 +1081,7 @@ fn confirm_quit_during_install(app: &tauri::AppHandle) -> bool {
     }
     app.dialog()
         .message(
-            "Unsloth is still installing. Quitting now stops it part-way and \
+            "XOne is still installing. Quitting now stops it part-way and \
              leaves the installation incomplete, so it will need to be repaired before \
              it can start.",
         )
@@ -1110,7 +1107,7 @@ fn confirm_quit_during_update(app: &tauri::AppHandle) -> bool {
     }
     app.dialog()
         .message(
-            "Unsloth is still updating. Quitting now stops it part-way and \
+            "XOne is still updating. Quitting now stops it part-way and \
              leaves the installation incomplete, so it will need to be repaired before \
              it can start.",
         )
@@ -1581,7 +1578,7 @@ fn setup_quit_menu(app: &tauri::App) -> Result<(), Box<dyn std::error::Error>> {
     if let Some(quit) = app_menu.items()?.last() {
         app_menu.remove(quit)?;
     }
-    let quit = MenuItemBuilder::with_id(APP_QUIT_MENU_ID, "Quit Unsloth")
+    let quit = MenuItemBuilder::with_id(APP_QUIT_MENU_ID, "Quit XOne")
         .accelerator("CmdOrCtrl+Q")
         .build(app)?;
     app_menu.append(&quit)?;
@@ -1701,7 +1698,7 @@ fn set_tray_server_status(app: tauri::AppHandle, status: String) {
 }
 
 fn setup_tray(app: &tauri::App) -> Result<(), Box<dyn std::error::Error>> {
-    let open = MenuItemBuilder::with_id("open", "Open Unsloth").build(app)?;
+    let open = MenuItemBuilder::with_id("open", "Open XOne").build(app)?;
     let toggle = MenuItemBuilder::with_id("toggle", "Start/Stop Server").build(app)?;
     let quit = MenuItemBuilder::with_id("quit", "Quit").build(app)?;
     let menu = MenuBuilder::new(app)
@@ -1711,7 +1708,7 @@ fn setup_tray(app: &tauri::App) -> Result<(), Box<dyn std::error::Error>> {
 
     TrayIconBuilder::new()
         .menu(&menu)
-        .tooltip("Unsloth")
+        .tooltip("XOne")
         .icon(app.default_window_icon().unwrap().clone())
         .on_menu_event(move |app, event| match event.id().as_ref() {
             "open" => show_main_window(app),
@@ -1835,7 +1832,7 @@ fn main() {
     let _ = fix_path_env::fix();
 
     setup_logging();
-    info!("Unsloth desktop app starting");
+    info!("XOne desktop app starting");
 
     #[cfg(target_os = "linux")]
     if let Some((variables, reason)) = webkit_rendering_workaround {
@@ -1864,7 +1861,6 @@ fn main() {
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_dialog::init())
-        .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(
             tauri_plugin_window_state::Builder::new()
@@ -1906,9 +1902,6 @@ fn main() {
             desktop_auth::desktop_auth,
             desktop_update_policy::check_desktop_manual_update,
             desktop_update_policy::desktop_update_policy,
-            desktop_updater::check_desktop_update,
-            desktop_updater::desktop_update_cleanup_armed,
-            desktop_updater::resume_desktop_update_cleanup,
             diagnostics::collect_support_diagnostics,
             native_clipboard::read_native_clipboard_files,
             native_clipboard::read_native_clipboard_png,
@@ -2212,7 +2205,7 @@ mod tests {
     }
 
     #[cfg(target_os = "linux")]
-    const BID: &str = "ai.unsloth.studio";
+    const BID: &str = "ai.xone.desktop";
 
     // Only XDG_DATA_HOME is swapped, and it is read elsewhere now (a relocated CLI
     // child pins it), so the swap holds the crate-wide env lock and readers take it
@@ -2610,10 +2603,10 @@ mod tests {
 
     #[test]
     fn autostart_hardening_appends_the_exec_binary_without_args() {
-        let entry = "[Desktop Entry]\nType=Application\nExec=/usr/bin/unsloth-studio --hidden\nTerminal=false";
+        let entry = "[Desktop Entry]\nType=Application\nExec=/usr/bin/X1-Studio --hidden\nTerminal=false";
         let hardened = hardened_autostart_entry(entry).expect("guard must be added");
         assert!(hardened.starts_with(entry));
-        assert!(hardened.ends_with("\nTryExec=/usr/bin/unsloth-studio"));
+        assert!(hardened.ends_with("\nTryExec=/usr/bin/X1-Studio"));
     }
 
     #[test]
@@ -2686,10 +2679,10 @@ mod tests {
     fn macos_plist_escapes_xml_metacharacters() {
         let plist = macos_launch_agent_plist(
             "Unsloth",
-            "/Applications/AI & ML/Unsloth.app/Contents/MacOS/unsloth-studio",
+            "/Applications/AI & ML/XOne.app/Contents/MacOS/X1-Studio",
         );
         assert!(plist.contains(
-            "<string>/Applications/AI &amp; ML/Unsloth.app/Contents/MacOS/unsloth-studio</string>"
+            "<string>/Applications/AI &amp; ML/XOne.app/Contents/MacOS/X1-Studio</string>"
         ));
         assert!(plist.contains("<string>--hidden</string>"));
         assert!(plist.contains("<key>RunAtLoad</key>"));

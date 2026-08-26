@@ -154,7 +154,7 @@ def test_models_endpoint_shape(client):
     body = r.json()
     assert body["object"] == "list"
     assert body["data"][0]["id"] == "demorun"
-    assert body["data"][0]["owned_by"] == "unsloth-studio"
+    assert body["data"][0]["owned_by"] == "xone-studio"
 
 
 def test_list_previews_builds_urls(client, monkeypatch):

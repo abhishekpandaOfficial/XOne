@@ -2,7 +2,7 @@
 # Copyright 2026-present the Unsloth AI Inc. team. All rights reserved. See /studio/LICENSE.AGPL-3.0
 
 """Interactive terminal prompt that forces a bootstrap password change before
-Unsloth is exposed on a public Cloudflare URL (``--secure`` / ``--cloudflare``).
+XOne is exposed on a public Cloudflare URL (``--secure`` / ``--cloudflare``).
 
 Masked input echoes one ``*`` per keystroke (unlike ``getpass``). Works on
 Windows (``msvcrt``) and Linux/macOS (``termios``). All output goes to stderr so
@@ -225,7 +225,7 @@ def prompt_for_password_change(
         out = sys.stderr
     out.write(
         "\n"
-        "Unsloth Studio will be exposed on the public internet, so set a\n"
+        "X1-Studio will be exposed on the public internet, so set a\n"
         "password now. Ctrl+C to abort.\n\n"
     )
     out.flush()
@@ -256,7 +256,7 @@ def prompt_for_password_change(
             out.flush()
             return True
     except (KeyboardInterrupt, EOFError):
-        out.write("Password change aborted; not exposing Unsloth.\n")
+        out.write("Password change aborted; not exposing XOne.\n")
         out.flush()
         return False
 

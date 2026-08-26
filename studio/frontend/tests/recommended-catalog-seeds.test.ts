@@ -10,11 +10,39 @@ import {
   curatedSizeBytesFor,
 } from "../src/features/model-picker/components/model-selector/model-catalog.ts";
 import {
+  deviceModelGuidance,
   hfModelFitsDevice,
   loadScopedGpu,
   orderRecommendedRows,
   searchRowFitsDevice,
 } from "../src/features/model-picker/components/model-selector/recommended-fit.ts";
+
+test("device guidance prefers MLX on Apple Silicon and stays conservative on CPU", () => {
+  const apple = deviceModelGuidance({
+    available: true,
+    budgetKnown: true,
+    backend: "mlx",
+    name: "Apple M3 Max",
+    memoryTotalGb: 0,
+    systemRamAvailableGb: 48,
+    cpuThread: 16,
+  });
+  assert.equal(apple.preferredFormats, "MLX or GGUF");
+  assert.match(apple.title, /up to 70B/);
+  assert.match(apple.detail, /Apple M3 Max/);
+
+  const smallCpu = deviceModelGuidance({
+    available: false,
+    budgetKnown: true,
+    backend: "cpu",
+    name: "Unknown",
+    memoryTotalGb: 0,
+    systemRamAvailableGb: 32,
+    cpuThread: 4,
+  });
+  assert.match(smallCpu.title, /up to 3B/);
+  assert.equal(smallCpu.preferredFormats, "GGUF");
+});
 
 interface Row {
   id: string;

@@ -123,11 +123,11 @@ export function remoteAccessBlockMessage(
 ): string | null {
   switch (reason) {
     case "server_starting":
-      return "Unsloth is still starting.";
+      return "XOne is still starting.";
     case "admin_password_change_required":
       return isDesktop
         ? "Set a remote password before exposing this server."
-        : "Change the administrator password before exposing this server. In the desktop app, run unsloth studio reset-password.";
+        : "Change the administrator password before exposing this server. In X1-Studio, run xone studio reset-password.";
     case "explicitly_disabled":
       return "This launch used --no-cloudflare. Restart without it to enable remote access.";
     case "launch_managed":

@@ -14,18 +14,18 @@ export APPDIR PATH
 # The path carries the AppImage's own file name, so encode it for XML and for
 # sed on the way in; the cleanup below decodes it on the way back out.
 unsloth_fonts_template="$APPDIR/usr/etc/fonts/unsloth-appimage.conf"
-unsloth_fonts_state="${XDG_RUNTIME_DIR:-${XDG_CACHE_HOME:-${HOME:-}/.cache}}/unsloth-studio"
+xone_fonts_state="${XDG_RUNTIME_DIR:-${XDG_CACHE_HOME:-${HOME:-}/.cache}}/x1-studio"
 FONTCONFIG_FILE="$unsloth_fonts_template"
 if [ -r "$unsloth_fonts_template" ] &&
-  mkdir -p "$unsloth_fonts_state" 2>/dev/null &&
+  mkdir -p "$xone_fonts_state" 2>/dev/null &&
   unsloth_fonts_appdir="$(printf '%s' "$APPDIR" | sed \
     -e 's,&,\&amp;,g' -e 's,<,\&lt;,g' -e 's,>,\&gt;,g' \
     -e 's,\\,\\\\,g' -e 's,&,\\&,g' -e 's,|,\\|,g')" &&
   sed "s|@APPDIR@|$unsloth_fonts_appdir|g" "$unsloth_fonts_template" \
-    >"$unsloth_fonts_state/fonts-${APPDIR##*/}.conf" 2>/dev/null; then
-  FONTCONFIG_FILE="$unsloth_fonts_state/fonts-${APPDIR##*/}.conf"
+    >"$xone_fonts_state/fonts-${APPDIR##*/}.conf" 2>/dev/null; then
+  FONTCONFIG_FILE="$xone_fonts_state/fonts-${APPDIR##*/}.conf"
   # Preserve policies for live mounts and remove only departed ones.
-  for unsloth_stale in "$unsloth_fonts_state"/fonts-*.conf; do
+  for unsloth_stale in "$xone_fonts_state"/fonts-*.conf; do
     [ -f "$unsloth_stale" ] || continue
     [ "$unsloth_stale" != "$FONTCONFIG_FILE" ] || continue
     unsloth_stale_mount="$(sed -n 's|^[[:space:]]*<dir>\(.*\)/usr/share/unsloth/fonts</dir>.*|\1|p' \
@@ -36,7 +36,7 @@ if [ -r "$unsloth_fonts_template" ] &&
   unset unsloth_stale unsloth_stale_mount
 fi
 export FONTCONFIG_FILE
-unset unsloth_fonts_appdir unsloth_fonts_template unsloth_fonts_state
+unset unsloth_fonts_appdir unsloth_fonts_template xone_fonts_state
 
 # The loader reads LD_LIBRARY_PATH before those RUNPATHs, so an inherited value would put
 # host GLib, GTK, WebKit or GStreamer in front of the bundle. Managed children still get it;
@@ -51,4 +51,4 @@ fi
 cd "$APPDIR/usr"
 
 
-exec "$APPDIR/usr/bin/unsloth-studio" "$@"
+exec "$APPDIR/usr/bin/X1-Studio" "$@"

@@ -449,7 +449,7 @@ class TestSecurityHeadersMiddleware:
         assert "camera=()" in permissions_policy
         assert "microphone=(self)" in permissions_policy
         assert "geolocation=()" in permissions_policy
-        assert r.headers["server"] == "unsloth-studio"
+        assert r.headers["server"] == "xone-studio"
 
     def test_internal_nonce_header_is_spliced_into_csp_and_stripped(self, main_module):
         nonce = "test-nonce-abc"
@@ -638,7 +638,7 @@ class TestSecurityHeadersMiddleware:
         assert r.status_code == 200
         assert r.text == "ab"
         assert r.headers["x-content-type-options"] == "nosniff"
-        assert r.headers["server"] == "unsloth-studio"
+        assert r.headers["server"] == "xone-studio"
         assert "content-security-policy" in r.headers
 
     def test_artifact_preview_frame_omits_x_frame_options(self, main_module):
@@ -682,7 +682,7 @@ class TestSecurityHeadersMiddleware:
         asyncio.run(mw({"type": "http", "path": "/plain"}, _receive, _send))
 
         hdrs = captured["headers"]
-        assert hdrs[b"server"] == b"unsloth-studio"
+        assert hdrs[b"server"] == b"xone-studio"
         assert b"content-security-policy" in hdrs
         assert hdrs[b"x-frame-options"] == b"DENY"
 
@@ -986,7 +986,7 @@ class TestHealthAuthGate:
         assert "timestamp" in body
         for field in self.LAUNCHER_BITS:
             assert field in body, f"missing launcher bit: {field}"
-        assert body["service"] == "Unsloth UI Backend"
+        assert body["service"] == "XOne Backend"
         for forbidden in self.FINGERPRINT_FIELDS:
             assert forbidden not in body
 

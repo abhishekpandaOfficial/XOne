@@ -634,7 +634,7 @@ function VramBudgetRow() {
         info={
           <div className="flex flex-col gap-1.5">
             <div>
-              Share of each GPU Unsloth will claim when it sizes the model and
+              Share of each GPU XOne will claim when it sizes the model and
               context. The rest is left for memory fragmentation, the per-device
               CUDA context on a multi-GPU split, and MoE routing.
             </div>
@@ -738,7 +738,7 @@ function GpuMemorySettings({
           <InfoHint>
             <div className="flex flex-col gap-1.5">
               <div>
-                <span className="font-medium">Default:</span> Unsloth fits the
+                <span className="font-medium">Default:</span> XOne fits the
                 model and context to your GPUs.
               </div>
               <div>
@@ -829,7 +829,7 @@ function GpuMemorySettings({
           <div className="flex min-w-0 items-center gap-1.5">
             <span className={LABEL_CLASS}>GPUs</span>
             <InfoHint>
-              By default, Unsloth chooses GPUs automatically. Editing this list
+              By default, XOne chooses GPUs automatically. Editing this list
               makes the checked GPUs the explicit candidate pool. At least one
               GPU must stay selected.
             </InfoHint>
@@ -1005,7 +1005,7 @@ function LoadModeRow({
           <span className={LABEL_CLASS}>Mmap/Mlock</span>
           <InfoHint>
             How the weights are read off disk (--load-mode). Auto is the
-            default: Unsloth picks None when it can prove the model fits without
+            default: XOne picks None when it can prove the model fits without
             paging, since a mapped read is slower, and otherwise leaves the
             choice to llama.cpp, which memory-maps unless a device cannot. mmap
             forces the mapping, mlock keeps the model in RAM rather than letting
@@ -1687,7 +1687,7 @@ function ExtraArgsRow({
             <div>
               Quote a value containing spaces or backslashes, including a
               Windows path. Nothing runs a shell, so $HOME, ; and | are ordinary
-              characters. Flags Unsloth owns, like the model, the port and the
+              characters. Flags XOne owns, like the model, the port and the
               API key, are refused.
             </div>
           </div>

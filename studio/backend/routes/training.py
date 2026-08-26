@@ -1193,7 +1193,7 @@ async def start_training(
                     status_code = 409,
                     detail = (
                         "Cannot start training over the API while an inference request is in "
-                        "progress. Wait for it to finish, or start training from the Unsloth UI."
+                        "progress. Wait for it to finish, or start training from the XOne UI."
                     ),
                 )
 

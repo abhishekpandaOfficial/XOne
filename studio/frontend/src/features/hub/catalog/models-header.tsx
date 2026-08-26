@@ -7,6 +7,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useSettingsDialogStore } from "@/features/settings";
+import type { DeviceModelGuidance } from "@/features/model-picker/components/model-selector/recommended-fit";
 import {
   ChipIcon,
   CpuIcon,
@@ -46,6 +47,7 @@ export function ModelsHeader({
   gpuLabel,
   ramLabel,
   coreLabel,
+  hardwareGuidance,
   activeCheckpoint,
   activeGgufVariant,
   onTitleClick,
@@ -57,6 +59,7 @@ export function ModelsHeader({
   gpuLabel: string;
   ramLabel: string;
   coreLabel: string;
+  hardwareGuidance: DeviceModelGuidance;
   activeCheckpoint: string | null;
   activeGgufVariant: string | null;
   onTitleClick: () => void;
@@ -129,6 +132,17 @@ export function ModelsHeader({
           </div>
         )}
       </div>
+
+      {!isDataset && (
+        <div className="hub-device-guidance basis-full" data-detected={hardwareGuidance.detected}>
+          <span className="hub-device-guidance-orb" aria-hidden="true" />
+          <div className="min-w-0">
+            <strong>{hardwareGuidance.title}</strong>
+            <p>{hardwareGuidance.detail}</p>
+          </div>
+          <span className="hub-device-guidance-badge">DEVICE FIT</span>
+        </div>
+      )}
     </header>
   );
 }

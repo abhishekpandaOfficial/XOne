@@ -8,6 +8,7 @@ import type { CopySupportDiagnosticsResult } from "@/lib/tauri-diagnostics";
 import { ChevronDown as ChevronDownIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { AnimatePresence, motion } from "motion/react";
+import { applyXOneDisplayBrand, XONE_BRAND } from "@/xone";
 import { useState } from "react";
 
 interface UpdateScreenProps {
@@ -26,16 +27,15 @@ function Logo() {
   return (
     <div className="flex items-center justify-center gap-3">
       <img
-        src="/sticker.png"
-        alt=""
-        aria-hidden="true"
+        src={XONE_BRAND.icons.app}
+        alt={XONE_BRAND.name}
         className="h-[60px] w-[60px] object-contain"
       />
       <span
         className="text-ui-50 font-semibold leading-none tracking-[-0.02em] text-foreground"
         style={{ fontFamily: '"Hellix", sans-serif' }}
       >
-        unsloth
+        {XONE_BRAND.wordmark}
       </span>
     </div>
   );
@@ -89,7 +89,7 @@ function UpdateDetails({ logs }: { logs: string[] }) {
         />
       </summary>
       <pre className="mt-2 max-h-28 overflow-auto whitespace-pre-wrap break-words rounded-lg border border-border/50 bg-muted/30 p-3 font-mono text-ui-10 leading-relaxed text-muted-foreground">
-        {logs.join("\n")}
+        {applyXOneDisplayBrand("desktop.updateDetails", logs.join("\n"))}
       </pre>
     </details>
   );
@@ -178,7 +178,7 @@ export function UpdateScreen({
                   exit={{ opacity: 0, height: 0 }}
                   className="max-w-md text-xs text-muted-foreground"
                 >
-                  {error}
+                  {applyXOneDisplayBrand("desktop.error", error)}
                 </motion.p>
               )}
             </AnimatePresence>

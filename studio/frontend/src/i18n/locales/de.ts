@@ -56,8 +56,8 @@ export const de = {
   },
   shell: {
     beta: "BETA",
-    brand: "unsloth",
-    product: "Unsloth",
+    brand: "xone",
+    product: "XOne",
     accountMenu: "Kontomenü von {name}",
     updateAvailable: "Update verfügbar",
     resize: {
@@ -66,7 +66,7 @@ export const de = {
       drag: "Zum Ändern der Größe ziehen",
     },
     aria: {
-      home: "Unsloth-Startseite",
+      home: "XOne-Startseite",
       closeSidebar: "Seitenleiste schließen",
       openSidebar: "Seitenleiste öffnen",
       resizeSidebar: "Seitenleiste anpassen oder einklappen",
@@ -182,7 +182,7 @@ export const de = {
     title: "Einstellungen",
     dialog: {
       title: "Einstellungen",
-      description: "Verwalten Sie Ihre Unsloth-Einstellungen.",
+      description: "Verwalten Sie Ihre XOne-Einstellungen.",
       closeAriaLabel: "Einstellungen schließen",
       searchPlaceholder: "Einstellungen durchsuchen…",
       searchNoResults: "Keine Einstellungen gefunden.",
@@ -244,7 +244,7 @@ export const de = {
         },
         logOut: {
           label: "Abmelden",
-          description: "Von Unsloth abmelden",
+          description: "Von XOne abmelden",
         },
         approveToolRequest: {
           label: "Anfrage genehmigen",
@@ -501,7 +501,7 @@ export const de = {
         sttReady: "Auf {device} geladen",
         sttLoaded: "Geladen",
         sttUnavailable:
-          "Auf diesem Server nicht installiert. Führen Sie `unsloth studio update` aus, um das lokale Diktat zu aktivieren.",
+          "Auf diesem Server nicht installiert. Führen Sie `xone studio update` aus, um das lokale Diktat zu aktivieren.",
         sttRetry: "Erneut versuchen",
         sttDownloadChecking: "Download-Status wird geprüft…",
         sttNotDownloaded: "Nicht heruntergeladen",
@@ -536,7 +536,7 @@ export const de = {
           "Erlauben Sie den Mikrofonzugriff, um Gerätenamen anzuzeigen",
         allowMicrophone: "Mikrofonzugriff erlauben",
         micAccessBlocked:
-          "Der Mikrofonzugriff wurde blockiert. Erlauben Sie den Mikrofonzugriff für diese Unsloth-Seite und versuchen Sie es erneut.",
+          "Der Mikrofonzugriff wurde blockiert. Erlauben Sie den Mikrofonzugriff für diese XOne-Seite und versuchen Sie es erneut.",
         micAccessBlockedDesktop:
           "Der Mikrofonzugriff wurde blockiert. Versuchen Sie es erneut und wählen Sie Zulassen, oder aktivieren Sie das Mikrofon in den Datenschutzeinstellungen des Systems.",
         micAccessUnsupported:
@@ -642,7 +642,7 @@ export const de = {
     },
     general: {
       title: "Allgemein",
-      description: "Globale Einstellungen für Unsloth.",
+      description: "Globale Einstellungen für XOne.",
       account: "Konto",
       huggingFaceToken: "Hugging-Face-Token",
       huggingFaceTokenDescription:
@@ -654,7 +654,7 @@ export const de = {
       tokenValidated: "Token validiert",
       password: "Passwort",
       passwordDescription:
-        "Ändern Sie das Passwort für dieses Unsloth-Konto.",
+        "Ändern Sie das Passwort für dieses XOne-Konto.",
       passwordDialog: {
         trigger: "Passwort ändern",
         title: "Passwort ändern",
@@ -663,7 +663,7 @@ export const de = {
         setTrigger: "Remote-Passwort festlegen",
         setTitle: "Remote-Passwort festlegen",
         setDescription:
-          "Wählen Sie das Passwort, mit dem sich entfernte Browser als unsloth anmelden (mindestens {minLength} Zeichen). Die Unsloth Desktop-App meldet sich weiterhin automatisch an.",
+          "Wählen Sie das Passwort, mit dem sich entfernte Browser als unsloth anmelden (mindestens {minLength} Zeichen). Die XOne Desktop-App meldet sich weiterhin automatisch an.",
         setSubmit: "Passwort festlegen",
         setting: "Wird festgelegt...",
         setDone: "Passwort festgelegt.",
@@ -735,7 +735,7 @@ export const de = {
           "Speichert den KV-Cache vor dem Entladen bei Inaktivität, damit der Verlauf bei fortgesetzten Chats nicht erneut eingelesen werden muss. Bis zu 10 GB auf der Festplatte.",
         apiOnly: "Nur über die API geladene Modelle entladen",
         apiOnlyDescription:
-          "Das automatische Entladen bei Inaktivität lässt ein von dir in Unsloth geladenes Modell im Speicher und gibt nur solche frei, die eine API-Anfrage geladen hat.",
+          "Das automatische Entladen bei Inaktivität lässt ein von dir in XOne geladenes Modell im Speicher und gibt nur solche frei, die eine API-Anfrage geladen hat.",
       },
       previewSharing: {
         sectionTitle: "Vorschau-Freigabe",
@@ -769,13 +769,13 @@ export const de = {
       },
       startup: {
         sectionTitle: "Autostart",
-        launchAtLogin: "Unsloth bei der Anmeldung starten",
+        launchAtLogin: "XOne bei der Anmeldung starten",
         launchAtLoginDescription:
-          "Startet Unsloth im Hintergrund, wenn Sie sich anmelden. Es bleibt in der Menüleiste bzw. im Infobereich, bis Sie es öffnen.",
+          "Startet XOne im Hintergrund, wenn Sie sich anmelden. Es bleibt in der Menüleiste bzw. im Infobereich, bis Sie es öffnen.",
 
         closeToTray: "In den Infobereich schließen",
         closeToTrayDescription:
-          "Unsloth und seinen Server im Hintergrund weiterlaufen lassen, wenn Sie das Hauptfenster schließen.",
+          "XOne und seinen Server im Hintergrund weiterlaufen lassen, wenn Sie das Hauptfenster schließen.",
         closeToTraySaveError:
           "Die Einstellung zum Schließen in den Infobereich konnte nicht aktualisiert werden.",
         loadError: "Die Autostart-Einstellung konnte nicht geladen werden.",
@@ -846,22 +846,22 @@ export const de = {
         action: "Einstellungen zurücksetzen",
         confirmTitle: "Alle lokalen Einstellungen zurücksetzen?",
         confirmDescription:
-          "Löscht nur lokal gespeicherte Einstellungen und lädt Unsloth neu. Chats, API-Zugriff und in der DB gespeicherte Einstellungen bleiben erhalten.",
+          "Löscht nur lokal gespeicherte Einstellungen und lädt XOne neu. Chats, API-Zugriff und in der DB gespeicherte Einstellungen bleiben erhalten.",
         confirmAction: "Zurücksetzen und neu laden",
       },
       permissions: {
         sectionTitle: "Berechtigungen",
         bypassLabel: "Tool-Berechtigungen",
         bypassDescription:
-          "Wie Unsloth Tool-Aufrufe im Chat (Terminal, Python, Web, MCP) vor der Ausführung freigibt. „Full access“ deaktiviert die Freigaben und die Code-Sandbox.",
+          "Wie XOne Tool-Aufrufe im Chat (Terminal, Python, Web, MCP) vor der Ausführung freigibt. „Full access“ deaktiviert die Freigaben und die Code-Sandbox.",
       },
     },
     profile: {
       title: "Profil",
-      description: "Wie Ihr Profil in Unsloth angezeigt wird.",
+      description: "Wie Ihr Profil in XOne angezeigt wird.",
       changePicture: "Profilbild ändern",
       displayName: "Anzeigename",
-      nickname: "Wie soll Unsloth Sie nennen?",
+      nickname: "Wie soll XOne Sie nennen?",
       nicknamePlaceholder: "Spitzname",
       nicknameSaved: "Bevorzugter Name gespeichert",
       avatarShape: "Form des Profilbilds",
@@ -888,10 +888,10 @@ export const de = {
       stats: {
         title: "Ihre Statistiken",
         subtitle:
-          "Alles Folgende wird aus Ihrem eigenen Verlauf berechnet. Es wird nichts erfasst oder an Unsloth gesendet.",
+          "Alles Folgende wird aus Ihrem eigenen Verlauf berechnet. Es wird nichts erfasst oder an XOne gesendet.",
         retry: "Erneut versuchen",
         privacyNote:
-          "Die Statistiken werden aus dem Chat- und Trainingsverlauf berechnet, der in Ihrer Unsloth-Installation gespeichert ist. Es wird nichts erfasst und nichts an Unsloth oder Dritte gesendet.",
+          "Die Statistiken werden aus dem Chat- und Trainingsverlauf berechnet, der in Ihrer XOne-Installation gespeichert ist. Es wird nichts erfasst und nichts an XOne oder Dritte gesendet.",
         emptyChats:
           "Noch keine Chats. Starten Sie ein Gespräch, dann erscheinen hier Ihre Statistiken.",
         lifetimeTokens: "Tokens insgesamt",
@@ -944,7 +944,7 @@ export const de = {
     },
     appearance: {
       title: "Darstellung",
-      description: "Wie Unsloth auf diesem Gerät aussieht.",
+      description: "Wie XOne auf diesem Gerät aussieht.",
       theme: {
         title: "Design",
         label: "Farbschema",
@@ -955,7 +955,7 @@ export const de = {
       },
       palette: {
         label: "Farbpalette",
-        description: "Farben, die in Unsloth im hellen und dunklen Modus verwendet werden.",
+        description: "Farben, die in XOne im hellen und dunklen Modus verwendet werden.",
         standard: "Standard",
         classic: "Klassisch",
         minimal: "Minimal",
@@ -1013,7 +1013,7 @@ export const de = {
         },
         uiFontSize: {
           label: "Schriftgröße der Oberfläche",
-          description: "Passen Sie die Grundgröße der Unsloth-Oberfläche an.",
+          description: "Passen Sie die Grundgröße der XOne-Oberfläche an.",
         },
         codeFontSize: {
           label: "Schriftgröße für Code",
@@ -1043,7 +1043,7 @@ export const de = {
       language: {
         title: "Sprache",
         label: "Anzeigesprache",
-        description: "Die von Unsloth verwendete Sprache.",
+        description: "Die von XOne verwendete Sprache.",
         autoDetect: "Automatisch erkennen",
       },
       layout: {
@@ -1071,7 +1071,7 @@ export const de = {
     resources: {
       title: "System",
       description:
-        "Überwachen Sie Hardware und Speicher dieses Unsloth-Servers.",
+        "Überwachen Sie Hardware und Speicher dieses XOne-Servers.",
       liveUpdates: "Live-Updates",
       floatingWindow: "Schwebendes Fenster",
       disableOverlay: "Overlay deaktivieren",
@@ -1128,7 +1128,7 @@ export const de = {
           description: "Verwende deinen eigenen llama-server-Build.",
           hint: "Wähle den llama.cpp-Ordner mit llama-server oder einen Build, in dem er unter build/bin liegt. Die benutzerdefinierte Laufzeit wird für GGUF-Chat, Einbettungen und unterstützte Sprachmodelle verwendet. Umgebungsvariablen haben weiterhin Vorrang.",
           automatic: "Automatisch (mitgeliefert)",
-          bundled: "Verwendet die von Unsloth installierte llama.cpp-Laufzeit.",
+          bundled: "Verwendet die von XOne installierte llama.cpp-Laufzeit.",
           active: "Dein eigener llama-server wird beim nächsten Laden eines Modells verwendet.",
           environmentManaged: "Wird durch die Umgebungsvariable {variable} verwaltet.",
           missingBinary: "llama-server ist in diesem Ordner nicht mehr verfügbar. Wähle einen anderen Ordner oder verwende die mitgelieferte Laufzeit.",
@@ -1150,8 +1150,8 @@ export const de = {
           metal: "Metal",
         },
         unsupported: {
-          notInstalled: "Es wurde keine von Unsloth verwaltete llama.cpp-Installation gefunden, daher gibt es kein Backend zum Wechseln.",
-          localLink: "llama.cpp ist ein selbst verknüpftes lokales Verzeichnis, das Unsloth nicht ersetzt.",
+          notInstalled: "Es wurde keine von XOne verwaltete llama.cpp-Installation gefunden, daher gibt es kein Backend zum Wechseln.",
+          localLink: "llama.cpp ist ein selbst verknüpftes lokales Verzeichnis, das XOne nicht ersetzt.",
           sourceBuild: "Dieses llama.cpp wurde aus dem Quellcode gebaut; sein Backend lässt sich hier nicht wechseln.",
           customPath: "Ein benutzerdefinierter llama.cpp-Ordner ist ausgewählt. Dessen Build bestimmt das Compute-Backend.",
           unresolved: "Die verfügbaren Backends konnten nicht geprüft werden. Prüfe deine Verbindung und versuche es erneut.",
@@ -1220,9 +1220,9 @@ export const de = {
     agents: {
       title: "Agenten",
       description:
-        "Verbinden Sie Coding-Agenten wie Claude Code und Codex über unsloth start mit einem lokalen Modell.",
+        "Verbinden Sie Coding-Agenten wie Claude Code und Codex über xone start mit einem lokalen Modell.",
       intro:
-        "verbindet Claude Code, Codex, Hermes, OpenClaw, OpenCode und weitere Agenten mit einem lokal von Unsloth bereitgestellten Modell, vollständig offline. Es startet einen OpenAI-kompatiblen Server und verändert nie die Konfigurationsdateien Ihres Agenten.",
+        "verbindet Claude Code, Codex, Hermes, OpenClaw, OpenCode und weitere Agenten mit einem lokal von XOne bereitgestellten Modell, vollständig offline. Es startet einen OpenAI-kompatiblen Server und verändert nie die Konfigurationsdateien Ihres Agenten.",
       readDocs: "Dokumentation lesen",
       copy: "Kopieren",
       copied: "Kopiert",
@@ -1245,23 +1245,23 @@ export const de = {
       agentDocs: "Einrichtungsdokumentation zu {agent} öffnen",
       copyGeneratedCommand: "Generierten Befehl kopieren",
       modelNote:
-        "Codex benötigt ein GGUF-Modell, das von llama-server bereitgestellt wird. Andere Agenten können auch Transformer-basierte Modelle verwenden; lassen Sie --model weg, um das bereits in Unsloth geladene Modell zu nutzen.",
+        "Codex benötigt ein GGUF-Modell, das von llama-server bereitgestellt wird. Andere Agenten können auch Transformer-basierte Modelle verwenden; lassen Sie --model weg, um das bereits in XOne geladene Modell zu nutzen.",
       subagent: {
         title: "Ein lokales Modell als Subagent verwenden",
         description:
-          "Belassen Sie {agent} bei seinem aktuellen Modell und delegieren Sie ausgewählte Aufgaben an dieses lokale Unsloth-Modell.",
+          "Belassen Sie {agent} bei seinem aktuellen Modell und delegieren Sie ausgewählte Aufgaben an dieses lokale XOne-Modell.",
         setupCommand: "Einrichtungsbefehl",
         copySetupCommand: "Einrichtungsbefehl für den Subagenten kopieren",
         usagePrompt: "Geben Sie dann in {agent} Folgendes ein:",
         copyUsagePrompt: "Nutzungs-Prompt für den Subagenten kopieren",
         defaultPrompt:
           "Starte einen lokalen Agenten, um diese Funktion zu implementieren.",
-        opencodePrompt: "@unsloth finde die Ursache dieses Testfehlers",
+        opencodePrompt: "@xone finde die Ursache dieses Testfehlers",
       },
       quickstart: {
         title: "Befehl zusammenstellen",
         description:
-          "Starten Sie einen Agenten mit dem aktuell in Unsloth geladenen Modell. Laden Sie zuerst ein Modell und ersetzen Sie dann claude durch einen der unten aufgeführten Agenten.",
+          "Starten Sie einen Agenten mit dem aktuell in XOne geladenen Modell. Laden Sie zuerst ein Modell und ersetzen Sie dann claude durch einen der unten aufgeführten Agenten.",
         noneDetected:
           "In Ihrem PATH wurden keine unterstützten Agent-CLIs gefunden.",
         installed: "Installiert",
@@ -1281,9 +1281,9 @@ export const de = {
       options: {
         title: "Gängige Optionen",
         description:
-          "Unsloth-Optionen werden zuerst ausgewertet; alles Unbekannte wird unverändert an den Agenten weitergereicht.",
+          "XOne-Optionen werden zuerst ausgewertet; alles Unbekannte wird unverändert an den Agenten weitergereicht.",
         model:
-          "Wählt ein Modell aus. Ohne --model verwendet unsloth start das aktuell in Unsloth geladene Modell und bricht mit einem Fehler ab, wenn keines geladen ist.",
+          "Wählt ein Modell aus. Ohne --model verwendet xone start das aktuell in XOne geladene Modell und bricht mit einem Fehler ab, wenn keines geladen ist.",
         contextLength:
           "Legt die gewünschte Kontextlänge fest (Alias: --max-seq-length).",
         ggufVariant: "Wählt die GGUF-Quantisierungsvariante.",
@@ -1295,11 +1295,11 @@ export const de = {
         launch:
           "Startet den Agenten oder gibt nur Befehl und Umgebung aus.",
         persist:
-          "Behält die von Unsloth verwalteten Agent-Daten über Läufe hinweg bei.",
+          "Behält die von XOne verwalteten Agent-Daten über Läufe hinweg bei.",
         asSubagent:
-          "Belässt den übergeordneten Agenten bei seinem aktuellen Modell und registriert Unsloth als lokalen Subagenten (Claude Code, Codex und OpenCode).",
+          "Belässt den übergeordneten Agenten bei seinem aktuellen Modell und registriert XOne als lokalen Subagenten (Claude Code, Codex und OpenCode).",
         apiKey:
-          "Übergibt Ihren Unsloth-API-Schlüssel (alternativ UNSLOTH_API_KEY setzen).",
+          "Übergibt Ihren XOne-API-Schlüssel (alternativ UNSLOTH_API_KEY setzen).",
         reasoning:
           "Reasoning im Chat verwenden: on, off oder auto. Auto folgt der Chat-Vorlage des Modells, was meist on bedeutet.",
         reasoningEffort:
@@ -1308,14 +1308,14 @@ export const de = {
           "Überspringt Bestätigungsabfragen. Nur in vertrauenswürdigen Umgebungen verwenden.",
       },
       remote: {
-        title: "Mit einem entfernten Unsloth Studio verbinden",
+        title: "Mit einem entfernten XOne Studio verbinden",
         description:
-          "Richten Sie unsloth start auf ein anderswo laufendes Unsloth Studio aus, indem Sie diese Variablen vor dem Aufruf setzen (oder --api-key direkt übergeben):",
+          "Richten Sie xone start auf ein anderswo laufendes XOne Studio aus, indem Sie diese Variablen vor dem Aufruf setzen (oder --api-key direkt übergeben):",
       },
       passthrough: {
         title: "Argumente an den Agenten übergeben",
         description:
-          "Argumente nach den Unsloth-Optionen werden an den Agenten selbst weitergereicht, sodass native Befehle wie resume weiterhin funktionieren:",
+          "Argumente nach den XOne-Optionen werden an den Agenten selbst weitergereicht, sodass native Befehle wie resume weiterhin funktionieren:",
       },
       dryRun: {
         title: "Vorschau ohne Start",
@@ -1517,11 +1517,11 @@ export const de = {
     remoteLan: {
       title: "Remote & LAN",
       description:
-        "Erreiche dieses Unsloth von deinen anderen Geräten über dein lokales Netzwerk oder eine temporäre öffentliche URL.",
+        "Erreiche dieses XOne von deinen anderen Geräten über dein lokales Netzwerk oder eine temporäre öffentliche URL.",
     },
     apiKeys: {
       title: "API",
-      description: "Zugriff auf Unsloth über die OpenAI-kompatible API.",
+      description: "Zugriff auf XOne über die OpenAI-kompatible API.",
       readDocs: "API-Dokumentation lesen",
       noAccess: "Noch kein API-Zugriff.",
       accessTokens: "Zugriffstoken",
@@ -1549,7 +1549,7 @@ export const de = {
       osWindows: "Windows",
       secureHttps: "Sicheres HTTPS",
       secureHttpsHint:
-        "Der 0.0.0.0-Port ist weiterhin global erreichbar. Für vollständige Sicherheit starten Sie Unsloth mit --secure, um nur diesen HTTPS-Link freizugeben.",
+        "Der 0.0.0.0-Port ist weiterhin global erreichbar. Für vollständige Sicherheit starten Sie XOne mit --secure, um nur diesen HTTPS-Link freizugeben.",
       copyTunnelUrl: "Tunnel-URL kopieren",
       copySnippet: "Snippet kopieren",
       copy: "Kopieren",
@@ -1583,7 +1583,7 @@ export const de = {
     about: {
       title: "Info",
       description: "Dokumentation, Versionshinweise, Feedback und Build-Infos.",
-      studioVersion: "Unsloth-Version",
+      studioVersion: "XOne-Version",
       packageVersion: "Paketversion",
       desktopAppVersion: "Version der Desktop-App",
       desktopAppVersionUnavailable: "Nicht verfügbar",
@@ -1602,27 +1602,27 @@ export const de = {
       reportIssue: "Problem melden",
       license: {
         sectionTitle: "Lizenz",
-        studioLabel: "Unsloth",
+        studioLabel: "XOne",
         studioLicense: "AGPL-3.0",
         studioDescription: "Open Source unter der GNU AGPL v3.0.",
-        libraryLabel: "Unsloth Core",
+        libraryLabel: "XOne Core",
         libraryLicense: "Apache-2.0",
         libraryDescription: "Lizenziert unter Apache 2.0.",
       },
       dangerZone: "Gefahrenzone",
-      shutDownStudio: "Unsloth herunterfahren",
+      shutDownStudio: "XOne herunterfahren",
       shutDownStudioDescription:
-        "Stoppt den Unsloth-Server und beendet Ihre Sitzung.",
+        "Stoppt den XOne-Server und beendet Ihre Sitzung.",
       shutDown: "Herunterfahren",
       update: {
-        title: "Unsloth aktualisieren",
+        title: "XOne aktualisieren",
         commandText: "{label} als Text",
         copied: "Kopiert",
         copyCommand: "Befehl kopieren",
         commandCopied: "{label} kopiert",
         copyNamedCommand: "{label} kopieren",
-        checkingInstall: "Es wird geprüft, wie Unsloth installiert wurde...",
-        installIntro: "So installieren oder aktualisieren Sie Unsloth:",
+        checkingInstall: "Es wird geprüft, wie XOne installiert wurde...",
+        installIntro: "So installieren oder aktualisieren Sie XOne:",
         localUpdateHeading: "Lokales Update",
         installCommandUnix: "macOS/Linux-Installationsbefehl",
         installCommandWindows: "Windows-Installationsbefehl",
@@ -1636,7 +1636,7 @@ export const de = {
           "Quell- oder VCS-Paketinstallation erkannt. Installieren Sie erneut vom ursprünglichen lokalen Pfad oder der Git-URL.",
         repoCheckoutFallback:
           "Wenn Sie den Repository-Checkout noch haben, führen Sie den lokalen Installer daraus aus:",
-        restartAfterUpdate: "Starten Sie Unsloth nach dem Update neu.",
+        restartAfterUpdate: "Starten Sie XOne nach dem Update neu.",
         desktopManaged:
           "Die Desktop-App sucht automatisch nach neuen App-Versionen. Sie können hier auch jederzeit nach Updates suchen oder ein Update durchführen.",
         desktopReady: "Updates für die Desktop-App",
@@ -1649,7 +1649,7 @@ export const de = {
         desktopAvailableDescription:
           "Aktualisieren Sie jetzt. Die Desktop-App wird nach Abschluss des Updates neu gestartet.",
         desktopExternalServer:
-          "Führen Sie `unsloth studio update` in dem Terminal aus, über das Sie Ihren Server gestartet haben.",
+          "Führen Sie `xone studio update` in dem Terminal aus, über das Sie Ihren Server gestartet haben.",
         desktopManualInstall:
           "Öffnen Sie die Release-Seite, um das neueste Linux-Paket zu installieren.",
         desktopCheckFailed: "Die Suche nach Updates ist fehlgeschlagen",
@@ -1657,7 +1657,7 @@ export const de = {
           "Überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
         desktopCurrent: "Die Desktop-App ist auf dem neuesten Stand",
         desktopCurrentDescription:
-          "Unsloth sucht weiterhin automatisch nach Updates.",
+          "XOne sucht weiterhin automatisch nach Updates.",
         checkForUpdates: "Nach Updates suchen",
         checkAgain: "Erneut suchen",
         retryCheck: "Erneut versuchen",
@@ -1665,7 +1665,7 @@ export const de = {
         updateNow: "Jetzt aktualisieren",
         openReleasePage: "Release-Seite öffnen",
         unknownInstall:
-          "Es konnte nicht erkannt werden, wie Unsloth installiert wurde. Verwenden Sie für Installer- oder PyPI-Installationen die obigen Befehle.",
+          "Es konnte nicht erkannt werden, wie XOne installiert wurde. Verwenden Sie für Installer- oder PyPI-Installationen die obigen Befehle.",
         localCheckout:
           "Führen Sie bei lokalen Checkout-Installationen den lokalen Installer aus diesem Checkout aus:",
         docs: "Installationsdokumentation:",
@@ -2180,7 +2180,7 @@ export const de = {
       },
       startFailed: "Training konnte nicht gestartet werden",
       startUnconfirmed:
-        "Unsloth konnte nicht bestätigen, ob das Training gestartet wurde. Der Status wird im Hintergrund geprüft.",
+        "XOne konnte nicht bestätigen, ob das Training gestartet wurde. Der Status wird im Hintergrund geprüft.",
       stopFailed: "Training konnte nicht gestoppt werden",
       trainingStillActiveTitle: "Training läuft noch",
       stopBeforeConfig:
@@ -2378,7 +2378,7 @@ export const de = {
       preparing: "Wird vorbereitet",
       left: "{eta} verbleibend",
       downloaded: "{size} heruntergeladen",
-      terminalStart: "> Unsloth-Training beginnt...",
+      terminalStart: "> XOne-Training beginnt...",
       preparingResources: "> Modell und Datensatz werden vorbereitet...",
       gettingReady: "> Wir bereiten alles für Ihren Lauf vor...",
       waitingForFirstStep:

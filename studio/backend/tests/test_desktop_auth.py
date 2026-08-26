@@ -40,7 +40,7 @@ def seed_user(*, must_change_password = False):
     )
 
 
-def auth_client():
+def auth_client(*, return_route = False):
     route_path = Path(__file__).resolve().parents[1] / "routes" / "auth.py"
     spec = importlib.util.spec_from_file_location("_desktop_auth_route", route_path)
     auth_route = importlib.util.module_from_spec(spec)
@@ -49,7 +49,8 @@ def auth_client():
 
     app = FastAPI()
     app.include_router(auth_route.router, prefix = "/api/auth")
-    return TestClient(app)
+    client = TestClient(app)
+    return (client, auth_route) if return_route else client
 
 
 def data_recipe_jobs_module():
@@ -548,6 +549,80 @@ def test_desktop_sets_the_remote_password_without_the_seeded_one():
     assert repeat.status_code == 409
 
 
+def test_local_first_run_creates_profile_without_the_seeded_password(monkeypatch):
+    seed_user(must_change_password = True)
+    client, auth_route = auth_client(return_route = True)
+    monkeypatch.setattr(auth_route, "_client_ip", lambda _request: "127.0.0.1")
+
+    response = client.post(
+        "/api/auth/local-initial-password",
+        headers = {"X-XOne-Local-Setup": "1"},
+        json = {"email": "person@example.com", "new_password": "my-xone-password-123"},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["must_change_password"] is False
+    assert is_desktop_token(response.json()["access_token"]) is False
+    assert storage.get_profile_email(storage.DEFAULT_ADMIN_USERNAME) == "person@example.com"
+    login = client.post(
+        "/api/auth/login",
+        json = {
+            "username": storage.DEFAULT_ADMIN_USERNAME,
+            "email": "person@example.com",
+            "password": "my-xone-password-123",
+        },
+    )
+    assert login.status_code == 200
+
+    wrong_email = client.post(
+        "/api/auth/login",
+        json = {
+            "username": storage.DEFAULT_ADMIN_USERNAME,
+            "email": "someone-else@example.com",
+            "password": "my-xone-password-123",
+        },
+    )
+    assert wrong_email.status_code == 401
+
+
+def test_verified_legacy_login_attaches_the_first_profile_email():
+    seed_user(must_change_password = False)
+    client = auth_client()
+
+    response = client.post(
+        "/api/auth/login",
+        json = {
+            "username": storage.DEFAULT_ADMIN_USERNAME,
+            "email": "Legacy.User@Example.com",
+            "password": "human-password-123",
+        },
+    )
+
+    assert response.status_code == 200
+    assert storage.get_profile_email(storage.DEFAULT_ADMIN_USERNAME) == "legacy.user@example.com"
+
+
+def test_local_first_run_rejects_remote_or_cross_origin_claims(monkeypatch):
+    seed_user(must_change_password = True)
+    client, auth_route = auth_client(return_route = True)
+
+    monkeypatch.setattr(auth_route, "_client_ip", lambda _request: "203.0.113.7")
+    remote = client.post(
+        "/api/auth/local-initial-password",
+        headers = {"X-XOne-Local-Setup": "1"},
+        json = {"email": "person@example.com", "new_password": "my-xone-password-123"},
+    )
+    monkeypatch.setattr(auth_route, "_client_ip", lambda _request: "127.0.0.1")
+    missing_header = client.post(
+        "/api/auth/local-initial-password",
+        json = {"email": "person@example.com", "new_password": "my-xone-password-123"},
+    )
+
+    assert remote.status_code == 403
+    assert missing_header.status_code == 403
+    assert storage.requires_password_change(storage.DEFAULT_ADMIN_USERNAME) is True
+
+
 def test_remote_password_refuses_credentials_that_are_not_the_desktop_app():
     seed_user(must_change_password = True)
     client = auth_client()
@@ -561,7 +636,7 @@ def test_remote_password_refuses_credentials_that_are_not_the_desktop_app():
         )
         # Distinguishable from the pre-existing "Password change required" refusal.
         assert response.status_code == 403
-        assert response.json()["detail"] == "This action requires the Unsloth desktop app."
+        assert response.json()["detail"] == "This action requires X1-Studio."
     assert storage.requires_password_change(storage.DEFAULT_ADMIN_USERNAME) is True
 
 

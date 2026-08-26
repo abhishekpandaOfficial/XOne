@@ -80,7 +80,7 @@ export const describeMediaError = (error: unknown): string => {
     // The desktop WebView has no site-permission UI, so Settings is the only way back.
     return isTauri
       ? "Microphone access is blocked. Open Settings > Voice and click Allow microphone."
-      : "Microphone access is blocked. Allow microphone access for this Unsloth page, then try again.";
+      : "Microphone access is blocked. Allow microphone access for this XOne page, then try again.";
   }
   if (name === "NotFoundError" || name === "OverconstrainedError") {
     return "No microphone was found for dictation.";
@@ -98,7 +98,7 @@ export const describeSpeechError = (
   message?: string,
 ): string => {
   if (error === "not-allowed") {
-    return "Speech recognition was blocked by the browser. Check microphone permissions for this Unsloth page.";
+    return "Speech recognition was blocked by the browser. Check microphone permissions for this XOne page.";
   }
   if (error === "service-not-allowed") {
     return "Speech recognition is blocked by the browser speech service.";

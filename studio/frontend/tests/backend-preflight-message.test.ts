@@ -14,8 +14,8 @@ import {
 
 const UNREACHABLE_PROFILE = /cannot reach your user folder/;
 const UPDATE_ADVICE = /unsloth studio update/;
-const MANAGED_TOO_OLD = /Managed Unsloth install is too old/;
-const OWNED_TOO_OLD = /Desktop-owned Unsloth backend is too old/;
+const MANAGED_TOO_OLD = /managed XOne backend is too old/i;
+const OWNED_TOO_OLD = /desktop-owned XOne backend is too old/i;
 const TOO_OLD = /too old/;
 
 test("an unreachable profile is not reported as an outdated install", () => {
@@ -84,7 +84,7 @@ test("a path setting that cannot be resolved is told apart from an unreachable f
 });
 
 test("the setting that could not be resolved is named", () => {
-  // "one of Unsloth's folder settings" is not something anyone can act on, so
+  // "one of XOne's folder settings" is not something anyone can act on, so
   // the backend appends the name and the message uses it.
   const named = preflightStaleMessage(
     "managed_stale",
@@ -94,6 +94,6 @@ test("the setting that could not be resolved is named", () => {
   assert.match(named, /full path/);
   // Without a name it still reads as a sentence, and still is not an update.
   const unnamed = preflightStaleMessage("managed_stale", PATH_SETTING_UNRESOLVABLE);
-  assert.match(unnamed, /One of Unsloth's folder settings points/);
+  assert.match(unnamed, /One of XOne's folder settings points/);
   assert.doesNotMatch(unnamed, UPDATE_ADVICE);
 });

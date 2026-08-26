@@ -397,7 +397,7 @@ def require_ui_session_for_local_commands(via_api_key: bool) -> None:
     if via_api_key:
         raise HTTPException(
             status_code = status.HTTP_403_FORBIDDEN,
-            detail = "Local (stdio) MCP servers can only be configured from the Unsloth UI, "
+            detail = "Local (stdio) MCP servers can only be configured from the XOne UI, "
             "not with an API key. Use an http:// or https:// MCP server instead.",
         )
 
@@ -445,7 +445,7 @@ def _invalid_api_key_detail(token: str) -> str:
     if token == API_KEY_PLACEHOLDER:
         return (
             "This is the placeholder key from the example. Create an API key in "
-            f"Unsloth Studio under Settings > API and use it in place of {API_KEY_PLACEHOLDER}."
+            f"X1-Studio under Settings > API and use it in place of {API_KEY_PLACEHOLDER}."
         )
     return "Invalid or expired API key"
 

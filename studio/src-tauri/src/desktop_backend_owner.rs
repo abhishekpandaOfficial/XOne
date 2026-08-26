@@ -299,7 +299,7 @@ fn ensure_studio_root_id_at_with_blank_observer(
     match read_studio_root_id_file(path)? {
         Some(winner) => Ok(Some(winner)),
         None => Err(format!(
-            "could not create the desktop ownership id at {}; delete that file and reopen Unsloth",
+            "could not create the desktop ownership id at {}; delete that file and reopen XOne",
             path.display()
         )),
     }
@@ -385,7 +385,7 @@ fn read_studio_root_id_file(path: &Path) -> Result<Option<String>, String> {
     // the previous value.
     parse_studio_root_id(&raw).map(Some).ok_or_else(|| {
         format!(
-            "the desktop ownership id at {} is not 64 lowercase hex characters; delete that file and reopen Unsloth",
+            "the desktop ownership id at {} is not 64 lowercase hex characters; delete that file and reopen XOne",
             path.display()
         )
     })

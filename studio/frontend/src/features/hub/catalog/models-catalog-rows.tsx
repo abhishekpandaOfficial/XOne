@@ -523,7 +523,7 @@ export const DiscoverModelRow = memo(function DiscoverModelRow({
               <span className="truncate">{row.owner}</span>
               {row.owner.toLowerCase() === "unsloth" && (
                 <span
-                  aria-label="Verified Unsloth"
+                  aria-label="Verified XOne"
                   className="hub-verified-badge size-3.5 shrink-0 text-verified"
                 />
               )}
@@ -723,7 +723,7 @@ export const InventoryRow = memo(function InventoryRow({
       <span className="truncate">{subLabel}</span>
       {subLabel.toLowerCase() === "unsloth" && (
         <span
-          aria-label="Verified Unsloth"
+          aria-label="Verified XOne"
           className="hub-verified-badge size-3.5 shrink-0 text-verified"
         />
       )}
@@ -854,7 +854,7 @@ export const InventoryRow = memo(function InventoryRow({
                 <span className="truncate">{subLabel}</span>
                 {subLabel.toLowerCase() === "unsloth" && (
                   <span
-                    aria-label="Verified Unsloth"
+                    aria-label="Verified XOne"
                     className="hub-verified-badge size-3 shrink-0 text-verified"
                   />
                 )}

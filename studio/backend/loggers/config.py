@@ -504,7 +504,7 @@ class LogConfig:
 
     @staticmethod
     def setup_logging(
-        service_name: str = "unsloth-studio-backend",
+        service_name: str = "xone-backend",
         env: Optional[str] = None,
         quiet_progress_bars: bool = True,
     ) -> structlog.BoundLogger:

@@ -3,27 +3,19 @@
 
 import { apiUrl } from "@/lib/api-base";
 import { Button } from "@/components/ui/button";
-import { MascotImg } from "@/components/mascot-img";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { XONE_BRAND } from "@/xone";
+import { GithubIcon, GoogleIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, Check, Copy, Eye, EyeOff, KeyRound, LockKeyhole, Mail } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { ReactElement } from "react";
 import type { SyntheticEvent } from "react";
 import { refreshSession } from "../api";
 
-// Bootstrap credentials injected into index.html by the backend (only present
-// while default admin must_change_password is true)
-declare global {
-  interface Window {
-    __UNSLOTH_BOOTSTRAP__?: { username: string; password: string };
-  }
-}
-
 import {
-  clearAuthTokens,
-  getAuthToken,
   getPostAuthRoute,
   hasAuthToken,
   hasRefreshToken,
@@ -47,6 +39,7 @@ type TokenResponse = {
 
 async function loginWithPassword(
   username: string,
+  email: string,
   password: string,
 ): Promise<TokenResponse> {
   const response = await fetch(apiUrl("/api/auth/login"), {
@@ -56,6 +49,7 @@ async function loginWithPassword(
     },
     body: JSON.stringify({
       username: username.trim(),
+      email: email.trim(),
       password,
     }),
   });
@@ -73,6 +67,38 @@ type AuthFormProps = {
 };
 
 const HIDDEN_LOGIN_USERNAME = "unsloth";
+const RESET_PASSWORD_COMMAND = "xone studio reset-password";
+
+function PasswordRecovery() {
+  const [copied, setCopied] = useState(false);
+
+  async function copyCommand() {
+    await navigator.clipboard.writeText(RESET_PASSWORD_COMMAND);
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1800);
+  }
+
+  return (
+    <details className="group rounded-2xl border border-violet-400/20 bg-violet-400/[0.055] p-4">
+      <summary className="flex cursor-pointer list-none items-center gap-2 text-sm font-medium text-foreground">
+        <KeyRound className="h-4 w-4 text-violet-300" />
+        I don&apos;t know the current password
+        <span className="ml-auto text-xs text-muted-foreground transition-transform group-open:rotate-45">+</span>
+      </summary>
+      <div className="mt-3 space-y-3 border-t border-white/10 pt-3 text-xs leading-5 text-muted-foreground">
+        <p>Reset this installation from a terminal, choose a new password, then return here and refresh.</p>
+        <div className="flex min-w-0 items-center gap-2 rounded-xl border border-white/10 bg-black/25 p-2.5">
+          <code className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap text-[11px] text-violet-200">{RESET_PASSWORD_COMMAND}</code>
+          <button type="button" onClick={() => void copyCommand()} className="inline-flex shrink-0 items-center gap-1 rounded-lg border border-white/10 px-2 py-1 text-[10px] text-foreground hover:bg-white/5">
+            {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+            {copied ? "Copied" : "Copy"}
+          </button>
+        </div>
+        <p>You do not need the old password to run this XOne recovery command.</p>
+      </div>
+    </details>
+  );
+}
 
 export function AuthForm({ mode }: AuthFormProps): ReactElement | null {
   const navigate = useNavigate();
@@ -80,9 +106,10 @@ export function AuthForm({ mode }: AuthFormProps): ReactElement | null {
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const username = HIDDEN_LOGIN_USERNAME;
+  const [email, setEmail] = useState("");
+  const [authStep, setAuthStep] = useState<"email" | "password">("email");
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [statusLoading, setStatusLoading] = useState(true);
   const [initialized, setInitialized] = useState<boolean | null>(null);
@@ -160,17 +187,6 @@ export function AuthForm({ mode }: AuthFormProps): ReactElement | null {
     window.dispatchEvent(new Event("unsloth:app-shell-ready"));
   }, [statusLoading]);
 
-  // Seed password from bootstrap credentials injected into HTML by web CLI.
-  useEffect(() => {
-    function loadBootstrap() {
-      const bootstrap = window.__UNSLOTH_BOOTSTRAP__;
-      if (bootstrap && !isLoginMode && !password) {
-        setPassword(bootstrap.password);
-      }
-    }
-    loadBootstrap();
-  }, []);
-
   const blockedByState =
     initialized === false ||
     (mode === "login" && requiresPasswordChange) ||
@@ -178,68 +194,55 @@ export function AuthForm({ mode }: AuthFormProps): ReactElement | null {
 
   let helperText: string | null = null;
   if (initialized === false) {
-    helperText = "Auth is still bootstrapping the default admin account.";
+    helperText = "XOne is preparing profile storage.";
   } else if (isLoginMode && requiresPasswordChange) {
-    helperText = "Sign in once with the seeded credentials to change the password.";
+    helperText = "Create your local profile before signing in.";
   } else if (!isLoginMode && !requiresPasswordChange) {
     helperText = "Password already updated. Use the login screen.";
   }
-  const title = isLoginMode ? "Welcome back" : "Setup your account";
-  const subtitle = isLoginMode  
-    ? "Sign in with your password."
-    : "Choose a new password";
-  const submitLabel = isLoginMode ? "Login" : "Change password";
+  const title = authStep === "email"
+    ? (isLoginMode ? "Welcome back" : "Create your XOne profile")
+    : (isLoginMode ? "Enter your password" : "Protect your workspace");
+  const subtitle = authStep === "email"
+    ? "Start with the email for this local XOne profile."
+    : (isLoginMode
+      ? "Use the local password connected to this email."
+      : "Choose one private password. No current or confirmation password is required.");
+  const submitLabel = authStep === "email"
+    ? "Continue with email"
+    : (isLoginMode ? "Open XOne" : "Create profile");
   const showSwitchLink = !isLoginMode;
-  const switchText = "Password already setup? ";
+  const switchText = "Already created your profile? ";
   const switchLinkTo = "/login";
   const switchLinkText = "Back to login";
-  const currentPassword = password || window.__UNSLOTH_BOOTSTRAP__?.password || "";
-  // On first boot the backend injects __UNSLOTH_BOOTSTRAP__ and we silently
-  // reuse that password; the Current password input is only rendered for the
-  // admin-forced must_change_password path where no bootstrap is available.
-  const hasBootstrapPassword = Boolean(window.__UNSLOTH_BOOTSTRAP__?.password);
   const invalidChangePasswordForm =
     !isLoginMode &&
-    (currentPassword.length < 8 ||
-      newPassword.length < 8 ||
-      /\s/.test(newPassword) ||
-      newPassword !== confirmPassword ||
-      currentPassword === newPassword);
+    (newPassword.length < 8 ||
+      /\s/.test(newPassword));
   const showWhitespaceWarning = !isLoginMode && /\s/.test(newPassword);
-  const showPasswordMismatchWarning =
-    !isLoginMode &&
-    newPassword.length > 0 &&
-    confirmPassword.length > 0 &&
-    newPassword !== confirmPassword;
+  const emailIsValid = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.trim());
 
   async function handleSubmit(event: SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
 
-    if (!isLoginMode) {
-      // Mirror the disable gate: Enter / autofill can bypass the button.
-      if (currentPassword.length < 8) {
-        setError(
-          currentPassword
-            ? "Current password must be at least 8 characters."
-            : "Unable to initialize setup. Reload the page and try again.",
-        );
+    if (authStep === "email") {
+      if (!emailIsValid) {
+        setError("Enter a valid email address.");
         return;
       }
+      setAuthStep("password");
+      return;
+    }
+
+    if (!isLoginMode) {
+      // Mirror the disable gate: Enter / autofill can bypass the button.
       if (newPassword.length < 8) {
         setError("New password must be at least 8 characters.");
         return;
       }
       if (/\s/.test(newPassword)) {
         setError("New password cannot contain spaces.");
-        return;
-      }
-      if (newPassword !== confirmPassword) {
-        setError("Passwords do not match.");
-        return;
-      }
-      if (currentPassword === newPassword) {
-        setError("New password must be different from your current password.");
         return;
       }
     }
@@ -249,37 +252,16 @@ export function AuthForm({ mode }: AuthFormProps): ReactElement | null {
       let token: TokenResponse;
 
       if (isLoginMode) {
-        token = await loginWithPassword(username, password);
+        token = await loginWithPassword(username, email, password);
       } else {
-        let accessToken = getAuthToken();
-
-        if (hasRefreshToken()) {
-          const refreshed = await refreshSession();
-          accessToken = getAuthToken();
-          if (!refreshed) {
-            clearAuthTokens();
-            accessToken = null;
-          }
-        }
-
-        if (!accessToken) {
-          const bootstrapToken = await loginWithPassword(username, currentPassword);
-          storeAuthTokens(
-            bootstrapToken.access_token,
-            bootstrapToken.refresh_token,
-          );
-          setMustChangePassword(bootstrapToken.must_change_password);
-          accessToken = bootstrapToken.access_token;
-        }
-
-        const response = await fetch(apiUrl("/api/auth/change-password"), {
+        const response = await fetch(apiUrl("/api/auth/local-initial-password"), {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
+            "X-XOne-Local-Setup": "1",
           },
           body: JSON.stringify({
-            current_password: currentPassword,
+            email: email.trim(),
             new_password: newPassword,
           }),
         });
@@ -305,12 +287,6 @@ export function AuthForm({ mode }: AuthFormProps): ReactElement | null {
       storeAuthTokens(token.access_token, token.refresh_token);
       navigate({ to: getPostAuthRoute() });
     } catch (err: unknown) {
-      // The backend returns the correct PATH-based command ("unsloth studio
-      // reset-password"), which the installer puts on PATH on every platform.
-      // Do NOT rewrite it to a relative Windows path like
-      // ".\unsloth_studio\Scripts\unsloth.exe ..." -- that only resolves inside
-      // the Unsloth home dir and fails with CommandNotFoundException elsewhere.
-      // Show the backend message as-is.
       const msg = err instanceof Error ? err.message : "Auth failed.";
       setError(msg);
     } finally {
@@ -321,133 +297,56 @@ export function AuthForm({ mode }: AuthFormProps): ReactElement | null {
   if (statusLoading && initialized === null && error === null) return null;
 
   return (
-    <div className="w-full max-w-sm space-y-6">
-      <div className="space-y-1.5 text-center">
-        <MascotImg
-          src="Sloth emojis/large sloth wave.png"
-          className="mx-auto mb-2 h-20 w-20 object-contain"
-        />
-        <h2 className="text-2xl font-semibold text-foreground">{title}</h2>
-        <p className="text-muted-foreground">{subtitle}</p>
+    <div className="w-full space-y-6">
+      <div className="space-y-2">
+        <img src={XONE_BRAND.icons.app} alt="X1" className="mb-5 h-14 w-14 rounded-[22%] object-cover shadow-2xl" />
+        <p className="text-[10px] font-semibold tracking-[0.16em] text-violet-300">XONE LOCAL IDENTITY</p>
+        <h2 className="text-3xl font-semibold tracking-tight text-foreground">{title}</h2>
+        <p className="text-sm leading-6 text-muted-foreground">{subtitle}</p>
       </div>
-      <form className="space-y-5" onSubmit={handleSubmit}>
-        {isLoginMode && (
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <div className="relative">
-              <Input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                className="pr-10"
-                autoComplete="current-password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                minLength={8}
-                required
-              />
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="absolute right-0 top-0 h-full px-3 text-muted-foreground hover:bg-transparent"
-                onClick={() => setShowPassword((prev) => !prev)}
-              >
-                {showPassword ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
-              </Button>
-            </div>
-          </div>
-        )}
 
-        {!isLoginMode && (
+      <div className="grid grid-cols-2 gap-2">
+        <Button type="button" variant="outline" disabled aria-label="Google login coming soon" className="h-11 justify-start gap-2 rounded-xl border-white/10 bg-white/[0.025] text-muted-foreground"><HugeiconsIcon icon={GoogleIcon} size={17} /> Google <small className="ml-auto text-[8px]">Soon</small></Button>
+        <Button type="button" variant="outline" disabled aria-label="GitHub login coming soon" className="h-11 justify-start gap-2 rounded-xl border-white/10 bg-white/[0.025] text-muted-foreground"><HugeiconsIcon icon={GithubIcon} size={17} /> GitHub <small className="ml-auto text-[8px]">Soon</small></Button>
+      </div>
+      <div className="flex items-center gap-3 text-[9px] uppercase tracking-[0.13em] text-muted-foreground"><span className="h-px flex-1 bg-border" />Available now<span className="h-px flex-1 bg-border" /></div>
+
+      <form className="space-y-5" onSubmit={handleSubmit}>
+        {authStep === "email" ? (
+          <div className="space-y-2">
+            <Label htmlFor="email">Email address</Label>
+            <div className="relative">
+              <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-violet-300" />
+              <Input id="email" type="email" className="xone-auth-input h-12 pl-10" autoComplete="email" autoFocus value={email} onChange={(event) => setEmail(event.target.value)} required placeholder="you@example.com" />
+            </div>
+            <p className="text-xs leading-5 text-muted-foreground">This identifies the profile on this XOne installation.</p>
+          </div>
+        ) : (
           <>
-            {!hasBootstrapPassword && (
-              <div className="space-y-2">
-                <Label htmlFor="current-password">Current password</Label>
-                <div className="relative">
-                  <Input
-                    id="current-password"
-                    type={showPassword ? "text" : "password"}
-                    className="pr-10"
-                    autoComplete="current-password"
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                    minLength={8}
-                    required
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="absolute right-0 top-0 h-full px-3 text-muted-foreground hover:bg-transparent"
-                    onClick={() => setShowPassword((prev) => !prev)}
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </Button>
-                </div>
-              </div>
-            )}
+            <button type="button" onClick={() => { setAuthStep("email"); setError(null); }} className="flex w-full items-center gap-2 rounded-xl border border-white/10 bg-white/[0.035] px-3 py-2.5 text-left text-xs text-muted-foreground transition hover:bg-white/[0.06] hover:text-foreground">
+              <ArrowLeft className="h-3.5 w-3.5" /><span className="min-w-0 flex-1 truncate">{email.trim()}</span><small>Change</small>
+            </button>
             <div className="space-y-2">
-              <Label htmlFor="new-password">New password</Label>
+              <Label htmlFor={isLoginMode ? "password" : "new-password"}>{isLoginMode ? "Password" : "Create password"}</Label>
               <div className="relative">
                 <Input
-                  id="new-password"
-                  type={showNewPassword ? "text" : "password"}
-                  className="pr-10"
-                  autoComplete="new-password"
-                  value={newPassword}
-                  onChange={(event) => setNewPassword(event.target.value)}
+                  id={isLoginMode ? "password" : "new-password"}
+                  type={(isLoginMode ? showPassword : showNewPassword) ? "text" : "password"}
+                  className="xone-auth-input h-12 pr-10"
+                  autoComplete={isLoginMode ? "current-password" : "new-password"}
+                  autoFocus
+                  value={isLoginMode ? password : newPassword}
+                  onChange={(event) => isLoginMode ? setPassword(event.target.value) : setNewPassword(event.target.value)}
                   minLength={8}
                   required
+                  placeholder={isLoginMode ? "Enter your password" : "At least 8 characters"}
                 />
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="absolute right-0 top-0 h-full px-3 text-muted-foreground hover:bg-transparent"
-                  onClick={() => setShowNewPassword((prev) => !prev)}
-                >
-                  {showNewPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
+                <Button type="button" variant="ghost" size="icon" className="absolute right-0 top-0 h-full px-3 text-muted-foreground hover:bg-transparent" onClick={() => isLoginMode ? setShowPassword((prev) => !prev) : setShowNewPassword((prev) => !prev)}>
+                  {(isLoginMode ? showPassword : showNewPassword) ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </Button>
               </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="confirm-password">Confirm password</Label>
-              <Input
-                id="confirm-password"
-                type="password"
-                autoComplete="new-password"
-                value={confirmPassword}
-                onChange={(event) => setConfirmPassword(event.target.value)}
-                minLength={8}
-                required
-              />
-            </div>
-            <p
-              className={`min-h-4 text-xs ${
-                showWhitespaceWarning || showPasswordMismatchWarning
-                  ? "text-destructive"
-                  : "text-muted-foreground"
-              }`}
-              aria-live="polite"
-            >
-              {showWhitespaceWarning
-                ? "New password cannot contain spaces."
-                : showPasswordMismatchWarning
-                  ? "Please ensure passwords match."
-                  : "Must be at least 8 characters."}
-            </p>
+            {!isLoginMode && <p className={`min-h-4 text-xs ${showWhitespaceWarning ? "text-destructive" : "text-muted-foreground"}`} aria-live="polite">{showWhitespaceWarning ? "Password cannot contain spaces." : "Must be at least 8 characters."}</p>}
           </>
         )}
 
@@ -462,18 +361,21 @@ export function AuthForm({ mode }: AuthFormProps): ReactElement | null {
 
         <Button
           type="submit"
-          className="mx-auto flex w-fit px-4"
+          className="flex h-11 w-full rounded-xl bg-gradient-to-r from-white to-violet-200 text-neutral-950 hover:from-white hover:to-violet-100"
           disabled={
             loading ||
             statusLoading ||
             blockedByState ||
-            (isLoginMode && password.length < 8) ||
-            invalidChangePasswordForm
+            (authStep === "email" ? !emailIsValid : (isLoginMode ? password.length < 8 : invalidChangePasswordForm))
           }
         >
           {loading ? "Please wait..." : submitLabel}
         </Button>
       </form>
+
+      {isLoginMode && authStep === "password" && <PasswordRecovery />}
+
+      <p className="flex items-center justify-center gap-1.5 text-center text-[10px] text-muted-foreground"><LockKeyhole className="h-3 w-3" /> Password authentication is local to this installation.</p>
 
       {showSwitchLink && (
         <p className="text-center text-sm text-muted-foreground">

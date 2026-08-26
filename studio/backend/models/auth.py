@@ -14,6 +14,7 @@ class AuthLoginRequest(BaseModel):
     """Login payload: username/password to obtain a JWT."""
 
     username: str = Field(..., description = "Username")
+    email: Optional[str] = Field(None, max_length = 254, description = "Local profile email")
     password: str = Field(..., description = "Password")
 
 
@@ -50,6 +51,17 @@ class DesktopInitialPasswordRequest(BaseModel):
         ...,
         min_length = MIN_PASSWORD_LENGTH,
         description = f"Replacement password (minimum {MIN_PASSWORD_LENGTH} characters)",
+    )
+
+
+class LocalInitialProfileRequest(BaseModel):
+    """Create the local profile from the first-run browser experience."""
+
+    email: str = Field(..., min_length = 3, max_length = 254, description = "Profile email")
+    new_password: str = Field(
+        ...,
+        min_length = MIN_PASSWORD_LENGTH,
+        description = f"Profile password (minimum {MIN_PASSWORD_LENGTH} characters)",
     )
 
 

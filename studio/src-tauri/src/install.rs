@@ -65,12 +65,12 @@ const POWERSHELL_ERROR_ID_FIELD: &str = "FullyQualifiedErrorId";
 /// can sit in a user-writable directory.
 const AMSI_MALWARE_GUIDANCE_PRE_START: &str = "Security software blocked the installer before it \
      started, so no installation steps ran; only diagnostic logs may have been written. This is \
-     usually a false positive: reinstall from an official Unsloth package, and if an unmodified \
+     usually a false positive: reinstall from an official XOne package, and if an unmodified \
      copy is still blocked, update your security product's definitions or report it to your \
      vendor. Do not disable endpoint protection.";
 const AMSI_MALWARE_GUIDANCE_IN_PROGRESS: &str = "Security software blocked part of the installer, \
      so setup did not finish and some components may already be installed. This is usually a \
-     false positive: reinstall from an official Unsloth package, and if an unmodified copy is \
+     false positive: reinstall from an official XOne package, and if an unmodified copy is \
      still blocked, update your security product's definitions or report it to your vendor. Do \
      not disable endpoint protection.";
 const AMSI_ADMIN_BLOCK_GUIDANCE_PRE_START: &str = "This machine's security policy blocked the \

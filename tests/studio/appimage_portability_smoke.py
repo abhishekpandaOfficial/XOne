@@ -89,7 +89,7 @@ def _write_fixture(art_dir: Path, home: Path, version: str) -> Path:
                     if self.path.startswith(("/api/liveness", "/api/health")):
                         return self.send_json({{
                             "status": "alive",
-                            "service": "Unsloth UI Backend",
+                            "service": "XOne Backend",
                             "version": VERSION,
                             "desktop_protocol_version": 1,
                             "desktop_manageability_version": 2,

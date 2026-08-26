@@ -27,6 +27,7 @@ import {
 } from "../components/update-studio-instructions";
 import { loadDesktopAppVersion } from "../desktop-app-version";
 import { useSettingsDialogStore } from "../stores/settings-dialog-store";
+import { XONE_BRAND, XONE_FEATURES, XONE_LINKS } from "@/xone";
 
 type ApiObject = Record<string, unknown>;
 
@@ -166,11 +167,19 @@ export function AboutTab() {
       <div ref={updateSectionRef} className="scroll-mt-5">
         <SettingsSection title={t("settings.about.updates")}>
           <div className="py-2">
-            <UpdateStudioInstructions
-              defaultShell={defaultShell}
-              installSource={isTauri ? null : installSource}
-              showTitle={false}
-            />
+            {isTauri && !XONE_FEATURES.desktopUpdater ? (
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                Desktop updates are disabled for the XOne private alpha. Install
+                reviewed builds manually; no upstream updater or replacement
+                release endpoint is configured.
+              </p>
+            ) : (
+              <UpdateStudioInstructions
+                defaultShell={defaultShell}
+                installSource={isTauri ? null : installSource}
+                showTitle={false}
+              />
+            )}
           </div>
         </SettingsSection>
       </div>
@@ -209,19 +218,19 @@ export function AboutTab() {
       <SettingsSection title={t("settings.about.help")}>
         <SettingsRow label={t("settings.about.documentation")}>
           <a
-            href="https://unsloth.ai/docs"
+            href={XONE_LINKS.upstreamDocs}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground"
           >
             <HugeiconsIcon icon={Book03Icon} className="size-3.5" />
-            unsloth.ai/docs
+            Upstream documentation
             <HugeiconsIcon icon={ArrowUpRight01Icon} className="size-3" />
           </a>
         </SettingsRow>
         <SettingsRow label={t("settings.about.releaseNotes")}>
           <a
-            href="https://unsloth.ai/docs/new/changelog"
+            href={XONE_LINKS.upstreamChangelog}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground"
@@ -233,7 +242,7 @@ export function AboutTab() {
         </SettingsRow>
         <SettingsRow label={t("settings.about.feedback")}>
           <a
-            href="https://github.com/unslothai/unsloth/issues"
+            href={XONE_LINKS.issues}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground"
@@ -248,32 +257,46 @@ export function AboutTab() {
         </SettingsRow>
       </SettingsSection>
 
-      <SettingsSection title={t("settings.about.license.sectionTitle")}>
+      <SettingsSection title="Open Source & Third-Party Licenses">
         <SettingsRow
-          label={t("settings.about.license.studioLabel")}
-          description={t("settings.about.license.studioDescription")}
+          label={`${XONE_BRAND.name} Desktop`}
+          description="This desktop interface remains open source under GNU AGPL v3.0."
         >
           <a
-            href="https://github.com/unslothai/unsloth/blob/main/studio/LICENSE.AGPL-3.0"
+            href={XONE_LINKS.studioLicense}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 font-mono text-xs font-medium text-muted-foreground hover:text-foreground"
           >
-            {t("settings.about.license.studioLicense")}
+            AGPL-3.0
             <HugeiconsIcon icon={ArrowUpRight01Icon} className="size-3" />
           </a>
         </SettingsRow>
         <SettingsRow
-          label={t("settings.about.license.libraryLabel")}
-          description={t("settings.about.license.libraryDescription")}
+          label="Upstream project"
+          description="XOne retains its upstream package names, compatibility interfaces, licenses, and attribution."
         >
           <a
-            href="https://github.com/unslothai/unsloth/blob/main/LICENSE"
+            href={XONE_LINKS.upstream}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 font-mono text-xs font-medium text-muted-foreground hover:text-foreground"
           >
-            {t("settings.about.license.libraryLicense")}
+            View upstream project
+            <HugeiconsIcon icon={ArrowUpRight01Icon} className="size-3" />
+          </a>
+        </SettingsRow>
+        <SettingsRow
+          label="Third-party notices"
+          description="Component licenses and notices are preserved in this repository."
+        >
+          <a
+            href={XONE_LINKS.copying}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 font-mono text-xs font-medium text-muted-foreground hover:text-foreground"
+          >
+            COPYING
             <HugeiconsIcon icon={ArrowUpRight01Icon} className="size-3" />
           </a>
         </SettingsRow>

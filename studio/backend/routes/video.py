@@ -622,7 +622,7 @@ async def get_gallery_video_signed_url(
     if no_credential:
         raise HTTPException(
             status_code = 403,
-            detail = "Video links can only be created from the Unsloth UI or with an API key.",
+            detail = "Video links can only be created from the XOne UI or with an API key.",
         )
 
     from core.inference import video_gallery

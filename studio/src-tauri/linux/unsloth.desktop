@@ -9,4 +9,4 @@ Icon={{icon}}
 Name={{name}}
 Terminal=false
 Type=Application
-MimeType=x-scheme-handler/unsloth;
+MimeType=x-scheme-handler/xone;x-scheme-handler/x1;x-scheme-handler/unsloth;

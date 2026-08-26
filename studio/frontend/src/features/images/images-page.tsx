@@ -360,7 +360,7 @@ function exportFilename(image: GalleryImage, format: ImageExportFormat = "png"):
     `-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}`;
   const suffix = image.batch_index > 0 ? `_${image.batch_index}` : "";
   const ext = format === "jpeg" ? "jpg" : format;
-  return `Unsloth_${stamp}_${image.seed}${suffix}.${ext}`;
+  return `XOne_${stamp}_${image.seed}${suffix}.${ext}`;
 }
 
 // PNG saves the stored bytes verbatim (keeping the embedded recipe); JPEG / WebP re-encode client-side, JPEG flattened onto white.

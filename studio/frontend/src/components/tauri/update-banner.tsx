@@ -11,6 +11,7 @@ import type {
 } from "@/hooks/use-tauri-update";
 import type { CopySupportDiagnosticsResult } from "@/lib/tauri-diagnostics";
 import { cn } from "@/lib/utils";
+import { XONE_BRAND } from "@/xone";
 import { CircleAlert, Download } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
@@ -168,7 +169,7 @@ export function UpdateBanner({
               />
               <div className="min-w-0">
                 <p className="font-heading text-base font-medium text-foreground">
-                  {showFailure ? "App update failed" : "New Unsloth version"}
+                  {showFailure ? "App update failed" : `New ${XONE_BRAND.name} version`}
                 </p>
                 {showFailure ? null : (
                   <p className="mt-0.5 text-xs text-muted-foreground">

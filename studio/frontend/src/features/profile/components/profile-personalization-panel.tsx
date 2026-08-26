@@ -13,6 +13,7 @@ import {
 import { getAuthToken } from "@/features/auth";
 import { cn } from "@/lib/utils";
 import { useT } from "@/i18n";
+import { XONE_BRAND } from "@/xone";
 import { toastError, toastSuccess } from "@/shared/toast";
 import {
   Delete02Icon,
@@ -88,7 +89,7 @@ export function ProfilePersonalizationPanel() {
   const lastNicknameRef = useRef(nickname);
 
   const sessionSub = decodeJwtSubject(getAuthToken()) ?? "";
-  const previewName = draftName.trim() || sessionSub || "Unsloth";
+  const previewName = draftName.trim() || sessionSub || XONE_BRAND.name;
 
   useEffect(() => {
     const previous = lastDisplayNameRef.current;
@@ -385,7 +386,7 @@ export function ProfilePersonalizationPanel() {
                 }
               }}
               autoComplete="off"
-              placeholder={sessionSub || "Unsloth"}
+              placeholder={sessionSub || "XOne"}
               className="h-9 w-full rounded-full text-sm"
             />
           </div>

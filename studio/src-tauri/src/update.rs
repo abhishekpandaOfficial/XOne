@@ -282,7 +282,7 @@ fn run_backend_update_with_terminal_events(
     let bin = match crate::process::find_unsloth_binary() {
         Some(bin) => bin,
         None => {
-            let msg = "Unsloth binary not found. Cannot run update.".to_string();
+            let msg = "Required XOne backend CLI not found. Cannot run update.".to_string();
             diagnostics::finish_attempt(&diagnostics, &attempt, None, false, Some(msg.clone()));
             clear_current_attempt(&state);
             return Err(msg);

@@ -33,9 +33,9 @@ export interface ChannelPreset {
 export const CHANNEL_PRESETS: readonly ChannelPreset[] = [
   {
     id: "unsloth-trending",
-    label: "Unsloth Trending",
+    label: "XOne Trending",
     icon: SparklesIcon,
-    hint: "Most trending models published by Unsloth.",
+    hint: "Most trending models featured by XOne.",
     owner: "unsloth",
     tags: ["gguf"],
     format: "gguf",
@@ -43,9 +43,9 @@ export const CHANNEL_PRESETS: readonly ChannelPreset[] = [
   },
   {
     id: "unsloth-latest",
-    label: "Latest Unsloth",
+    label: "Latest XOne",
     icon: NewReleasesIcon,
-    hint: "Freshly released models from the Unsloth channel.",
+    hint: "Freshly released models from the XOne channel.",
     owner: "unsloth",
     format: "all",
     // Newest by creation date so the feed shows freshly released models, not
@@ -85,6 +85,6 @@ export const CHANNEL_TO_SECTION: Record<ChannelId, HubSection> = {
 
 export const HUB_SECTION_TITLE: Record<HubSection, string> = {
   trending: "Trending Now",
-  latest: "Latest Unsloth Models",
+  latest: "Latest XOne Models",
   finetune: "Fine-tune Ready",
 };

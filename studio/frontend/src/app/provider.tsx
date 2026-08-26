@@ -16,6 +16,7 @@ import {
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { WebUpdateBanner } from "@/components/web/update-banner";
+import { XONE_FEATURES } from "@/xone";
 import { fetchDeviceType } from "@/config/env";
 import { getTauriAuthFailure, tauriAutoAuth } from "@/features/auth";
 import { DeepLinkHandler } from "@/features/deep-links";
@@ -454,6 +455,34 @@ function TauriUpdateLayer({
   );
 }
 
+function TauriPrivateAlphaLayer({
+  children,
+  appContent,
+}: {
+  children?: ReactNode;
+  appContent: ReactNode;
+}) {
+  return (
+    <>
+      {appContent}
+      <div
+        className={[
+          "pointer-events-none fixed bottom-0",
+          "right-4 -mx-3 flex flex-col items-end gap-2 overflow-y-auto overflow-x-hidden overscroll-contain px-3",
+        ].join(" ")}
+        style={{
+          paddingTop: STACK_SHADOW_GUTTER_TOP,
+          paddingBottom: STACK_SHADOW_GUTTER_BOTTOM,
+          maxHeight: "calc(100dvh - 8px)",
+          zIndex: Z_LAYER.OVERLAY_STACK,
+        }}
+      >
+        {children}
+      </div>
+    </>
+  );
+}
+
 const HIDDEN_TITLEBAR_SIDEBAR_ROUTES = new Set([
   "/login",
   "/change-password",
@@ -743,20 +772,31 @@ function TauriWrapper({ children }: { children: ReactNode }) {
   const startupStatus = status === "running" ? "starting" : status;
   const startupProgressDetail = progressDetail;
 
-  const shell = showApp ? (
-    <TauriUpdateLayer
-      isExternalServer={isExternalServer}
-      appContent={
-        <>
-          <NativeIntentDrain />
-          {children}
-        </>
-      }
-    >
+  const tauriAppContent = (
+    <>
+      <NativeIntentDrain />
+      {children}
+    </>
+  );
+  const tauriOverlays = (
+    <>
       <LlamaUpdateBanner positioned={false} enabled={!hidesTitlebarSidebar} />
       <DownloadManagerPanel positioned={false} />
       <LoadedModelsIndicator positioned={false} />
+    </>
+  );
+
+  const shell = showApp ? XONE_FEATURES.desktopUpdater ? (
+    <TauriUpdateLayer
+      isExternalServer={isExternalServer}
+      appContent={tauriAppContent}
+    >
+      {tauriOverlays}
     </TauriUpdateLayer>
+  ) : (
+    <TauriPrivateAlphaLayer appContent={tauriAppContent}>
+      {tauriOverlays}
+    </TauriPrivateAlphaLayer>
   ) : (
     <StartupScreen
       status={startupStatus}

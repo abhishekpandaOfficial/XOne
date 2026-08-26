@@ -21,7 +21,7 @@ const SIZES: Record<AvatarSize, string> = {
 
 const UNSLOTH_OWNER_LOGO: ProviderLogo = {
   id: "unsloth",
-  name: "Unsloth",
+  name: "XOne",
   logoPath: "/rounded.png",
   treatment: "original",
   background: "transparent",

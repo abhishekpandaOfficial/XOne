@@ -18,6 +18,7 @@ test/
 *.local
 .env
 .env.*
+!.env.example
 .omx/
 
 # Editor directories and files

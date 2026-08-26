@@ -30,6 +30,7 @@ import { isTauri } from "@/lib/api-base";
 import { copyToClipboard } from "@/lib/copy-to-clipboard";
 import { Tick02Icon } from "@/lib/tick-icon";
 import { cn } from "@/lib/utils";
+import { XONE_BRAND } from "@/xone";
 import {
   Copy01Icon,
   Globe02Icon,
@@ -209,7 +210,7 @@ function RemotePasswordRow({
   return (
     <SettingsRow
       label="Remote password"
-      description="Remote browsers sign in as unsloth. The Unsloth Desktop App keeps signing in automatically."
+      description={`Remote browsers sign in as unsloth. The ${XONE_BRAND.name} desktop app keeps signing in automatically.`}
     >
       <ChangePasswordDialog initial={status.passwordPending} onDone={onDone} />
     </SettingsRow>
@@ -372,7 +373,7 @@ export function RemoteAccessSection() {
               <AccessStatus status={status} />
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Use Unsloth and its APIs from other devices through a secure,
+              Use {XONE_BRAND.name} and its APIs from other devices through a secure,
               temporary Cloudflare URL.
             </p>
           </div>
@@ -400,7 +401,7 @@ export function RemoteAccessSection() {
 
         <SettingsRow
           label="Start automatically"
-          description="Create a new remote URL each time Unsloth starts. Stopping remote access now won’t turn this off."
+          description={`Create a new remote URL each time ${XONE_BRAND.name} starts. Stopping remote access now won’t turn this off.`}
         >
           <Switch
             checked={status?.autoStart ?? false}

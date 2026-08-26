@@ -1659,8 +1659,8 @@ export function ExportPage() {
                           </div>
                           <div className="text-xs text-muted-foreground">
                             {requiresImatrix
-                              ? "Required for the selected IQ low-bit quant. Auto-downloads the upstream Unsloth imatrix for the base model."
-                              : "Improves quant quality and unlocks the IQ low-bit quants. Auto-downloads the upstream Unsloth imatrix for the base model."}
+                              ? "Required for the selected IQ low-bit quant. Auto-downloads the upstream imatrix for the base model."
+                              : "Improves quant quality and unlocks the IQ low-bit quants. Auto-downloads the upstream imatrix for the base model."}
                           </div>
                         </div>
                         <Switch

@@ -256,7 +256,7 @@ class LoadRequest(BaseModel):
     gpu_memory_mode: Literal["auto", "manual"] = Field(
         "auto",
         description = (
-            "GPU memory strategy for GGUF models. 'auto' (default): Unsloth "
+            "GPU memory strategy for GGUF models. 'auto' (default): XOne "
             "selects GPUs and caps context to fit VRAM. 'manual': you own the "
             "offload. Leave gpu_layers at -1 (Auto) to hand memory management to "
             "llama.cpp's --fit (no device masking, no context auto-reduce, no "
@@ -337,7 +337,7 @@ class LoadRequest(BaseModel):
         description = (
             "Extra arguments forwarded verbatim to llama-server for GGUF models. "
             "One token per list entry, e.g. ['--top-k', '20', '--seed', '42']. "
-            "Unsloth-managed flags (model identity, port, context length, GPU placement, "
+            "XOne-managed flags (model identity, port, context length, GPU placement, "
             "auth, UI/server mode) are rejected. Ignored for non-GGUF models."
         ),
     )
@@ -547,13 +547,13 @@ class TransformersUpgradeInfo(BaseModel):
     )
     supported_in_pypi: bool = Field(
         False,
-        description = "True if the latest PyPI release ships this model_type; Unsloth can "
+        description = "True if the latest runtime release ships this model_type; XOne can "
         "install it into a persistent sidecar after user consent.",
     )
     supported_in_main: bool = Field(
         False,
         description = "True if transformers GitHub main ships this model_type (dev-only; "
-        "not installable through Unsloth yet).",
+        "not installable through XOne yet).",
     )
 
 
@@ -1118,7 +1118,7 @@ class LlamaFlagCatalogResponse(BaseModel):
     )
     managed: list[str] = Field(
         default_factory = list,
-        description = "Flags Unsloth Studio owns; validate_extra_args rejects these outright",
+        description = "Flags X1-Studio owns; validate_extra_args rejects these outright",
     )
     switch_flags: list[str] = Field(
         default_factory = list,
@@ -1631,7 +1631,7 @@ class ChatCompletionRequest(BaseModel):
         None,
         description = (
             "OpenAI function-tool definitions. When provided without `enable_tools=true`, "
-            "Unsloth forwards the tools to the backend so the model returns structured "
+            "XOne forwards the tools to the backend so the model returns structured "
             "tool_calls for the client to execute (standard OpenAI function calling)."
         ),
     )
