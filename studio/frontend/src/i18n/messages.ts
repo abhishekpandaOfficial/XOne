@@ -4,6 +4,7 @@
 import { getLocale } from "./locale-store";
 import { en } from "./locales/en";
 import type { InterpolationValues, MessageKey, MessageTree } from "./types";
+import { applyXOneDisplayBrand } from "@/xone";
 
 export const LOCALES = {
   en: { label: "English", nativeLabel: "English" },
@@ -213,7 +214,7 @@ export function translate(
     return key;
   }
 
-  return interpolate(fallback, values);
+  return interpolate(applyXOneDisplayBrand(key, fallback), values);
 }
 
 export function isSupportedLocale(value: unknown): value is Locale {

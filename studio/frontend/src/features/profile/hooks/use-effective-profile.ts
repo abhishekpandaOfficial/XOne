@@ -4,6 +4,7 @@
 import { getAuthToken } from "@/features/auth";
 import { decodeJwtSubject } from "../utils/jwt-subject";
 import { useUserProfileStore } from "../stores/user-profile-store";
+import { XONE_BRAND } from "@/xone";
 
 export function useEffectiveProfile() {
   const displayName = useUserProfileStore((s) => s.displayName);
@@ -16,7 +17,7 @@ export function useEffectiveProfile() {
   const addressName = nickname.trim() || dn.split(/\s+/)[0] || sessionSub || "";
   return {
     sessionSub,
-    displayTitle: dn || "Unsloth",
+    displayTitle: dn || XONE_BRAND.name,
     addressName,
     avatarDataUrl,
   };

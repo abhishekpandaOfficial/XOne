@@ -2294,7 +2294,7 @@ def _require_ui_session_for_keyless(via_api_key: bool = Depends(authenticated_vi
     if via_api_key:
         raise HTTPException(
             status_code = 403,
-            detail = "Keyless API access can only be changed from the Unsloth UI.",
+            detail = "Keyless API access can only be changed from the XOne UI.",
         )
 
 

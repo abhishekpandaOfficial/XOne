@@ -1,3 +1,200 @@
+<h1 align="center">XOne</h1>
+
+<p align="center"><strong>Private-alpha desktop experience for local AI workflows.</strong></p>
+
+XOne is an early-stage rebranded desktop distribution built from the Unsloth
+open-source project. The current work changes display identity and application
+shell metadata while deliberately retaining the proven `unsloth` Python packages,
+CLI, runtime APIs, model namespaces, data paths, and compatibility identifiers.
+
+This branch is not a production release channel. XOne desktop auto-updates are
+disabled for the private alpha, and no XOne binaries are published from this
+README. Build and test the application from source before evaluating it.
+
+## Project status
+
+- Display brand: XOne private alpha
+- Runtime foundation: Unsloth and its existing compatibility surfaces
+- Desktop updater: disabled; reviewed builds must be installed manually
+- Release claims: limited to functionality present in this checkout
+
+## Open source and attribution
+
+XOne is derived from [Unsloth](https://github.com/unslothai/unsloth). Upstream
+copyright notices, SPDX headers, package names, licenses, and attribution are
+preserved. See [LICENSE](LICENSE), [COPYING](COPYING),
+[studio/LICENSE.AGPL-3.0](studio/LICENSE.AGPL-3.0), and the component-specific
+license and notice files throughout the repository.
+
+## Building and validation
+
+Frontend commands live in `studio/frontend`:
+
+```bash
+npm run build
+npm run typecheck
+npm run lint
+npm test
+```
+
+Validate the native shell from `studio/src-tauri` with `cargo check` and the
+relevant Rust tests. XOne icon paths are centralized in
+`studio/frontend/src/xone/brand.ts`; environment overrides can supply final
+artwork without overwriting preserved upstream assets.
+
+## Local architecture and backend connection
+
+XOne uses one local HTTP backend for both the web and desktop interfaces. The
+backend listens on `127.0.0.1:8888` by default, so it is not exposed to the
+network unless LAN or remote access is explicitly enabled.
+
+For browser development, Vite serves the React application on port `5173` and
+proxies `/api/*` and `/v1/*` to the backend. For the native application, the
+Tauri shell starts the managed backend, validates its health, receives its
+runtime port, and points frontend API requests directly to
+`http://127.0.0.1:<port>`.
+
+Run the complete desktop development stack from the repository root:
+
+```bash
+cd studio
+npx --yes @tauri-apps/cli@2.10.1 dev
+```
+
+To run the browser and backend separately, use two terminals from the
+repository root:
+
+```bash
+# Terminal 1: local FastAPI backend
+./.venv/bin/unsloth studio --api-only -H 127.0.0.1 -p 8888
+
+# Terminal 2: React/Vite web interface
+cd studio/frontend
+npm run dev -- --port 5173 --strictPort
+```
+
+Then open <http://127.0.0.1:5173/>. Backend health and generated API references
+are available at:
+
+- Health: <http://127.0.0.1:8888/api/health>
+- OpenAPI JSON: <http://127.0.0.1:8888/openapi.json>
+- Swagger UI: <http://127.0.0.1:8888/docs>
+- ReDoc: <http://127.0.0.1:8888/redoc>
+
+### Technology stack
+
+- Web: React 19, TypeScript, Vite 8, Tailwind CSS 4, TanStack Router, Motion,
+  Recharts, and assistant-ui.
+- Desktop: Tauri 2 with a Rust native shell and the operating system WebView.
+- Backend: Python, FastAPI, Uvicorn, Pydantic, JWT authentication, and local
+  SQLite storage. Model execution is selected by platform and model type,
+  including PyTorch/Transformers, llama.cpp/GGUF, and MLX on Apple Silicon.
+- API styles: native XOne APIs under `/api/*`, plus OpenAI-compatible model APIs
+  under `/v1/*`.
+
+### Principal API endpoints
+
+The generated OpenAPI pages above are the source of truth. The main endpoint
+families currently registered by the backend are:
+
+| Area | Endpoint family | Purpose |
+| --- | --- | --- |
+| System | `/api/health`, `/api/liveness`, `/api/system` | Readiness, runtime, and hardware information |
+| Authentication | `/api/auth/*` | Local profile login, refresh, password setup, and API keys |
+| Chat | `/api/chat/*` | Threads, messages, projects, attachments, and research runs |
+| Inference | `/api/inference/*` | Model load/unload, generation, tokens, images, audio, and video |
+| OpenAI compatibility | `/v1/models`, `/v1/chat/completions`, `/v1/responses`, `/v1/embeddings` | Standard clients and agent integrations |
+| Training | `/api/train/*` | Fine-tuning jobs, progress, metrics, history, and diffusion training |
+| Models and Hub | `/api/models/*`, `/api/hub/*` | Discovery, downloads, local inventory, and model metadata |
+| Data and RAG | `/api/datasets/*`, `/api/data-recipe/*`, `/api/rag/*` | Dataset preparation and local knowledge bases |
+| Export | `/api/export/*` | Checkpoint loading and GGUF, LoRA, or merged-model export |
+| Settings and providers | `/api/settings/*`, `/api/providers/*`, `/api/mcp/servers/*` | Local configuration, model providers, credentials, and MCP servers |
+
+The login interface specifically calls `GET /api/auth/status`, followed by
+`POST /api/auth/login` for an existing local profile or
+`POST /api/auth/local-initial-password` for first-time local setup. Sessions
+use short-lived access tokens plus refresh tokens through
+`POST /api/auth/refresh`. Google and GitHub user login are visually reserved
+but are not presented as working authentication providers in this private
+alpha.
+
+## Publishing and deployment
+
+XOne has three deployment surfaces with different runtime requirements:
+
+| Surface | Recommended platform | What runs there |
+| --- | --- | --- |
+| Web | Vercel | The static Vite/React landing page and browser client |
+| Desktop | GitHub Releases built by GitHub Actions | Signed Tauri installers for macOS, Windows, and Linux |
+| Backend | The user's device by default; a dedicated GPU VM for an optional hosted service | FastAPI, model files, llama.cpp/MLX/PyTorch workers, training, and inference |
+
+### Deploy the web branch to Vercel
+
+1. Push the reviewed code to the `xone/main` branch of the XOne GitHub
+   repository.
+2. In Vercel, import `abhishekpandaOfficial/XOne` and select `xone/main` as the
+   production branch.
+3. Set **Root Directory** to `studio/frontend`. Vercel will use the checked-in
+   `vercel.json`, run `npm run build`, and publish `dist`.
+4. Leave `VITE_XONE_API_BASE` empty for the public landing-only deployment. To
+   enable the complete signed-in browser workspace, set it to the HTTPS origin
+   of a separately deployed XOne backend, then redeploy.
+5. Add the production domain and verify `/`, `/login`, and a deep application
+   route. Never put credentials in a `VITE_*` variable because those values are
+   compiled into the public browser bundle.
+
+Every pull request or non-production branch can remain a Vercel preview. The
+production deployment must track `xone/main`, never the upstream `main` branch.
+
+### Publish the desktop application
+
+Desktop packages should be produced by GitHub Actions and attached to GitHub
+Releases, not deployed to Vercel. Tauri builds separate platform artifacts:
+
+- macOS: signed and notarized `.dmg` for Apple Silicon, with an Intel build when
+  Intel support is required.
+- Windows: signed NSIS `.exe` installer.
+- Linux: `.deb` and AppImage artifacts.
+
+Before publishing, configure the repository's protected release environment,
+Apple signing/notarization credentials, Windows code-signing credentials, and
+Tauri updater signing keys. The current release workflow is inherited from the
+upstream project and still contains upstream release/version assumptions; it
+must not be dispatched as an XOne public release until a dedicated XOne release
+channel and signing identity have been reviewed.
+
+### Deploy the backend
+
+The default and recommended private architecture is the X1-Studio desktop app
+running its backend on the user's own machine. This keeps model weights,
+credentials, prompts, and generated media local while allowing hardware-aware
+model recommendations.
+
+Do not deploy the model backend as a Vercel Function. It needs persistent model
+storage, long-running streaming processes, optional GPU access, large uploads,
+and local subprocesses. For a managed remote edition, deploy the existing
+FastAPI service in a container on a dedicated GPU host such as RunPod, AWS EC2,
+Google Cloud, or Azure. Put it behind a stable HTTPS domain, persistent encrypted
+storage, authentication, and strict CORS/host policy. XOne's existing secure
+Cloudflare-tunnel mode is suitable for controlled testing; production should use
+a stable, access-controlled tunnel or reverse proxy.
+
+For a temporary secure backend test:
+
+```bash
+./.venv/bin/unsloth studio --api-only --secure -p 8888
+```
+
+Use the emitted HTTPS origin as `VITE_XONE_API_BASE` in Vercel. The command
+retains the upstream executable name for installed-runtime compatibility; the
+equivalent `xone` CLI alias is available after installing this checkout.
+
+## Upstream Unsloth documentation (preserved)
+
+The material below is retained as upstream documentation and attribution. Its
+download links, commands, domains, package names, and product claims refer to
+Unsloth—not to an XOne release.
+
 <h1 align="center" style="margin:0;">
   <a href="https://unsloth.ai/docs"><picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/unslothai/unsloth/main/images/unsloth%20logo%20white%20text.png">

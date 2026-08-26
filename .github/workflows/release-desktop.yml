@@ -771,12 +771,12 @@ jobs:
           cargo_lock = pathlib.Path('Cargo.lock')
           lock_text = cargo_lock.read_text()
           lock_text, count = re.subn(
-              r'(?m)(^\[\[package\]\]\nname = "unsloth-studio"\nversion = ")[^"]+(")',
+              r'(?m)(^\[\[package\]\]\nname = "X1-Studio"\nversion = ")[^"]+(")',
               lambda match: f'{match.group(1)}{app_version}{match.group(2)}',
               lock_text,
           )
           if count != 1:
-              sys.exit(f'Could not patch unsloth-studio version in Cargo.lock (matches={count})')
+              sys.exit(f'Could not patch X1-Studio version in Cargo.lock (matches={count})')
           cargo_lock.write_text(lock_text)
           PY
 
@@ -789,9 +789,9 @@ jobs:
 
           app_version = os.environ['APP_VERSION']
           metadata = json.loads(pathlib.Path(os.environ['RUNNER_TEMP'], 'cargo-metadata.json').read_text())
-          versions = [package['version'] for package in metadata.get('packages', []) if package.get('name') == 'unsloth-studio']
+          versions = [package['version'] for package in metadata.get('packages', []) if package.get('name') == 'X1-Studio']
           if versions != [app_version]:
-              sys.exit(f'cargo metadata unsloth-studio version mismatch: expected {app_version}, got {versions}')
+              sys.exit(f'cargo metadata X1-Studio version mismatch: expected {app_version}, got {versions}')
           PY
 
           git diff -- Cargo.toml Cargo.lock

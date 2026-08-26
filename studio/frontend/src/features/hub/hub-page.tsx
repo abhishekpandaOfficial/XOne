@@ -20,6 +20,7 @@ import {
   applyModelLoadConfigToRuntime,
   applyPerModelConfigToRuntime,
   currentRuntimePerModelConfig,
+  deviceModelGuidance,
   hfModelFitsDevice,
   resolveInitialConfig,
   useActiveModelConfig,
@@ -1298,6 +1299,10 @@ export function ModelsPage() {
     gpu.cpuCore > 0 && gpu.cpuThread > 0
       ? `${gpu.cpuCore}/${gpu.cpuThread}`
       : "Unavailable";
+  const hardwareGuidance = useMemo(
+    () => deviceModelGuidance(inferenceGpu),
+    [inferenceGpu],
+  );
 
   const openNewChat = useCallback(() => {
     void navigate({ to: "/chat", search: { new: crypto.randomUUID() } });
@@ -1933,6 +1938,7 @@ export function ModelsPage() {
           gpuLabel={gpuLabel}
           ramLabel={ramLabel}
           coreLabel={coreLabel}
+          hardwareGuidance={hardwareGuidance}
           activeCheckpoint={activeCheckpoint}
           activeGgufVariant={activeGgufVariant}
           onTitleClick={handleResetToDiscover}

@@ -15,6 +15,7 @@ import { ChevronDown as ChevronDownIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { AnimatePresence, motion } from "motion/react";
 import { type ReactNode, useEffect, useState } from "react";
+import { applyXOneDisplayBrand, XONE_BRAND } from "@/xone";
 
 interface StartupScreenProps {
   status: BackendStatus;
@@ -103,16 +104,15 @@ function Logo() {
   return (
     <div className="flex items-center justify-center gap-3">
       <img
-        src="/sticker.png"
-        alt=""
-        aria-hidden="true"
+        src={XONE_BRAND.icons.app}
+        alt={XONE_BRAND.name}
         className="h-[60px] w-[60px] object-contain"
       />
       <span
         className="text-ui-50 font-semibold leading-none tracking-[-0.02em] text-foreground"
         style={{ fontFamily: '"Hellix", sans-serif' }}
       >
-        unsloth
+        {XONE_BRAND.wordmark}
       </span>
     </div>
   );
@@ -168,7 +168,7 @@ function NotInstalledContent({ onInstall }: { onInstall: () => void }) {
           className="text-ui-13 font-semibold tracking-[-0.01em] text-muted-foreground"
           style={{ fontFamily: '"Hellix", sans-serif' }}
         >
-          To install Unsloth, click Get Started.
+          To install XOne, click Get Started.
         </p>
         <ActionButton onClick={onInstall}>
           Get Started
@@ -231,7 +231,7 @@ function InstallingContent({
               />
             </summary>
             <pre className="mt-2 max-h-28 overflow-auto whitespace-pre-wrap break-words rounded-lg border border-border/50 bg-muted/30 p-3 font-mono text-ui-10 leading-relaxed text-muted-foreground">
-              {detailLines.join("\n")}
+              {applyXOneDisplayBrand("desktop.installDetails", detailLines.join("\n"))}
             </pre>
           </details>
         )}
@@ -273,7 +273,7 @@ function RepairingContent({
               />
             </summary>
             <pre className="mt-2 max-h-28 overflow-auto whitespace-pre-wrap break-words rounded-lg border border-border/50 bg-muted/30 p-3 font-mono text-ui-10 leading-relaxed text-muted-foreground">
-              {detailLines.join("\n")}
+              {applyXOneDisplayBrand("desktop.setupDetails", detailLines.join("\n"))}
             </pre>
           </details>
         )}
@@ -291,7 +291,7 @@ function ClosingContent() {
       <div className="mb-10 flex w-full flex-col items-center gap-2">
         <Spinner className="size-6 text-primary" />
         <p className="text-sm font-bold text-foreground" aria-live="polite">
-          Closing Unsloth Desktop...
+          Closing XOne Desktop...
         </p>
         <p className="text-sm text-muted-foreground">Shutting down the backend.</p>
       </div>
@@ -314,7 +314,9 @@ function InstallErrorContent({
       <div className="mt-8 flex flex-col items-center gap-2">
         <p className="text-sm font-medium text-destructive">Setup ran into a problem</p>
         {error && (
-          <p className="max-w-xs text-center text-xs text-muted-foreground">{error}</p>
+          <p className="max-w-xs text-center text-xs text-muted-foreground">
+            {applyXOneDisplayBrand("desktop.error", error)}
+          </p>
         )}
         <DiagnosticsCopyActions onCopyDiagnostics={onCopyDiagnostics}>
           <ActionButton onClick={onRetryInstall}>Try Again</ActionButton>
@@ -339,7 +341,9 @@ function RepairErrorContent({
       <div className="mt-8 flex flex-col items-center gap-2">
         <p className="text-sm font-medium text-destructive">Update failed</p>
         {error && (
-          <p className="max-w-md text-center text-xs text-muted-foreground">{error}</p>
+          <p className="max-w-md text-center text-xs text-muted-foreground">
+            {applyXOneDisplayBrand("desktop.error", error)}
+          </p>
         )}
         <DiagnosticsCopyActions onCopyDiagnostics={onCopyDiagnostics}>
           <ActionButton onClick={onRetry}>Retry</ActionButton>
@@ -426,7 +430,9 @@ function ErrorContent({
       <div className="mt-8 flex flex-col items-center gap-2">
         <p className="text-sm font-medium text-destructive">Something went wrong</p>
         {error && (
-          <p className="max-w-md text-center text-xs text-muted-foreground">{error}</p>
+          <p className="max-w-md text-center text-xs text-muted-foreground">
+            {applyXOneDisplayBrand("desktop.error", error)}
+          </p>
         )}
         <DiagnosticsCopyActions onCopyDiagnostics={onCopyDiagnostics}>
           <ActionButton onClick={onRetry}>Retry</ActionButton>

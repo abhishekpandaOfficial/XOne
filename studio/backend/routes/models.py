@@ -3026,7 +3026,7 @@ async def delete_finetuned_model(
     if source not in {"training", "exported"}:
         raise HTTPException(
             status_code = 400,
-            detail = "Only trained or exported Unsloth models can be deleted",
+            detail = "Only models trained or exported by XOne can be deleted",
         )
 
     if not model_path or not model_path.strip():
@@ -3058,14 +3058,14 @@ async def delete_finetuned_model(
         if not _is_path_under_lexically(delete_path, allowed_root):
             raise HTTPException(
                 status_code = 400,
-                detail = "Model path is outside Unsloth storage",
+                detail = "Model path is outside XOne-managed storage",
             )
         if export_type == "gguf" and gguf_variant:
             target_path = delete_path.resolve()
             if not _is_path_under(target_path, allowed_root):
                 raise HTTPException(
                     status_code = 400,
-                    detail = "Model path is outside Unsloth storage",
+                    detail = "Model path is outside XOne-managed storage",
                 )
         else:
             target_path = delete_path
@@ -3078,7 +3078,7 @@ async def delete_finetuned_model(
     if should_check_resolved_path and not _is_path_under(target_path, allowed_root):
         raise HTTPException(
             status_code = 400,
-            detail = "Model path is outside Unsloth storage",
+            detail = "Model path is outside XOne-managed storage",
         )
     if target_path == allowed_root:
         raise HTTPException(

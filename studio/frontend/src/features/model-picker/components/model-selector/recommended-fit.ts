@@ -74,6 +74,79 @@ export function paramsFromId(id: string): number | undefined {
 // can run at all, so it uses this rather than a default 4-bit size.
 const MIN_QUANT_BYTES_PER_PARAM = 0.4;
 
+export type DeviceModelGuidance = {
+  detected: boolean;
+  title: string;
+  detail: string;
+  safeMemoryGb: number;
+  preferredFormats: string;
+};
+
+/** Human-readable device guidance for the Hub. This is deliberately more
+ * conservative than the per-file fit predicate below: the banner should
+ * recommend a responsive everyday model, while the row-level check remains
+ * the source of truth for whether a particular artifact can load at all. */
+export function deviceModelGuidance(device: {
+  available: boolean;
+  budgetKnown: boolean;
+  backend: string;
+  name: string;
+  memoryTotalGb: number;
+  systemRamAvailableGb: number;
+  cpuThread: number;
+}): DeviceModelGuidance {
+  if (!device.budgetKnown) {
+    return {
+      detected: false,
+      title: "Detecting this device",
+      detail: "XOne will recommend models after the backend reports processor and memory details.",
+      safeMemoryGb: 0,
+      preferredFormats: "GGUF",
+    };
+  }
+
+  const backend = device.backend.toLowerCase();
+  const sharedMemoryHost = backend === "mlx" || !device.available;
+  const safeMemoryGb = sharedMemoryHost
+    ? device.systemRamAvailableGb * 0.65
+    : device.memoryTotalGb * 0.7 + device.systemRamAvailableGb * 0.35;
+  let maxParamsB = safeMemoryGb < 5 ? 3
+    : safeMemoryGb < 9 ? 7
+      : safeMemoryGb < 16 ? 14
+        : safeMemoryGb < 28 ? 32
+          : safeMemoryGb < 52 ? 70
+            : 100;
+
+  // CPU-only machines can technically offload larger models, but the result is
+  // rarely a good interactive experience. Keep their recommendation practical.
+  if (!device.available && backend !== "mlx") {
+    if (device.cpuThread > 0 && device.cpuThread <= 4) maxParamsB = Math.min(maxParamsB, 3);
+    else if (device.cpuThread > 0 && device.cpuThread <= 8) maxParamsB = Math.min(maxParamsB, 7);
+    else if (device.cpuThread > 0 && device.cpuThread <= 12) maxParamsB = Math.min(maxParamsB, 14);
+  }
+
+  const preferredFormats = backend === "mlx"
+    ? "MLX or GGUF"
+    : ["cuda", "rocm", "xpu"].includes(backend)
+      ? "GGUF or quantized safetensors"
+      : "GGUF";
+  const processor = device.name && device.name !== "Unknown"
+    ? device.name
+    : backend.toUpperCase() || "CPU";
+  const memoryLabel = safeMemoryGb > 0
+    ? `${safeMemoryGb.toFixed(1)} GiB safe working budget`
+    : "memory budget unavailable";
+  const threadLabel = device.cpuThread > 0 ? ` · ${device.cpuThread} CPU threads` : "";
+
+  return {
+    detected: true,
+    title: `Recommended: up to ${maxParamsB}B quantized models`,
+    detail: `${processor} · ${preferredFormats} · ${memoryLabel}${threadLabel}. Exact downloads are checked individually before XOne recommends them.`,
+    safeMemoryGb,
+    preferredFormats,
+  };
+}
+
 /** Rough on-disk bytes for the smallest practical quant of `params` weights. */
 export function estimateQuantBytes(params: number): number {
   return params * MIN_QUANT_BYTES_PER_PARAM;

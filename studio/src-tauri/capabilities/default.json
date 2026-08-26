@@ -1,6 +1,6 @@
 {
   "identifier": "default",
-  "description": "Default capabilities for Unsloth",
+  "description": "Default capabilities for XOne",
   "windows": ["main"],
   "permissions": [
     "core:default",
@@ -32,7 +32,6 @@
       "identifier": "opener:allow-open-url",
       "allow": [{ "url": "https://*" }, { "url": "http://*" }, { "url": "mailto:*" }]
     },
-    "updater:default",
     "clipboard-manager:allow-write-text",
     "clipboard-manager:allow-read-image",
     "window-state:default"

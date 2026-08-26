@@ -178,16 +178,16 @@ fn should_emit_repair_failed(msg: &str) -> bool {
 fn external_conflict_message(conflict: &crate::preflight::ExternalBackendConflict) -> String {
     match conflict.reason.as_str() {
         "desktop_owned_backend_active" => format!(
-            "A desktop-owned Unsloth server for this install is already running on port {}. Quit the other desktop app instance, then try again.",
+            "A desktop-owned XOne server for this install is already running on port {}. Quit the other desktop app instance, then try again.",
             conflict.port
         ),
         // Do not describe a backend from an unknown install as terminal-started.
         "ambiguous_root_external_backend_active" => format!(
-            "An Unsloth server is already running on port {}, and this app cannot confirm which install it belongs to. Stop that server, then try again.",
+            "An XOne server is already running on port {}, and this app cannot confirm which install it belongs to. Stop that server, then try again.",
             conflict.port
         ),
         _ => format!(
-            "An Unsloth server for this install is already running from a terminal on port {}. Stop that server, or run `unsloth studio update` from that terminal before using desktop repair/update.",
+            "An XOne server for this install is already running from a terminal on port {}. Stop that server, or run `unsloth studio update` from that terminal before using desktop repair/update.",
             conflict.port
         ),
     }
@@ -717,8 +717,7 @@ pub async fn start_install(
 ) -> Result<(), String> {
     if has_owned_backend(&backend_state)? {
         return Err(
-            "The Unsloth backend is still running. Stop it before starting installation."
-                .to_string(),
+            "The XOne backend is still running. Stop it before starting installation.".to_string(),
         );
     }
     block_external_conflict(&[]).await?;
@@ -892,7 +891,10 @@ pub async fn start_managed_repair(
     let repair_group_id = install::take_pending_repair_group_for_resume(&install_state)
         .unwrap_or_else(|| diagnostics::begin_repair_group(&diagnostics_state));
 
-    let _ = app.emit("repair-progress", "Updating existing Unsloth install...");
+    let _ = app.emit(
+        "repair-progress",
+        "Updating existing XOne backend install...",
+    );
     let update_app = app.clone();
     let update_state = update_state.inner().clone();
     let update_diagnostics = diagnostics_state.clone();
@@ -919,7 +921,7 @@ pub async fn start_managed_repair(
             warn!("Managed repair update finished, but preflight is still not ready; falling back to installer");
             let _ = app.emit(
                 "repair-progress",
-                "Update finished, but Unsloth is still not ready. Running bundled installer...",
+                "Update finished, but the XOne backend is still not ready. Running bundled installer...",
             );
         }
         Err(msg) => {
@@ -1012,7 +1014,8 @@ pub async fn start_managed_repair(
         return Ok(());
     }
 
-    let msg = "Repair finished, but Unsloth install is still not desktop-ready.".to_string();
+    let msg =
+        "Repair finished, but the XOne backend install is still not desktop-ready.".to_string();
     error!("{}", msg);
     diagnostics::finish_repair_group(
         &diagnostics_state,

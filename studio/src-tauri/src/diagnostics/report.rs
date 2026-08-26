@@ -26,7 +26,7 @@ pub(crate) fn render_report(
     let mut warnings = Vec::new();
     let mut raw = String::new();
 
-    raw.push_str("Unsloth Support Diagnostics\n");
+    raw.push_str("XOne Support Diagnostics\n");
     raw.push_str(&format!("diag_report_schema={SCHEMA_VERSION}\n"));
     raw.push_str(&format!("created_at_ms={}\n", now_ms()));
     raw.push_str(&format!("app_version={}\n", env!("CARGO_PKG_VERSION")));
@@ -1024,7 +1024,7 @@ mod tests {
     #[test]
     fn a_truncated_report_still_carries_the_crash_stack() {
         let stack = "Current thread 0x1 (most recent call first):";
-        let mut body = String::from("Unsloth Support Diagnostics\n\n== Log tails ==\n");
+        let mut body = String::from("XOne Support Diagnostics\n\n== Log tails ==\n");
         body.push_str(&format!(
             "file=server.log source=backend-session-log\n```text\n{stack}\n```\n"
         ));

@@ -27,7 +27,7 @@ export function buildChatTourSteps({
       title: "Pick a model",
       body: (
         <>
-          Selects what’s loaded for inference. Recommended is Unsloth’s curated
+          Selects what’s loaded for inference. Recommended is XOne’s curated
           base models; On Device is your downloads and fine-tuned outputs (LoRA
           adapters and full finetunes).
         </>
@@ -39,7 +39,7 @@ export function buildChatTourSteps({
       title: "Find a model",
       body: (
         <>
-          Search Unsloth’s models, or hit Search Hub for all of Hugging Face.
+          Search XOne’s models, or hit Search Hub for all of Hugging Face.
           Switch Recommended and On Device, filter by format, and sort by
           trending or recent. An OOM tag means it won’t fit in your VRAM.
         </>

@@ -306,7 +306,7 @@ def _friendly_upstream_error(text: str) -> str:
         return (
             "The model couldn't compile a tool-calling grammar for this request. This is a "
             "llama-server limitation with some model/quant and tool-schema combinations. "
-            "Update Unsloth (it installs the latest llama.cpp, which handles the common "
+            "Update the XOne runtime (it installs the latest llama.cpp, which handles the common "
             "coding-agent tools) or try a different GGUF model."
         )
     return f"llama-server error: {text}"
@@ -3901,7 +3901,7 @@ def _full_access_tip(code_tools: list[str]) -> str:
         # Three names now, so only the last pair takes the "and".
         subject = "The " + ", ".join(code_tools[:-1]) + f" and {code_tools[-1]} tools run"
     return (
-        subject + " where Unsloth Studio is running, with the code sandbox and the "
+        subject + " where X1-Studio is running, with the code sandbox and the "
         "approval prompts disabled, so you can inspect and change whatever that "
         "process can reach. That is not necessarily the device the user is viewing "
         "this on, and it may be a remote host or a container that mounts only some "
@@ -6160,11 +6160,11 @@ async def _unavailable_model_message(requested_model: str) -> str:
     if not available:
         return (
             f"The model '{requested_model}' is not downloaded on this server, and no "
-            "models are downloaded yet. Download one in Unsloth Studio."
+            "models are downloaded yet. Download one in X1-Studio."
         )
     return (
         f"The model '{requested_model}' is not downloaded on this server. "
-        f"Available models: {available}. Download more in Unsloth Studio, "
+        f"Available models: {available}. Download more in X1-Studio, "
         "or list them with GET /v1/models."
     )
 
@@ -6635,14 +6635,14 @@ async def _reject_unservable_model(
         status_code, code = 503, "model_switch_failed"
         message = (
             f"The model '{requested_model}' is downloaded, but this server could not "
-            "switch to it. Retry shortly, or load it in Unsloth Studio."
+            "switch to it. Retry shortly, or load it in X1-Studio."
         )
     elif downloaded:
         status_code, code = 404, "model_not_found"
         message = (
             f"The model '{requested_model}' is downloaded but not loaded, and "
             "'Switch model by request' is off, so this server can only serve the "
-            "loaded model. Turn it on in Unsloth Studio under Settings > API."
+            "loaded model. Turn it on in X1-Studio under Settings > API."
         )
     else:
         status_code, code = 404, "model_not_found"
@@ -10076,7 +10076,7 @@ async def _load_model_impl(
                 backend.active_model_name, model_identifier
             ) and _mlx_runtime_settings_match(backend, request):
                 api_monitor.discard(_load_event)  # nothing loaded, no monitor row
-                logger.info(f"Model already loaded (Unsloth): {model_log_label}, skipping reload")
+                logger.info(f"Model already loaded (XOne): {model_log_label}, skipping reload")
                 # A no-op Studio load of a preview-owned checkpoint still claims it.
                 _set_preview_resident(None)
                 inference_config = load_inference_config(backend.active_model_name)
@@ -10262,8 +10262,8 @@ async def _load_model_impl(
             raise HTTPException(
                 status_code = 400,
                 detail = (
-                    "Unsloth does not support distributed MLX inference under "
-                    "mlx.launch. Use `mlx.launch ... unsloth chat` or run Unsloth "
+                    "XOne does not support distributed MLX inference under "
+                    "mlx.launch. Use `mlx.launch ... xone chat` or run XOne "
                     "without the distributed launcher."
                 ),
             )
@@ -10452,7 +10452,7 @@ async def _load_model_impl(
             # Unload any active Unsloth model only after every hub conflict check.
             if unsloth_backend.active_model_name:
                 logger.info(
-                    f"Unloading Unsloth model '{unsloth_backend.active_model_name}' before loading GGUF"
+                    f"Unloading XOne model '{unsloth_backend.active_model_name}' before loading GGUF"
                 )
                 try:
                     await asyncio.to_thread(
@@ -10607,7 +10607,7 @@ async def _load_model_impl(
         # Unload any active GGUF model first, off-loop: a 600 GB teardown measures
         # 160s and on-loop would block _tunnel_safe_json's own padding.
         if llama_backend.is_loaded:
-            logger.info("Unloading GGUF model before loading Unsloth model")
+            logger.info("Unloading GGUF model before loading XOne model")
             try:
                 await asyncio.to_thread(llama_backend.unload_model)
             except Exception:
@@ -12055,7 +12055,7 @@ async def confirm_tool_call(
 
 @studio_router.get("/monitor")
 async def get_api_monitor(current_subject: str = Depends(get_current_subject)):
-    """Return recent OpenAI-compatible API activity for Unsloth."""
+    """Return recent OpenAI-compatible API activity for XOne."""
     # Off-loop: both helpers reach get_inference_backend(), whose first call waits on
     # hardware detection, and this is polled from first paint.
     active_model, context_length, queue, direct_busy = await asyncio.to_thread(
@@ -15663,7 +15663,7 @@ async def openai_chat_completions(
         if request_admitted_without_credential(request):
             raise HTTPException(
                 status_code = 403,
-                detail = "External providers can only be used from the Unsloth UI or with an API key.",
+                detail = "External providers can only be used from the XOne UI or with an API key.",
             )
         # External provider: this request won't touch the local GGUF, so drop it
         # from the keep-warm count or its in-flight stream would falsely block a
@@ -16564,7 +16564,7 @@ async def openai_chat_completions(
             raise _reject(
                 400,
                 openai_error_body(
-                    "response_format is not supported with Unsloth tool execution; "
+                    "response_format is not supported with XOne tool execution; "
                     "send the request without enable_tools to use guided decoding.",
                     status = 400,
                     code = "unsupported_parameter",
@@ -19655,7 +19655,7 @@ async def serve_sandbox_file(
 # =====================================================================
 
 # `owned_by` marker on every /v1/models entry (loaded and available alike).
-_OWNED_BY = "unsloth-studio"
+_OWNED_BY = "xone-studio"
 
 
 def _openai_model_objects() -> list[dict]:
@@ -22387,7 +22387,7 @@ def _anthropic_requested_studio_tools(tools: Optional[list]) -> set[str]:
 def _select_anthropic_server_tools(
     all_tools: list[dict], requested_studio_tools: set[str], enabled_tools: Optional[list[str]]
 ) -> list[dict]:
-    """Select Unsloth tools requested through Anthropic tools and extensions."""
+    """Select XOne tools requested through Anthropic tools and extensions."""
     if not requested_studio_tools and enabled_tools is None:
         return all_tools
 

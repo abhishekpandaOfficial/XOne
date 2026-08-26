@@ -146,7 +146,7 @@ def test_liveness_reports_a_generation_in_flight():
 
     assert result["busy"]["status_code"] == 200
     assert result["busy"]["status"] == "alive"
-    assert result["busy"]["service"] == "Unsloth UI Backend"
+    assert result["busy"]["service"] == "XOne Backend"
     assert result["busy"]["inference_active"] is True, (
         "liveness does not say the backend is generating; the watchdog cannot tell a busy "
         "backend from a dead one and kills the stream at three missed probes"

@@ -53,8 +53,8 @@ export const ar = {
   },
   shell: {
     beta: "BETA",
-    brand: "unsloth",
-    product: "Unsloth",
+    brand: "xone",
+    product: "XOne",
     accountMenu: "قائمة حساب {name}",
     updateAvailable: "يتوفر تحديث",
     resize: {
@@ -63,7 +63,7 @@ export const ar = {
       drag: "اسحب لتغيير الحجم",
     },
     aria: {
-      home: "الصفحة الرئيسية لـ Unsloth",
+      home: "الصفحة الرئيسية لـ XOne",
       closeSidebar: "إغلاق الشريط الجانبي",
       openSidebar: "فتح الشريط الجانبي",
       resizeSidebar: "تغيير حجم الشريط الجانبي أو طيه",
@@ -178,7 +178,7 @@ export const ar = {
     title: "الإعدادات",
     dialog: {
       title: "الإعدادات",
-      description: "إدارة تفضيلات Unsloth الخاصة بك.",
+      description: "إدارة تفضيلات XOne الخاصة بك.",
       closeAriaLabel: "إغلاق الإعدادات",
       searchPlaceholder: "ابحث في الإعدادات…",
       searchNoResults: "لم يُعثر على أي إعداد.",
@@ -240,7 +240,7 @@ export const ar = {
         },
         logOut: {
           label: "تسجيل الخروج",
-          description: "تسجيل الخروج من Unsloth",
+          description: "تسجيل الخروج من XOne",
         },
         approveToolRequest: {
           label: "الموافقة على الطلب",
@@ -493,7 +493,7 @@ export const ar = {
         sttReady: "مُحمَّل على {device}",
         sttLoaded: "مُحمَّل",
         sttUnavailable:
-          "غير مثبّت على هذا الخادم. نفّذ `unsloth studio update` لتفعيل الإملاء المحلي.",
+          "غير مثبّت على هذا الخادم. نفّذ `xone studio update` لتفعيل الإملاء المحلي.",
         sttRetry: "إعادة المحاولة",
         sttDownloadChecking: "جارٍ التحقق من حالة التنزيل…",
         sttNotDownloaded: "لم يُنزَّل",
@@ -526,7 +526,7 @@ export const ar = {
           "اسمح بالوصول إلى الميكروفون لعرض أسماء الأجهزة",
         allowMicrophone: "السماح بالميكروفون",
         micAccessBlocked:
-          "تم حظر الوصول إلى الميكروفون. اسمح بالوصول إلى الميكروفون لصفحة Unsloth هذه ثم أعد المحاولة.",
+          "تم حظر الوصول إلى الميكروفون. اسمح بالوصول إلى الميكروفون لصفحة XOne هذه ثم أعد المحاولة.",
         micAccessBlockedDesktop:
           "تم حظر الوصول إلى الميكروفون. أعد المحاولة واختر السماح، أو مكّن الميكروفون من إعدادات الخصوصية في النظام.",
         micAccessUnsupported:
@@ -630,7 +630,7 @@ export const ar = {
     },
     general: {
       title: "عام",
-      description: "التفضيلات العامة لـ Unsloth.",
+      description: "التفضيلات العامة لـ XOne.",
       account: "الحساب",
       huggingFaceToken: "رمز وصول Hugging Face",
       huggingFaceTokenDescription:
@@ -641,7 +641,7 @@ export const ar = {
       checkingToken: "جارٍ التحقق من رمز الوصول...",
       tokenValidated: "تم التحقق من الرمز",
       password: "كلمة المرور",
-      passwordDescription: "تغيير كلمة المرور لحساب Unsloth هذا.",
+      passwordDescription: "تغيير كلمة المرور لحساب XOne هذا.",
       passwordDialog: {
         trigger: "تغيير كلمة المرور",
         title: "تغيير كلمة المرور",
@@ -650,7 +650,7 @@ export const ar = {
         setTrigger: "تعيين كلمة مرور الوصول عن بُعد",
         setTitle: "تعيين كلمة مرور الوصول عن بُعد",
         setDescription:
-          "اختر كلمة المرور التي تسجّل بها المتصفحات البعيدة الدخول باسم unsloth (بحد أدنى {minLength} حرفًا). سيواصل تطبيق Unsloth لسطح المكتب تسجيل الدخول تلقائيًا.",
+          "اختر كلمة المرور التي تسجّل بها المتصفحات البعيدة الدخول باسم unsloth (بحد أدنى {minLength} حرفًا). سيواصل تطبيق XOne لسطح المكتب تسجيل الدخول تلقائيًا.",
         setSubmit: "تعيين كلمة المرور",
         setting: "جارٍ التعيين...",
         setDone: "تم تعيين كلمة المرور.",
@@ -718,7 +718,7 @@ export const ar = {
           "يحفظ ذاكرة KV المؤقتة قبل التفريغ التلقائي عند الخمول، حتى لا تعيد المحادثات المستأنفة قراءة السجل. بحد أقصى 10 جيجابايت على القرص.",
         apiOnly: "تفريغ النماذج التي حمّلتها واجهة API فقط",
         apiOnlyDescription:
-          "يُبقي التفريغ التلقائي عند الخمول النموذج الذي حمّلته من Unsloth في الذاكرة، ولا يفرّغ سوى النماذج التي حمّلها طلب عبر واجهة API.",
+          "يُبقي التفريغ التلقائي عند الخمول النموذج الذي حمّلته من XOne في الذاكرة، ولا يفرّغ سوى النماذج التي حمّلها طلب عبر واجهة API.",
       },
       previewSharing: {
         sectionTitle: "مشاركة المعاينة",
@@ -750,13 +750,13 @@ export const ar = {
       },
       startup: {
         sectionTitle: "بدء التشغيل",
-        launchAtLogin: "تشغيل Unsloth عند تسجيل الدخول",
+        launchAtLogin: "تشغيل XOne عند تسجيل الدخول",
         launchAtLoginDescription:
-          "يبدأ Unsloth في الخلفية عند تسجيل الدخول، ويبقى في شريط القوائم أو علبة النظام حتى تفتحه.",
+          "يبدأ XOne في الخلفية عند تسجيل الدخول، ويبقى في شريط القوائم أو علبة النظام حتى تفتحه.",
 
         closeToTray: "الإغلاق إلى علبة النظام",
         closeToTrayDescription:
-          "إبقاء Unsloth وخادمه قيد التشغيل في الخلفية عند إغلاق النافذة الرئيسية.",
+          "إبقاء XOne وخادمه قيد التشغيل في الخلفية عند إغلاق النافذة الرئيسية.",
         closeToTraySaveError: "تعذّر تحديث إعداد الإغلاق إلى علبة النظام.",
         loadError: "تعذر تحميل إعداد التشغيل عند تسجيل الدخول.",
         saveError: "تعذر تحديث إعداد التشغيل عند تسجيل الدخول.",
@@ -822,22 +822,22 @@ export const ar = {
         action: "إعادة تعيين التفضيلات",
         confirmTitle: "إعادة تعيين جميع التفضيلات المحلية؟",
         confirmDescription:
-          "يمسح التفضيلات المحلية فقط ويعيد تحميل Unsloth. تُحفظ المحادثات ووصول API والإعدادات المخزّنة في قاعدة البيانات.",
+          "يمسح التفضيلات المحلية فقط ويعيد تحميل XOne. تُحفظ المحادثات ووصول API والإعدادات المخزّنة في قاعدة البيانات.",
         confirmAction: "إعادة التعيين وإعادة التحميل",
       },
       permissions: {
         sectionTitle: "الأذونات",
         bypassLabel: "أذونات الأدوات",
         bypassDescription:
-          "كيفية موافقة Unsloth على استدعاءات أدوات المحادثة (الطرفية، python، الويب، MCP) قبل تشغيلها. وضع «Full access» يعطّل الموافقات وصندوق عزل الشيفرة.",
+          "كيفية موافقة XOne على استدعاءات أدوات المحادثة (الطرفية، python، الويب، MCP) قبل تشغيلها. وضع «Full access» يعطّل الموافقات وصندوق عزل الشيفرة.",
       },
     },
     profile: {
       title: "الملف الشخصي",
-      description: "كيفية ظهور ملفك الشخصي في Unsloth.",
+      description: "كيفية ظهور ملفك الشخصي في XOne.",
       changePicture: "تغيير صورة الملف الشخصي",
       displayName: "الاسم المعروض",
-      nickname: "بماذا يجب أن يناديك Unsloth؟",
+      nickname: "بماذا يجب أن يناديك XOne؟",
       nicknamePlaceholder: "الاسم المفضّل",
       nicknameSaved: "تم حفظ الاسم المفضّل",
       avatarShape: "شكل صورة الملف الشخصي",
@@ -864,10 +864,10 @@ export const ar = {
       stats: {
         title: "إحصاءاتك",
         subtitle:
-          "كل ما يلي محسوب من سجلك الخاص. لا يُجمَع أي شيء ولا يُرسَل إلى Unsloth.",
+          "كل ما يلي محسوب من سجلك الخاص. لا يُجمَع أي شيء ولا يُرسَل إلى XOne.",
         retry: "إعادة المحاولة",
         privacyNote:
-          "تُحسب الإحصاءات من سجل المحادثات والتدريب المحفوظ في نسخة Unsloth لديك. لا يُجمَع أي شيء، ولا يُرسَل شيء إلى Unsloth أو إلى أي طرف ثالث.",
+          "تُحسب الإحصاءات من سجل المحادثات والتدريب المحفوظ في نسخة XOne لديك. لا يُجمَع أي شيء، ولا يُرسَل شيء إلى XOne أو إلى أي طرف ثالث.",
         emptyChats:
           "لا توجد محادثات بعد. ابدأ محادثة وستظهر إحصاءاتك هنا.",
         lifetimeTokens: "إجمالي التوكنات",
@@ -920,7 +920,7 @@ export const ar = {
     },
     appearance: {
       title: "المظهر",
-      description: "كيفية ظهور Unsloth على هذا الجهاز.",
+      description: "كيفية ظهور XOne على هذا الجهاز.",
       theme: {
         title: "السمة",
         label: "نظام الألوان",
@@ -931,7 +931,7 @@ export const ar = {
       },
       palette: {
         label: "لوحة الألوان",
-        description: "الألوان المستخدمة في Unsloth في الوضعين الفاتح والداكن.",
+        description: "الألوان المستخدمة في XOne في الوضعين الفاتح والداكن.",
         standard: "قياسية",
         classic: "كلاسيكية",
         minimal: "بسيطة",
@@ -989,7 +989,7 @@ export const ar = {
         },
         uiFontSize: {
           label: "حجم خط الواجهة",
-          description: "اضبط الحجم الأساسي المستخدم في واجهة Unsloth.",
+          description: "اضبط الحجم الأساسي المستخدم في واجهة XOne.",
         },
         codeFontSize: {
           label: "حجم خط الشيفرة",
@@ -1019,7 +1019,7 @@ export const ar = {
       language: {
         title: "اللغة",
         label: "لغة العرض",
-        description: "اللغة التي يستخدمها Unsloth.",
+        description: "اللغة التي يستخدمها XOne.",
         autoDetect: "اكتشاف تلقائي",
       },
       layout: {
@@ -1046,7 +1046,7 @@ export const ar = {
     },
     resources: {
       title: "النظام",
-      description: "راقب عتاد خادم Unsloth هذا ومساحة تخزينه.",
+      description: "راقب عتاد خادم XOne هذا ومساحة تخزينه.",
       liveUpdates: "التحديثات المباشرة",
       floatingWindow: "نافذة عائمة",
       disableOverlay: "تعطيل التراكب",
@@ -1101,7 +1101,7 @@ export const ar = {
           description: "استخدم إصدار llama-server الخاص بك.",
           hint: "اختر مجلد llama.cpp الذي يحتوي على llama-server، أو إصدارًا يوجد فيه ضمن build/bin. يُستخدم وقت التشغيل المخصّص لمحادثة GGUF والتضمينات ونماذج الصوت المدعومة. تبقى لمتغيرات البيئة الأولوية.",
           automatic: "تلقائي (مضمّن)",
-          bundled: "يستخدم وقت تشغيل llama.cpp الذي ثبّته Unsloth.",
+          bundled: "يستخدم وقت تشغيل llama.cpp الذي ثبّته XOne.",
           active: "سيُستخدم llama-server المخصّص عند تحميل النموذج التالي.",
           environmentManaged: "تديره متغير البيئة {variable}.",
           missingBinary: "لم يعد llama-server متاحًا في هذا المجلد. اختر مجلدًا آخر أو استخدم وقت التشغيل المضمّن.",
@@ -1124,7 +1124,7 @@ export const ar = {
         },
         unsupported: {
           notInstalled: "لم يُعثر على تثبيت llama.cpp مُدار، لذا لا توجد خلفية لتبديلها.",
-          localLink: "llama.cpp مجلد محلي ربطته بنفسك، ولن يستبدله Unsloth.",
+          localLink: "llama.cpp مجلد محلي ربطته بنفسك، ولن يستبدله XOne.",
           sourceBuild: "بُني هذا الإصدار من llama.cpp من الشيفرة المصدرية، لذا لا يمكن تبديل خلفيته من هنا.",
           customPath: "تم تحديد مجلد llama.cpp مخصّص. يحدد هذا الإصدار خلفية الحوسبة.",
           unresolved: "تعذّر التحقق من الخلفيات المتاحة. تحقّق من اتصالك وحاول مرة أخرى.",
@@ -1191,9 +1191,9 @@ export const ar = {
     agents: {
       title: "الوكلاء",
       description:
-        "اربط وكلاء البرمجة مثل Claude Code وCodex بنموذج محلي باستخدام unsloth start.",
+        "اربط وكلاء البرمجة مثل Claude Code وCodex بنموذج محلي باستخدام xone start.",
       intro:
-        "يربط Claude Code وCodex وHermes وOpenClaw وOpenCode وغيرها من الوكلاء بنموذج يقدّمه Unsloth محليًا، دون اتصال بالإنترنت تمامًا. يشغّل خادمًا متوافقًا مع OpenAI ولا يمسّ ملفات إعدادات وكيلك إطلاقًا.",
+        "يربط Claude Code وCodex وHermes وOpenClaw وOpenCode وغيرها من الوكلاء بنموذج يقدّمه XOne محليًا، دون اتصال بالإنترنت تمامًا. يشغّل خادمًا متوافقًا مع OpenAI ولا يمسّ ملفات إعدادات وكيلك إطلاقًا.",
       readDocs: "قراءة التوثيق",
       copy: "نسخ",
       copied: "تم النسخ",
@@ -1216,22 +1216,22 @@ export const ar = {
       agentDocs: "فتح توثيق إعداد {agent}",
       copyGeneratedCommand: "نسخ الأمر المُنشأ",
       modelNote:
-        "يتطلب Codex نموذج GGUF يقدّمه llama-server. أما الوكلاء الآخرون فيمكنهم استخدام النماذج المبنية على transformers أيضًا؛ احذف ‎--model لاستخدام النموذج المُحمَّل بالفعل في Unsloth.",
+        "يتطلب Codex نموذج GGUF يقدّمه llama-server. أما الوكلاء الآخرون فيمكنهم استخدام النماذج المبنية على transformers أيضًا؛ احذف ‎--model لاستخدام النموذج المُحمَّل بالفعل في XOne.",
       subagent: {
         title: "استخدام نموذج محلي كوكيل فرعي",
         description:
-          "أبقِ {agent} على نموذجه الحالي وفوّض مهام محددة إلى نموذج Unsloth المحلي هذا.",
+          "أبقِ {agent} على نموذجه الحالي وفوّض مهام محددة إلى نموذج XOne المحلي هذا.",
         setupCommand: "أمر الإعداد",
         copySetupCommand: "نسخ أمر إعداد الوكيل الفرعي",
         usagePrompt: "ثم اكتب في {agent}:",
         copyUsagePrompt: "نسخ موجّه استخدام الوكيل الفرعي",
         defaultPrompt: "شغّل وكيلًا محليًا لتنفيذ هذه الدالة.",
-        opencodePrompt: "@unsloth ابحث عن سبب فشل هذا الاختبار",
+        opencodePrompt: "@xone ابحث عن سبب فشل هذا الاختبار",
       },
       quickstart: {
         title: "بناء أمر",
         description:
-          "شغّل وكيلًا على النموذج المُحمَّل حاليًا في Unsloth. حمّل نموذجًا أولًا، ثم استبدل claude بأي وكيل مدعوم أدناه.",
+          "شغّل وكيلًا على النموذج المُحمَّل حاليًا في XOne. حمّل نموذجًا أولًا، ثم استبدل claude بأي وكيل مدعوم أدناه.",
         noneDetected: "لم يُعثر في متغيّر PATH لديك على أي واجهة أوامر لوكيل مدعوم.",
         installed: "مثبّت",
       },
@@ -1250,9 +1250,9 @@ export const ar = {
       options: {
         title: "الخيارات الشائعة",
         description:
-          "تُحلَّل رايات Unsloth أولًا؛ وأي شيء لا يتعرّف عليه يُمرَّر كما هو إلى الوكيل.",
+          "تُحلَّل رايات XOne أولًا؛ وأي شيء لا يتعرّف عليه يُمرَّر كما هو إلى الوكيل.",
         model:
-          "يختار نموذجًا. بدون ‎--model يستخدم unsloth start النموذج المُحمَّل حاليًا في Unsloth، ويُظهر خطأ إن لم يكن هناك أي نموذج محمَّل.",
+          "يختار نموذجًا. بدون ‎--model يستخدم xone start النموذج المُحمَّل حاليًا في XOne، ويُظهر خطأ إن لم يكن هناك أي نموذج محمَّل.",
         contextLength:
           "يحدد طول السياق المطلوب (اسم بديل: ‎--max-seq-length).",
         ggufVariant: "يختار نسخة تكميم GGUF.",
@@ -1261,10 +1261,10 @@ export const ar = {
           "يفعّل أو يعطّل التوازي التنسوري عبر عدة أجهزة GPU.",
         serve: "يفعّل أو يعطّل الخادم المحلي التلقائي.",
         launch: "يشغّل الوكيل، أو يكتفي بطباعة الأمر والبيئة.",
-        persist: "يحتفظ بمساحة تخزين الوكيل التي يديرها Unsloth بين عمليات التشغيل.",
+        persist: "يحتفظ بمساحة تخزين الوكيل التي يديرها XOne بين عمليات التشغيل.",
         asSubagent:
-          "يبقي الوكيل الأصلي على نموذجه الحالي ويسجّل Unsloth كوكيل فرعي محلي (Claude Code وCodex وOpenCode).",
-        apiKey: "يمرّر مفتاح API الخاص بـ Unsloth (أو اضبط UNSLOTH_API_KEY).",
+          "يبقي الوكيل الأصلي على نموذجه الحالي ويسجّل XOne كوكيل فرعي محلي (Claude Code وCodex وOpenCode).",
+        apiKey: "يمرّر مفتاح API الخاص بـ XOne (أو اضبط UNSLOTH_API_KEY).",
         reasoning:
           "استخدام الاستدلال في المحادثة: on أو off أو auto. ويتبع auto قالب المحادثة الخاص بالنموذج، وهو غالبًا on.",
         reasoningEffort:
@@ -1272,14 +1272,14 @@ export const ar = {
         yolo: "يتخطى طلبات الموافقة. استخدمه في البيئات الموثوقة فقط.",
       },
       remote: {
-        title: "الاتصال بنسخة بعيدة من Unsloth Studio",
+        title: "الاتصال بنسخة بعيدة من XOne Studio",
         description:
-          "وجّه unsloth start إلى نسخة من Unsloth Studio تعمل في مكان آخر بضبط ما يلي قبل التشغيل (أو مرّر ‎--api-key مباشرة):",
+          "وجّه xone start إلى نسخة من XOne Studio تعمل في مكان آخر بضبط ما يلي قبل التشغيل (أو مرّر ‎--api-key مباشرة):",
       },
       passthrough: {
         title: "تمرير وسائط إلى الوكيل",
         description:
-          "الوسائط التي تأتي بعد رايات Unsloth تُمرَّر إلى الوكيل نفسه، لذا تظل أوامره الأصلية مثل resume تعمل:",
+          "الوسائط التي تأتي بعد رايات XOne تُمرَّر إلى الوكيل نفسه، لذا تظل أوامره الأصلية مثل resume تعمل:",
       },
       dryRun: {
         title: "المعاينة دون تشغيل",
@@ -1476,11 +1476,11 @@ export const ar = {
     remoteLan: {
       title: "الوصول عن بُعد والشبكة المحلية",
       description:
-        "الوصول إلى Unsloth من أجهزتك الأخرى عبر شبكتك المحلية أو عنوان URL عام مؤقت.",
+        "الوصول إلى XOne من أجهزتك الأخرى عبر شبكتك المحلية أو عنوان URL عام مؤقت.",
     },
     apiKeys: {
       title: "API",
-      description: "الوصول إلى Unsloth عبر واجهة API المتوافقة مع OpenAI.",
+      description: "الوصول إلى XOne عبر واجهة API المتوافقة مع OpenAI.",
       readDocs: "قراءة وثائق API",
       noAccess: "لا يوجد وصول إلى API بعد.",
       accessTokens: "توكنات الوصول",
@@ -1508,7 +1508,7 @@ export const ar = {
       osWindows: "Windows",
       secureHttps: "HTTPS آمن",
       secureHttpsHint:
-        "لا يزال المنفذ على العنوان 0.0.0.0 متاحًا عالميًا. للحصول على أمان كامل، شغّل Unsloth باستخدام --secure لإتاحة رابط HTTPS هذا فقط.",
+        "لا يزال المنفذ على العنوان 0.0.0.0 متاحًا عالميًا. للحصول على أمان كامل، شغّل XOne باستخدام --secure لإتاحة رابط HTTPS هذا فقط.",
       copyTunnelUrl: "نسخ رابط النفق",
       copySnippet: "نسخ المقتطف",
       copy: "نسخ",
@@ -1541,7 +1541,7 @@ export const ar = {
     about: {
       title: "حول",
       description: "الوثائق وملاحظات الإصدار والآراء ومعلومات النسخة.",
-      studioVersion: "إصدار Unsloth",
+      studioVersion: "إصدار XOne",
       packageVersion: "إصدار الحزمة",
       desktopAppVersion: "إصدار تطبيق سطح المكتب",
       desktopAppVersionUnavailable: "غير متاح",
@@ -1560,27 +1560,27 @@ export const ar = {
       reportIssue: "الإبلاغ عن مشكلة",
       license: {
         sectionTitle: "الترخيص",
-        studioLabel: "Unsloth",
+        studioLabel: "XOne",
         studioLicense: "AGPL-3.0",
         studioDescription: "مفتوح المصدر بموجب GNU AGPL v3.0.",
-        libraryLabel: "Unsloth Core",
+        libraryLabel: "XOne Core",
         libraryLicense: "Apache-2.0",
         libraryDescription: "مرخّص بموجب Apache 2.0.",
       },
       dangerZone: "منطقة الخطر",
-      shutDownStudio: "إيقاف تشغيل Unsloth",
+      shutDownStudio: "إيقاف تشغيل XOne",
       shutDownStudioDescription:
-        "يوقف خادم Unsloth وينهي جلستك.",
+        "يوقف خادم XOne وينهي جلستك.",
       shutDown: "إيقاف التشغيل",
       update: {
-        title: "تحديث Unsloth",
+        title: "تحديث XOne",
         commandText: "نص {label}",
         copied: "تم النسخ",
         copyCommand: "نسخ الأمر",
         commandCopied: "تم نسخ {label}",
         copyNamedCommand: "نسخ {label}",
-        checkingInstall: "جارٍ التحقق من طريقة تثبيت Unsloth...",
-        installIntro: "لتثبيت أو تحديث Unsloth:",
+        checkingInstall: "جارٍ التحقق من طريقة تثبيت XOne...",
+        installIntro: "لتثبيت أو تحديث XOne:",
         localUpdateHeading: "تحديث محلي",
         installCommandUnix: "أمر التثبيت على macOS أو Linux",
         installCommandWindows: "أمر التثبيت على Windows",
@@ -1594,7 +1594,7 @@ export const ar = {
           "تم اكتشاف تثبيت من المصدر أو حزمة VCS. أعد التثبيت من المسار المحلي الأصلي أو رابط Git.",
         repoCheckoutFallback:
           "إذا كانت لا تزال لديك نسخة المستودع، شغّل المثبّت المحلي منها:",
-        restartAfterUpdate: "أعد تشغيل Unsloth بعد التحديث.",
+        restartAfterUpdate: "أعد تشغيل XOne بعد التحديث.",
         desktopManaged:
           "يتحقق تطبيق سطح المكتب تلقائيًا من توفر إصدارات جديدة. ويمكنك أيضًا التحقق من وجود تحديثات أو تثبيتها هنا في أي وقت.",
         desktopReady: "تحديثات تطبيق سطح المكتب",
@@ -1606,13 +1606,13 @@ export const ar = {
         desktopAvailableDescription:
           "حدّث الآن، وسيُعاد تشغيل تطبيق سطح المكتب عند اكتمال التحديث.",
         desktopExternalServer:
-          "شغّل الأمر `unsloth studio update` في الطرفية التي شغّلت الخادم.",
+          "شغّل الأمر `xone studio update` في الطرفية التي شغّلت الخادم.",
         desktopManualInstall:
           "افتح صفحة الإصدار لتثبيت أحدث حزمة لنظام Linux.",
         desktopCheckFailed: "تعذّر التحقق من وجود تحديثات",
         desktopCheckFailedDescription: "تحقق من اتصالك ثم حاول مرة أخرى.",
         desktopCurrent: "تطبيق سطح المكتب محدّث",
-        desktopCurrentDescription: "سيواصل Unsloth التحقق تلقائيًا.",
+        desktopCurrentDescription: "سيواصل XOne التحقق تلقائيًا.",
         checkForUpdates: "التحقق من وجود تحديثات",
         checkAgain: "التحقق مرة أخرى",
         retryCheck: "إعادة المحاولة",
@@ -1620,7 +1620,7 @@ export const ar = {
         updateNow: "التحديث الآن",
         openReleasePage: "فتح صفحة الإصدار",
         unknownInstall:
-          "تعذّر اكتشاف طريقة تثبيت Unsloth. لعمليات تثبيت المثبّت أو PyPI، استخدم الأوامر أعلاه.",
+          "تعذّر اكتشاف طريقة تثبيت XOne. لعمليات تثبيت المثبّت أو PyPI، استخدم الأوامر أعلاه.",
         localCheckout:
           "لعمليات تثبيت النسخة المحلية، شغّل المثبّت المحلي من تلك النسخة:",
         docs: "وثائق التثبيت:",
@@ -2121,7 +2121,7 @@ export const ar = {
       },
       startFailed: "فشل بدء التدريب",
       startUnconfirmed:
-        "تعذّر على Unsloth تأكيد بدء التدريب. جارٍ التحقق من الحالة في الخلفية.",
+        "تعذّر على XOne تأكيد بدء التدريب. جارٍ التحقق من الحالة في الخلفية.",
       stopFailed: "فشل إيقاف التدريب",
       trainingStillActiveTitle: "لا يزال التدريب نشطًا",
       stopBeforeConfig: "أوقف التدريب أولًا، ثم عُد إلى التكوين.",
@@ -2312,7 +2312,7 @@ export const ar = {
       preparing: "جارٍ التحضير",
       left: "{eta} متبقٍ",
       downloaded: "تم تنزيل {size}",
-      terminalStart: "> يبدأ تدريب Unsloth...",
+      terminalStart: "> يبدأ تدريب XOne...",
       preparingResources: "> جارٍ تحضير النموذج ومجموعة البيانات...",
       gettingReady: "> نُجهّز كل شيء لعملية التدريب...",
       waitingForFirstStep: "> {message} | في انتظار الخطوة الأولى... ({step})",

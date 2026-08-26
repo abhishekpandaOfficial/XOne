@@ -201,7 +201,7 @@ async fn exchange_desktop_secret(
 
     if response.status() == reqwest::StatusCode::NOT_FOUND {
         return Err(AuthError::StaleResponder(
-            "Running Unsloth backend is too old for this desktop app. Update that backend and restart."
+            "The running XOne backend is too old for this desktop app. Update it and restart."
                 .to_string(),
         ));
     }
@@ -367,7 +367,7 @@ async fn desktop_auth_inner(
     }
 
     Err(
-        "Desktop auth failed. Update or repair the managed Unsloth install, then restart Unsloth."
+        "Desktop auth failed. Update or repair the managed XOne backend, then restart XOne."
             .to_string(),
     )
 }
@@ -468,7 +468,7 @@ mod tests {
             .message();
         assert_eq!(
             error,
-            "Running Unsloth backend is too old for this desktop app. Update that backend and restart."
+            "The running XOne backend is too old for this desktop app. Update it and restart."
         );
     }
 }

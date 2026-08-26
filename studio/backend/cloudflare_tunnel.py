@@ -1,13 +1,13 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # Copyright 2026-present the Unsloth AI Inc. team. All rights reserved. See /studio/LICENSE.AGPL-3.0
 
-"""Free Cloudflare quick tunnel for Unsloth's 0.0.0.0 launches.
+"""Free Cloudflare quick tunnel for XOne's 0.0.0.0 launches.
 
 The raw http://<ip>:<port> is often unreachable (https-vs-http, blocked ports,
 closed security groups); a cloudflared quick tunnel gives a free
 https://*.trycloudflare.com URL that works anywhere, with no account or domain.
 
-Best-effort throughout: any failure collapses to "no URL" and Unsloth keeps
+Best-effort throughout: any failure collapses to "no URL" and XOne keeps
 running. Stdlib only (back-end imports are lazy) so it is safe to import early.
 """
 
@@ -44,7 +44,7 @@ _DOWNLOAD_TIMEOUT = 60  # urlopen timeout for the one-time binary download
 # A registered edge connection does not mean the hostname resolves yet, so the
 # URL is fetched once before it is advertised.
 _PUBLIC_PROBE_PATH = "/api/health"
-_PUBLIC_PROBE_MARKER = "Unsloth UI Backend"
+_PUBLIC_PROBE_MARKER = "XOne Backend"
 # One deadline for DNS propagation + the health probe, bounding the startup stall.
 _PUBLIC_PROBE_TIMEOUT = 45.0
 _PUBLIC_PROBE_ATTEMPT_TIMEOUT = 5.0

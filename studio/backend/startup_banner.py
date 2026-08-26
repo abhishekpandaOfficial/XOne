@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # Copyright 2026-present the Unsloth AI Inc. team. All rights reserved. See /studio/LICENSE.AGPL-3.0
 
-"""Terminal banner for Unsloth startup.
+"""Terminal banner for X1-Studio startup.
 
 Stdlib only -- safe to import without the rest of the backend.
 """
@@ -61,7 +61,7 @@ def print_studio_stop_hint() -> None:
             [
                 "",
                 style(
-                    "  To stop Unsloth Studio: press Ctrl+C "
+                    "  To stop X1-Studio: press Ctrl+C "
                     "(Control+C, not Command+C, on macOS).",
                     stop_hint_style,
                 ),
@@ -123,7 +123,7 @@ def print_studio_access_banner(
 
     lines: list[str] = [
         "",
-        style("🦥 Unsloth Studio is running", title),
+        style("X1-Studio is running", title),
         style("─" * 52, dim),
         style("  On this machine -- open this in your browser:", dim),
         style(f"    {primary_url}", local_url_style),
@@ -183,14 +183,14 @@ def print_studio_access_banner(
                     ),
                     style(
                         "  To expose it, turn on Settings > Remote & LAN > LAN access, or "
-                        f"relaunch with:  unsloth studio -H 0.0.0.0 -p {port}",
+                        f"relaunch with:  xone studio -H 0.0.0.0 -p {port}",
                         secondary,
                     ),
                 ]
             )
         lines.append(
             style(
-                "  Only on trusted networks -- anyone who reaches this machine can use Unsloth.",
+                "  Only on trusted networks -- anyone who reaches this machine can use XOne.",
                 secondary,
             )
         )
@@ -200,7 +200,7 @@ def print_studio_access_banner(
             [
                 "",
                 style(
-                    "  To stop Unsloth Studio: press Ctrl+C "
+                    "  To stop X1-Studio: press Ctrl+C "
                     "(Control+C, not Command+C, on macOS).",
                     stop_hint_style,
                 ),

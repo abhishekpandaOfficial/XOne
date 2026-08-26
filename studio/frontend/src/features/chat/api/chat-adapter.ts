@@ -38,6 +38,7 @@ import {
   sandboxSessionIdFor,
 } from "@/components/assistant-ui/sandbox-files";
 import { apiUrl } from "@/lib/api-base";
+import { XONE_BRAND } from "@/xone";
 import {
   answerTextFromParts,
   extractSearchImages,
@@ -2699,7 +2700,7 @@ async function ensureDefaultModelDownloaded(
   };
   const totalLabel = formatDownloadBytes(expectedBytes);
   const description =
-    `Unsloth couldn’t find an existing model. Unsloth is now getting ` +
+    `${XONE_BRAND.name} couldn’t find an existing model. ${XONE_BRAND.name} is now getting ` +
     `${DEFAULT_CHAT_MODEL_LABEL} ready for use. You can stop the download or ` +
     `manage models later in the 'Model hub'`;
   setToast(

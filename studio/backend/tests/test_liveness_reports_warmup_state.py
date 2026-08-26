@@ -147,7 +147,7 @@ def test_an_unsettled_verdict_is_published_as_still_warming_up():
 
     assert result["status_code"] == 200
     assert result["status"] == "alive"
-    assert result["service"] == "Unsloth UI Backend"
+    assert result["service"] == "XOne Backend"
     assert result["torch_warm_in_progress"] is True
     assert result["hardware_detecting"] is True
     assert result["hardware_detection_deferred"] is None, (

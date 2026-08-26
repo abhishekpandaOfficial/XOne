@@ -2,7 +2,7 @@
 # Copyright 2026-present the Unsloth AI Inc. team. All rights reserved. See /studio/LICENSE.AGPL-3.0
 
 """
-Main FastAPI application for Unsloth UI Backend
+Main FastAPI application for the XOne backend.
 """
 
 import os
@@ -730,7 +730,7 @@ async def lifespan(app: FastAPI):
         print("DEFAULT ADMIN ACCOUNT CREATED")
         print(f"    username: {storage.DEFAULT_ADMIN_USERNAME}")
         print(f"    password saved to: {bootstrap_path}")
-        print("    Open the Unsloth UI to sign in and change it.")
+        print("    Open the XOne UI to sign in and change it.")
         print("=" * 60 + "\n")
     else:
         app.state.bootstrap_password = (
@@ -793,9 +793,9 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title = "Unsloth UI Backend",
+    title = "XOne Backend",
     version = UNSLOTH_VERSION,
-    description = "Backend API for Unsloth UI - Training and Model Management",
+    description = "Local-first API for XOne chat, inference, training, media, and model management.",
     lifespan = lifespan,
     # Swagger UI and ReDoc are re-registered below on these same paths, against vendored
     # assets instead of a CDN. FastAPI's built-ins point at cdn.jsdelivr.net, and this origin
@@ -825,7 +825,7 @@ from loggers.config import LogConfig
 from loggers.handlers import LoggingMiddleware
 
 logger = LogConfig.setup_logging(
-    service_name = "unsloth-studio-backend",
+    service_name = "xone-backend",
     env = os.getenv("ENVIRONMENT_TYPE", "production"),
 )
 
@@ -964,7 +964,7 @@ class SecurityHeadersMiddleware:
                     "Permissions-Policy",
                     "camera=(), microphone=(self), geolocation=()",
                 )
-                headers["server"] = "unsloth-studio"
+                headers["server"] = "xone-studio"
             await send(message)
 
         await self.app(scope, receive, send_wrapper)
@@ -1638,7 +1638,7 @@ async def liveness_check():
     """Cheap process liveness for desktop port validation."""
     alive = {
         "status": "alive",
-        "service": "Unsloth UI Backend",
+        "service": "XOne Backend",
         "desktop_protocol_version": 1,
         # Lockstep with DESKTOP_MANAGEABILITY_VERSION in
         # studio/src-tauri/src/preflight/version.rs and `desktop-capabilities`.
@@ -1697,7 +1697,7 @@ async def health_check(request: Request):
     base = {
         "status": "healthy",
         "timestamp": datetime.now().isoformat(),
-        "service": "Unsloth UI Backend",
+        "service": "XOne Backend",
         # Literal True with no snapshot, not a CHAT_ONLY read: a pass in flight sets the flag False
         # before a probe that can still fall back to CPU.
         "chat_only": snapshot[0] if snapshot is not None else True,
@@ -1809,7 +1809,7 @@ def studio_install_source(_current_subject: str = Depends(get_current_subject)):
 
 @app.get("/api/studio/update-status")
 def studio_update_status(_current_subject: str = Depends(get_current_subject)):
-    """Return source-aware manual update status for browser-served Unsloth."""
+    """Return source-aware manual update status for browser-served XOne."""
     return get_studio_update_status(UNSLOTH_VERSION)
 
 

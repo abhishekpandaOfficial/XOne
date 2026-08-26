@@ -195,7 +195,7 @@ jobs:
       - name: Launch repeatedly under Xvfb
         run: |
           set -u
-          BIN="$PWD/studio/src-tauri/target/debug/unsloth-studio"
+          BIN="$PWD/studio/src-tauri/target/debug/X1-Studio"
           [ -x "$BIN" ] || { echo "::error::no debug binary at $BIN"; exit 1; }
 
           # From libX11 1.8 the library calls XInitThreads() from its own
@@ -306,7 +306,7 @@ jobs:
         with:
           name: tauri-debug-build
           path: |
-            studio/src-tauri/target/debug/unsloth-studio
+            studio/src-tauri/target/debug/X1-Studio
             studio/frontend/dist
           # The build can fail before the binary exists; still upload the
           # frontend dist rather than failing the upload itself.

@@ -213,7 +213,7 @@ def install_route_mocks(page, counters: dict[str, int], offline: dict[str, bool]
             route,
             {
                 "status": "healthy",
-                "service": "Unsloth UI Backend",
+                "service": "XOne Backend",
                 "device_type": "cuda",
                 "chat_only": False,
                 "chat_only_reason": None,

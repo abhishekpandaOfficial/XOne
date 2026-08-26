@@ -601,7 +601,7 @@ def test_verify_public_url_accepts_studio_marker(monkeypatch):
 
     def handler(req):
         seen["url"] = req.full_url
-        return _FakeResponse(b'{"status":"healthy","service":"Unsloth UI Backend"}')
+        return _FakeResponse(b'{"status":"healthy","service":"XOne Backend"}')
 
     _patch_urlopen(monkeypatch, handler)
     assert ct.verify_public_url("https://words.trycloudflare.com") is True
@@ -614,7 +614,7 @@ def test_verify_public_url_waits_for_dns_before_probing_the_hostname(monkeypatch
 
     def handler(req):
         order.append(("probe", req.full_url))
-        return _FakeResponse(b'{"service":"Unsloth UI Backend"}')
+        return _FakeResponse(b'{"service":"XOne Backend"}')
 
     _patch_urlopen(monkeypatch, handler)
     assert ct.verify_public_url("https://words.trycloudflare.com") is True
@@ -643,7 +643,7 @@ def test_verify_public_url_retries_then_succeeds(monkeypatch):
         calls.append(req.full_url)
         if len(calls) < 3:
             raise OSError("Name or service not known")
-        return _FakeResponse(b'{"service":"Unsloth UI Backend"}')
+        return _FakeResponse(b'{"service":"XOne Backend"}')
 
     _patch_urlopen(monkeypatch, handler)
     monkeypatch.setattr(ct.time, "sleep", lambda _s: None)
@@ -725,7 +725,7 @@ def _edge_response(status: bytes, body: bytes) -> bytes:
 
 
 def test_edge_probe_selects_the_tunnel_by_sni(monkeypatch):
-    seen = _fake_edge(monkeypatch, _edge_response(b"200 OK", b'{"service":"Unsloth UI Backend"}'))
+    seen = _fake_edge(monkeypatch, _edge_response(b"200 OK", b'{"service":"XOne Backend"}'))
     assert ct._probe_edge("104.16.0.1", "words.trycloudflare.com") is True
     assert seen["address"] == ("104.16.0.1", 443)
     # Cloudflare picks the tunnel from SNI and the Host header, not the address.
@@ -841,7 +841,7 @@ def test_blocked_edge_falls_back_to_the_hostname(monkeypatch):
 
     def handler(_req):
         order.append("hostname")
-        return _FakeResponse(b'{"service":"Unsloth UI Backend"}')
+        return _FakeResponse(b'{"service":"XOne Backend"}')
 
     monkeypatch.setattr(ct, "_edge_addresses", lambda: ["104.16.0.1"])
     monkeypatch.setattr(ct, "_probe_edge", probe)

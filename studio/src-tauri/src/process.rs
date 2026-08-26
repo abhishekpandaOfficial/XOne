@@ -386,7 +386,7 @@ fn acquire_named_studio_runtime_launch_guard(
                 let _ = windows_sys::Win32::Foundation::CloseHandle(handle);
             }
             Err(
-                "Unsloth installation is modifying the managed environment. Wait for it to finish, then start the backend again."
+                "XOne is modifying the managed environment. Wait for it to finish, then start the backend again."
                     .to_string(),
             )
         }
@@ -1516,11 +1516,11 @@ pub(crate) fn resolve_managed_cli_invocation_with(
     {
         let python = bin
             .parent()
-            .ok_or_else(|| "Managed Unsloth executable has no parent directory.".to_string())?
+            .ok_or_else(|| "Managed XOne backend executable has no parent directory.".to_string())?
             .join("python.exe");
         if !python.is_file() {
             return Err(format!(
-                "Managed Python interpreter not found beside Unsloth: {}",
+                "Managed Python interpreter not found beside the XOne backend: {}",
                 python.display()
             ));
         }
@@ -3094,8 +3094,9 @@ pub(crate) fn resolve_backend_binary() -> Result<std::path::PathBuf, String> {
         info!("Dev mode: no local .venv found, falling back to installed backend");
     }
 
-    find_unsloth_binary()
-        .ok_or_else(|| "Unsloth binary not found. Please install Unsloth first.".to_string())
+    find_unsloth_binary().ok_or_else(|| {
+        "Required XOne backend CLI not found. Please install XOne first.".to_string()
+    })
 }
 
 fn backend_args(port: u16) -> Vec<String> {
@@ -3223,7 +3224,7 @@ pub fn start_backend(
     if let Err(error) = apply_managed_cli_context_at(&mut cmd, &work_dir) {
         // The drive holding an override can go between the preflight check and
         // this call, and a panic in the spawn path takes the desktop with it.
-        let msg = format!("Failed to prepare the Unsloth backend command: {}", error);
+        let msg = format!("Failed to prepare the XOne backend command: {}", error);
         diagnostics::record_backend_start_failure(
             diagnostics_state,
             Some(port),

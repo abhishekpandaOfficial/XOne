@@ -3740,7 +3740,7 @@ export function HubModelPicker({
         ) {
           // Loading it here would evict the chat model for a repo neither surface can run.
           toast.error(
-            `${id} is not a speech model Unsloth can run yet. The Audio page lists the families it supports.`,
+            `${id} is not a speech model XOne can run yet. The Audio page lists the families it supports.`,
             { duration: 7000 },
           );
           return;
@@ -4657,7 +4657,7 @@ export function HubModelPicker({
         value={recommendedSort}
         options={RECOMMENDED_SORT_OPTIONS}
         onValueChange={setRecommendedSort}
-        ariaLabel="Sort Unsloth models"
+        ariaLabel="Sort XOne models"
         align="end"
         className={sortTriggerClassName}
         contentClassName={sortMenuContentClassName}
@@ -5206,7 +5206,7 @@ export function HubModelPicker({
               placeholder={
                 section === "downloaded"
                   ? "Search local models"
-                  : "Search Unsloth models"
+                  : "Search XOne models"
               }
               data-model-picker-search-input={true}
               className="field-soft h-(--picker-control-h) border-0 pl-8 pr-8"
@@ -5413,7 +5413,7 @@ export function HubModelPicker({
                                 side="bottom"
                                 className="tooltip-compact"
                               >
-                                Other non-Unsloth models
+                                Other community models
                               </TooltipContent>
                             </Tooltip>
                           ) : null}
@@ -5466,7 +5466,7 @@ export function HubModelPicker({
                     >
                       {/* Rows drop the unsloth/ prefix; the heading carries
                     it for the group. */}
-                      Unsloth
+                      XOne
                     </ListLabel>
                     {!downloadedCollapsed &&
                       unslothCachedGguf.map(renderDownloadedGgufRow)}
@@ -6426,7 +6426,7 @@ export function HubModelPicker({
                         <div className="px-2.5 py-2 text-xs text-muted-foreground">
                           {communityDiscoveryEnabled
                             ? "No matching models."
-                            : "No matching Unsloth models."}
+                            : "No matching XOne models."}
                         </div>
                       ) : null
                     ) : (

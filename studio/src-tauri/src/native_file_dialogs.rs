@@ -74,7 +74,7 @@ fn default_file_name(suggested_name: &str) -> String {
         .file_name()
         .and_then(|name| name.to_str())
         .filter(|name| !name.is_empty() && *name != "." && *name != "..")
-        .unwrap_or("unsloth-export.json")
+        .unwrap_or("xone-export.json")
         .to_string()
 }
 fn decode_default_file_name(encoded_name: &str) -> Result<String, String> {
@@ -370,7 +370,7 @@ pub async fn save_native_file(
     let (tx, rx) = tokio::sync::oneshot::channel();
     app.dialog()
         .file()
-        .set_title("Save Unsloth export")
+        .set_title("Save XOne export")
         .set_file_name(file_name)
         .add_filter(filter_name, &extension_refs)
         .save_file(move |path| {
@@ -404,7 +404,7 @@ pub async fn save_native_file_from_url(
     let (tx, rx) = tokio::sync::oneshot::channel();
     app.dialog()
         .file()
-        .set_title("Save Unsloth export")
+        .set_title("Save XOne export")
         .set_file_name(file_name)
         .add_filter(filter_name, &extension_refs)
         .save_file(move |path| {
@@ -1036,7 +1036,7 @@ mod tests {
     #[test]
     fn strips_directories_from_suggested_default_name() {
         assert_eq!(default_file_name("../../chat.jsonl"), "chat.jsonl");
-        assert_eq!(default_file_name(""), "unsloth-export.json");
+        assert_eq!(default_file_name(""), "xone-export.json");
 
         assert_eq!(
             decode_default_file_name("Y2hhdC5qc29ubA==").unwrap(),

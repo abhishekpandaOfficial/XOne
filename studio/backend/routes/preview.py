@@ -221,7 +221,7 @@ def _models_response(run: str, checkpoint: str | None):
                 "id": model_id,
                 "object": "model",
                 "created": int(path.stat().st_mtime),
-                "owned_by": "unsloth-studio",
+                "owned_by": "xone-studio",
             }
         ],
     }

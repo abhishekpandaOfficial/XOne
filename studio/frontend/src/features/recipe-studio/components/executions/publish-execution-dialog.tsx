@@ -59,7 +59,7 @@ function buildDefaultDescription(execution: RecipeExecutionRecord | null): strin
     typeof records === "number" && records > 0
       ? ` It contains ${records.toLocaleString()} generated records.`
       : "";
-  return `${runName} was generated with Unsloth Recipe Studio.${recordPart}`;
+  return `${runName} was generated with XOne Recipe Studio.${recordPart}`;
 }
 
 export function PublishExecutionDialog({

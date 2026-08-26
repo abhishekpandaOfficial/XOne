@@ -32,7 +32,7 @@ test("installer progress rotates reassurance without changing actual phases", ()
   const expectedTitles = new Map([
     [-1, "Preparing your workspace..."],
     [2, "Downloading required components..."],
-    [4, "Installing Unsloth..."],
+    [4, "Installing XOne..."],
     [6, "Finishing setup..."],
   ]);
 
@@ -48,9 +48,9 @@ test("installer progress rotates reassurance without changing actual phases", ()
 });
 
 test("startup copy rotates while preserving backend phase transitions", () => {
-  assert.equal(startupWaitingMessage(INITIAL_STARTUP_MESSAGE, 0), "Starting Unsloth...");
+  assert.equal(startupWaitingMessage(INITIAL_STARTUP_MESSAGE, 0), "Starting XOne...");
   assert.equal(startupWaitingMessage(INITIAL_STARTUP_MESSAGE, 1), "Loading projects...");
-  assert.equal(startupWaitingMessage(INITIAL_STARTUP_MESSAGE, 2), "Starting Unsloth...");
+  assert.equal(startupWaitingMessage(INITIAL_STARTUP_MESSAGE, 2), "Starting XOne...");
 });
 
 test("nearly done only appears after the backend starts its server", () => {

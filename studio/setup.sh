@@ -819,7 +819,7 @@ print_installed_llama_prebuilt_release() {
 
 # ── Banner ──
 echo ""
-printf "  ${C_TITLE}%s${C_RST}\n" "🦥 Unsloth Studio Setup"
+printf "  ${C_TITLE}%s${C_RST}\n" "X1-Studio Setup"
 printf "  ${C_DIM}%s${C_RST}\n" "$RULE"
 verbose_substep "verbose diagnostics enabled"
 _LLAMA_ONLY="${UNSLOTH_STUDIO_LLAMA_ONLY:-0}"

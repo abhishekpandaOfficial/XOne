@@ -9,6 +9,7 @@ import base64
 import importlib.util
 import ipaddress
 import os
+import re
 import shlex
 import sys
 import threading
@@ -27,6 +28,7 @@ from models.auth import (
     CreateApiKeyResponse,
     DesktopInitialPasswordRequest,
     DesktopLoginRequest,
+    LocalInitialProfileRequest,
     RefreshTokenRequest,
 )
 from models.users import Token
@@ -45,6 +47,16 @@ from auth.authentication import (
 router = APIRouter()
 
 
+def _normalize_profile_email(value: str) -> str:
+    email = value.strip().casefold()
+    if not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", email):
+        raise HTTPException(
+            status_code = status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail = "Enter a valid email address.",
+        )
+    return email
+
+
 def _require_a_credential_of_its_own(what: str):
     """Refuse a caller that nothing but keyless API access let in.
 
@@ -57,7 +69,7 @@ def _require_a_credential_of_its_own(what: str):
         if no_credential:
             raise HTTPException(
                 status_code = status.HTTP_403_FORBIDDEN,
-                detail = f"{what} can only be done from the Unsloth UI or with an existing API key.",
+                detail = f"{what} can only be done from the XOne UI or with an existing API key.",
             )
 
     return dependency
@@ -67,7 +79,7 @@ def _require_a_credential_of_its_own(what: str):
 # the bootstrap unsloth_cli/__main__.py documents for user-site installs.
 _CLI_BOOTSTRAP = (
     "import sys, os; sys.path[:1] = [x for x in sys.path[:1] if getattr(sys.flags, 'safe_path', False) or x not in ('', os.getcwd())]; "
-    "sys.argv[0] = 'unsloth'; from unsloth_cli import app; sys.exit(app())"
+    "sys.argv[0] = 'xone'; from unsloth_cli import app; sys.exit(app())"
 )
 
 
@@ -128,14 +140,15 @@ def _reset_password_command() -> str:
             # A spaced interpreter path cannot be written unquoted, so fall
             # through to the PATH form below.
         else:
-            exe = os.path.join(bin_dir, "unsloth")
-            if os.path.isfile(exe):
-                return f"{shlex.quote(exe)} studio reset-password"
+            for command in ("xone", "unsloth"):
+                exe = os.path.join(bin_dir, command)
+                if os.path.isfile(exe):
+                    return f"{shlex.quote(exe)} studio reset-password"
     except Exception:
         pass
     if os.name == "nt":
-        return "unsloth.cmd studio reset-password"
-    return "unsloth studio reset-password"
+        return "xone.cmd studio reset-password"
+    return "xone studio reset-password"
 
 
 # Per-(ip, username) bucket + per-IP aggregate. Account bucket stops one user's
@@ -289,6 +302,25 @@ def _client_ip(request: Request | None) -> str:
             if normalized:
                 return normalized
     return (request.client.host if request.client else None) or "_unknown"
+
+
+def _require_local_first_run(request: Request) -> None:
+    """Limit passwordless first-run setup to this machine and this UI.
+
+    The custom header forces a browser preflight for cross-origin requests, while
+    the socket-derived client address prevents a remote caller from claiming a
+    freshly installed workspace. This endpoint is useful only while the seeded
+    credential is still marked for replacement.
+    """
+    try:
+        is_loopback = ipaddress.ip_address(_client_ip(request)).is_loopback
+    except ValueError:
+        is_loopback = False
+    if not is_loopback or request.headers.get("x-xone-local-setup") != "1":
+        raise HTTPException(
+            status_code = status.HTTP_403_FORBIDDEN,
+            detail = "First-run profile setup is available only from XOne on this device.",
+        )
 
 
 def _bucket_key(request: Request | None, username: str) -> tuple[str, str]:
@@ -475,11 +507,23 @@ async def login(payload: AuthLoginRequest, request: Request) -> Token:
         )
 
     salt, pwd_hash, jwt_secret, must_change_password = record
-    if not hashing.verify_password(payload.password, salt, pwd_hash):
+    supplied_email = _normalize_profile_email(payload.email) if payload.email is not None else None
+    stored_email = storage.get_profile_email(payload.username)
+    email_mismatch = bool(
+        supplied_email and stored_email and supplied_email.casefold() != stored_email.casefold()
+    )
+    if email_mismatch or not hashing.verify_password(payload.password, salt, pwd_hash):
         _record_login_failure(key)
         raise HTTPException(
             status_code = status.HTTP_401_UNAUTHORIZED,
             detail = f"Incorrect password. To reset it, run this in your terminal: {_reset_password_command()}",
+        )
+
+    if supplied_email and stored_email is None:
+        storage.set_profile_email_if_missing(
+            payload.username,
+            supplied_email,
+            expect_password_hash = pwd_hash,
         )
 
     _clear_login_bucket(key)
@@ -574,7 +618,7 @@ async def set_desktop_initial_password(
     if not is_desktop:
         raise HTTPException(
             status_code = status.HTTP_403_FORBIDDEN,
-            detail = "This action requires the Unsloth desktop app.",
+            detail = "This action requires X1-Studio.",
         )
 
     record = storage.get_user_and_secret(current_subject)
@@ -620,6 +664,59 @@ async def set_desktop_initial_password(
     return Token(
         access_token = access_token,
         refresh_token = refresh_token,
+        token_type = "bearer",
+        must_change_password = False,
+    )
+
+
+@router.post("/local-initial-password", response_model = Token)
+async def set_local_initial_password(
+    payload: LocalInitialProfileRequest,
+    request: Request,
+) -> Token:
+    """Claim a fresh local XOne installation without exposing its seeded password."""
+    _require_local_first_run(request)
+    profile_email = _normalize_profile_email(payload.email)
+    current_subject = storage.DEFAULT_ADMIN_USERNAME
+    record = storage.get_user_and_secret(current_subject)
+    if record is None:
+        raise HTTPException(
+            status_code = status.HTTP_409_CONFLICT,
+            detail = "XOne profile setup is not ready yet.",
+        )
+
+    _salt, pwd_hash, _jwt_secret, must_change_password = record
+    if not must_change_password:
+        raise HTTPException(
+            status_code = status.HTTP_409_CONFLICT,
+            detail = "An XOne profile already exists. Sign in instead.",
+        )
+    if any(ch.isspace() for ch in payload.new_password):
+        raise HTTPException(
+            status_code = status.HTTP_400_BAD_REQUEST,
+            detail = "New password cannot contain spaces",
+        )
+
+    new_secret = storage.update_password(
+        current_subject,
+        payload.new_password,
+        revoke_refresh_tokens = True,
+        expect_password_hash = pwd_hash,
+        preserve_desktop_secret = True,
+        profile_email = profile_email,
+    )
+    if new_secret is None:
+        raise HTTPException(
+            status_code = status.HTTP_409_CONFLICT,
+            detail = "The profile was created in another window. Sign in instead.",
+        )
+    try:
+        request.app.state.bootstrap_password = None
+    except AttributeError:
+        pass
+    return Token(
+        access_token = create_access_token(subject = current_subject, secret = new_secret),
+        refresh_token = create_refresh_token(subject = current_subject, secret = new_secret),
         token_type = "bearer",
         must_change_password = False,
     )

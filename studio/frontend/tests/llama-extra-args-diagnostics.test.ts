@@ -86,7 +86,7 @@ test("parallel aliases point at the supported control", () => {
 test("a managed flag with no control says who owns it instead", () => {
   // --api-key is not a row in this panel, so pointing at one would be a lie.
   const text = messages("--api-key secret");
-  assert.match(text, /managed by Unsloth/);
+  assert.match(text, /managed by XOne/);
   assert.doesNotMatch(text, /above/);
 });
 

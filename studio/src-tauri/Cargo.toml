@@ -1,14 +1,14 @@
 [package]
-name = "unsloth-studio"
+name = "X1-Studio"
 # Placeholder, not the released app version. release-desktop.yml rewrites this
-# field (and the unsloth-studio entry in Cargo.lock) to the dispatched
+# field (and the X1-Studio entry in Cargo.lock) to the dispatched
 # studio_version before every release build, so editing it here changes nothing
 # that ships. tauri.conf.json declares no version of its own, which is why the
 # app version comes from this field rather than from there. The stale CalVer
 # below is also the wrong shape: release builds always write SemVer, e.g. 0.1.52-beta.
 version = "2026.4.8"
-description = "Unsloth Desktop App"
-authors = ["Unsloth AI"]
+description = "X1-Studio Desktop App"
+authors = ["XOne AI"]
 edition = "2021"
 # std::fs::File::lock, used for the desktop ownership id.
 rust-version = "1.89"
@@ -34,7 +34,6 @@ open = "5"
 process-wrap = { version = "9", features = ["std"] }
 fix-path-env = { git = "https://github.com/tauri-apps/fix-path-env-rs" }
 tauri-plugin-opener = "2.5.4"
-tauri-plugin-updater = "2"
 tauri-plugin-clipboard-manager = "2"
 arboard = "3.6.1"
 tauri-plugin-dialog = "2"

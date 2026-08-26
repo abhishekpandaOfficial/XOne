@@ -1790,7 +1790,7 @@ function AutoHealToolCallsToggle() {
           Auto-Healing Tool Calls
         </span>
         <InfoHint>
-          Unsloth auto-fixes broken tool calls so inference output is never
+          XOne auto-fixes broken tool calls so inference output is never
           broken.
         </InfoHint>
       </div>
@@ -1839,7 +1839,7 @@ function ConfirmToolCallsToggle() {
             Confirm tool calls
           </span>
           <InfoHint>
-            When on, every local Unsloth tool call pauses for your approval
+            When on, every local XOne tool call pauses for your approval
             before it runs (the "Ask for approval" level). When off, tool calls
             run without prompts inside the sandbox (the "Run automatically"
             level).
@@ -1872,7 +1872,7 @@ function BypassPermissionsToggle() {
           Tool permissions
         </span>
         <InfoHint>
-          Choose how Unsloth approves tool calls before they run. Full access
+          Choose how XOne approves tool calls before they run. Full access
           disables confirmations and the code sandbox.
         </InfoHint>
       </div>

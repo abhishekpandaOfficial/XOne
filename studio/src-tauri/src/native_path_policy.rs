@@ -433,7 +433,7 @@ fn reject_sensitive_artifact(path: &Path) -> Result<(), String> {
             || segment.starts_with("studio.db")
     });
     if has_sensitive_segment {
-        return Err("Sensitive Unsloth state cannot be registered as an artifact.".to_string());
+        return Err("Sensitive XOne state cannot be registered as an artifact.".to_string());
     }
     if let Some(ext) = path.extension().and_then(|ext| ext.to_str()) {
         if matches!(

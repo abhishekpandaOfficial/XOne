@@ -581,8 +581,10 @@ def test_desktop_titlebar_separates_navigation_from_sidebar_brand():
     assert "<ArrowRight" in titlebar
     assert "window.history.back()" in titlebar
     assert "window.history.forward()" in titlebar
-    assert 'src="/circle-logo-small.png"' in header
-    assert header.index("<DesktopTitlebarNavigation") < header.index('src="/circle-logo-small.png"')
+    assert "src={XONE_BRAND.icons.wordmark}" in header
+    assert header.index("<DesktopTitlebarNavigation") < header.index(
+        "src={XONE_BRAND.icons.wordmark}"
+    )
 
 
 def test_collapsed_tauri_keeps_history_arrows_and_adds_new_chat_by_model_picker():

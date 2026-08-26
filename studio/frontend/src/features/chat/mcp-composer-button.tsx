@@ -65,7 +65,7 @@ type McpPreset = {
 const MCP_PRESETS: readonly McpPreset[] = [
   {
     id: "unsloth-docs",
-    displayName: "Unsloth Docs",
+    displayName: "XOne Docs",
     url: "https://unsloth.ai/docs/~gitbook/mcp",
   },
   {

@@ -297,6 +297,7 @@ def get_connection() -> sqlite3.Connection:
         CREATE TABLE IF NOT EXISTS auth_user (
             id INTEGER PRIMARY KEY,
             username TEXT UNIQUE NOT NULL,
+            profile_email TEXT,
             password_salt TEXT NOT NULL,
             password_hash TEXT NOT NULL,
             jwt_secret TEXT NOT NULL,
@@ -348,6 +349,12 @@ def get_connection() -> sqlite3.Connection:
         conn.execute(
             "ALTER TABLE auth_user ADD COLUMN must_change_password INTEGER NOT NULL DEFAULT 0"
         )
+    if "profile_email" not in columns:
+        conn.execute("ALTER TABLE auth_user ADD COLUMN profile_email TEXT")
+    conn.execute(
+        "CREATE UNIQUE INDEX IF NOT EXISTS auth_user_profile_email_unique "
+        "ON auth_user(profile_email COLLATE NOCASE) WHERE profile_email IS NOT NULL"
+    )
     refresh_columns = {row["name"] for row in conn.execute("PRAGMA table_info(refresh_tokens)")}
     if "is_desktop" not in refresh_columns:
         conn.execute("ALTER TABLE refresh_tokens ADD COLUMN is_desktop INTEGER NOT NULL DEFAULT 0")
@@ -707,6 +714,39 @@ def get_jwt_secret(username: str) -> Optional[str]:
         conn.close()
 
 
+def get_profile_email(username: str) -> Optional[str]:
+    """Return the email attached to a local profile, if it has one."""
+    conn = get_connection()
+    try:
+        row = conn.execute(
+            "SELECT profile_email FROM auth_user WHERE username = ?",
+            (username,),
+        ).fetchone()
+        return row["profile_email"] if row and row["profile_email"] else None
+    finally:
+        conn.close()
+
+
+def set_profile_email_if_missing(
+    username: str,
+    email: str,
+    *,
+    expect_password_hash: str,
+) -> bool:
+    """Attach an email after a verified legacy-profile login, without racing a reset."""
+    conn = get_connection()
+    try:
+        cursor = conn.execute(
+            "UPDATE auth_user SET profile_email = ? "
+            "WHERE username = ? AND password_hash = ? AND profile_email IS NULL",
+            (email, username, expect_password_hash),
+        )
+        conn.commit()
+        return cursor.rowcount > 0
+    finally:
+        conn.close()
+
+
 def requires_password_change(username: str) -> bool:
     """Return whether the user must change the seeded default password."""
     conn = get_connection()
@@ -770,6 +810,7 @@ def update_password(
     revoke_refresh_tokens: bool = False,
     expect_password_hash: Optional[str] = None,
     preserve_desktop_secret: bool = False,
+    profile_email: Optional[str] = None,
 ) -> Optional[str]:
     """Update password, clear first-login requirement, rotate JWT secret.
 
@@ -801,19 +842,21 @@ def update_password(
             cursor = conn.execute(
                 """
                 UPDATE auth_user
-                SET password_salt = ?, password_hash = ?, jwt_secret = ?, must_change_password = 0
+                SET password_salt = ?, password_hash = ?, jwt_secret = ?,
+                    must_change_password = 0, profile_email = COALESCE(?, profile_email)
                 WHERE username = ?
                 """,
-                (salt, pwd_hash, jwt_secret, username),
+                (salt, pwd_hash, jwt_secret, profile_email, username),
             )
         else:
             cursor = conn.execute(
                 """
                 UPDATE auth_user
-                SET password_salt = ?, password_hash = ?, jwt_secret = ?, must_change_password = 0
+                SET password_salt = ?, password_hash = ?, jwt_secret = ?,
+                    must_change_password = 0, profile_email = COALESCE(?, profile_email)
                 WHERE username = ? AND password_hash = ?
                 """,
-                (salt, pwd_hash, jwt_secret, username, expect_password_hash),
+                (salt, pwd_hash, jwt_secret, profile_email, username, expect_password_hash),
             )
         if revoke_refresh_tokens and cursor.rowcount > 0:
             conn.execute("DELETE FROM refresh_tokens WHERE username = ?", (username,))

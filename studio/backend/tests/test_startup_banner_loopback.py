@@ -36,7 +36,7 @@ def test_banner_prints_on_strict_cp1252_stdout(monkeypatch):
     stdout.flush()
 
     out = buf.getvalue().decode("cp1252")
-    assert "? Unsloth Studio is running" in out
+    assert "X1-Studio is running" in out
 
 
 def test_banner_print_fallback_handles_unknown_stdout_encoding(monkeypatch):
@@ -62,4 +62,4 @@ def test_banner_print_fallback_handles_unknown_stdout_encoding(monkeypatch):
 
     print_studio_access_banner(port = 8891, bind_host = "127.0.0.1", display_host = "127.0.0.1")
 
-    assert "? Unsloth Studio is running" in stdout.getvalue()
+    assert "X1-Studio is running" in stdout.getvalue()
