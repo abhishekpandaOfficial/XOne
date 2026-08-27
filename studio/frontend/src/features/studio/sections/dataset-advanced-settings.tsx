@@ -114,7 +114,7 @@ export function DatasetAdvancedSettings({
                   <TooltipContent>
                     {t("studio.dataset.targetFormatTooltip")}{" "}
                     <a
-                      href="https://unsloth.ai/docs/get-started/fine-tuning-llms-guide/datasets-guide"
+                      href="/docs#train"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-primary underline"

@@ -185,7 +185,7 @@ export function UpdateBanner({
                     : isManualLinuxPackage
                       ? "Open the GitHub release page to install the Linux package"
                       : isExternalServer
-                        ? "Run `unsloth studio update` from your terminal"
+                        ? "Run `xone studio update` from your terminal"
                         : "A new app update is available"}
                 </p>
               </div>

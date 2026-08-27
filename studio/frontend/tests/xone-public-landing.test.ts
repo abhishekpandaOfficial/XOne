@@ -46,6 +46,16 @@ test("the dedicated XOne workflow publishes every stable portal asset", async ()
   assert.match(workflow, /--latest/);
 });
 
+test("XOne Docs is first-party and documents the local operating loop", async () => {
+  const route = await readSource("../src/app/routes/docs.tsx");
+  const docs = await readSource("../src/features/docs/xone-docs-page.tsx");
+  assert.match(route, /path: "\/docs"/);
+  assert.match(docs, /MCP & AGENTS/);
+  assert.match(docs, /RAG & KNOWLEDGE/);
+  assert.match(docs, /xone studio --api-only --secure/);
+  assert.doesNotMatch(docs, /unsloth studio|unsloth start/);
+});
+
 test("local password recovery is discoverable without the old password", async () => {
   const source = await readSource("../src/features/auth/components/auth-form.tsx");
   const authCss = await readSource("../src/features/auth/components/auth-shell.css");

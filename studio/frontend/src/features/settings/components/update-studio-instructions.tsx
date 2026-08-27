@@ -15,18 +15,17 @@ import type { ReactElement } from "react";
 import { useEffect, useRef, useState } from "react";
 
 const STUDIO_INSTALL_UNIX_CMD =
-  "curl -fsSL https://unsloth.ai/install.sh | sh";
-const STUDIO_INSTALL_WINDOWS_CMD = "irm https://unsloth.ai/install.ps1 | iex";
+  "curl -fsSL https://raw.githubusercontent.com/abhishekpandaOfficial/XOne/main/install.sh | sh";
+const STUDIO_INSTALL_WINDOWS_CMD =
+  "irm https://raw.githubusercontent.com/abhishekpandaOfficial/XOne/main/install.ps1 | iex";
 const STUDIO_LOCAL_PULL_CMD = "git pull --ff-only";
 const STUDIO_LOCAL_INSTALL_UNIX_CMD = "./install.sh --local";
 const STUDIO_LOCAL_INSTALL_WINDOWS_CMD = ".\\install.ps1 --local";
 
-const DOCS_INSTALL_URL = "https://unsloth.ai/docs/get-started/install";
-const DOCS_UPDATING_URL =
-  "https://unsloth.ai/docs/get-started/install/updating";
-const DOCS_MAC_URL = "https://unsloth.ai/docs/get-started/install/mac";
-const DOCS_WINDOWS_URL =
-  "https://unsloth.ai/docs/get-started/install/windows-installation";
+const DOCS_INSTALL_URL = "/docs#install";
+const DOCS_UPDATING_URL = "/docs#operate";
+const DOCS_MAC_URL = "/docs#install";
+const DOCS_WINDOWS_URL = "/docs#install";
 
 export type UpdateShell = "windows" | "unix";
 export type UpdateInstallSource =

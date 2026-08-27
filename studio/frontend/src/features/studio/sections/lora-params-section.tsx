@@ -76,7 +76,7 @@ export function LoraParamsSection(): ReactElement | null {
               <>
                 {t("studio.params.rankTooltip")}{" "}
                 <a
-                  href="https://unsloth.ai/docs/get-started/fine-tuning-llms-guide/lora-hyperparameters-guide"
+                  href="/docs#train"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-primary underline"
@@ -97,7 +97,7 @@ export function LoraParamsSection(): ReactElement | null {
               <>
                 {t("studio.params.alphaTooltip")}{" "}
                 <a
-                  href="https://unsloth.ai/docs/get-started/fine-tuning-llms-guide/lora-hyperparameters-guide"
+                  href="/docs#train"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-primary underline"
@@ -118,7 +118,7 @@ export function LoraParamsSection(): ReactElement | null {
               <>
                 {t("studio.params.dropoutTooltip")}{" "}
                 <a
-                  href="https://unsloth.ai/docs/get-started/fine-tuning-llms-guide/lora-hyperparameters-guide"
+                  href="/docs#train"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-primary underline"

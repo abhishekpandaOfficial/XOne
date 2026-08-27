@@ -36,7 +36,7 @@ export function preflightStaleMessage(
     return `${which} somewhere that cannot be resolved, so XOne has nowhere safe to run from. Set it to a full path, such as D:\\unsloth-cache, and try again.`;
   }
   if (disposition === "owned_stale") {
-    return "The desktop-owned XOne backend is too old for this desktop app. Run `unsloth studio update`, then restart XOne.";
+    return "The desktop-owned XOne backend is too old for this desktop app. Run `xone studio update`, then restart XOne.";
   }
-  return "The managed XOne backend is too old. Run `unsloth studio update`.";
+  return "The managed XOne backend is too old. Run `xone studio update`.";
 }

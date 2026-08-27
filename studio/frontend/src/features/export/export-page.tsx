@@ -1048,7 +1048,7 @@ export function ExportPage() {
                               Choose a saved checkpoint to export. Lower loss
                               generally means better quality.{" "}
                               <a
-                                href="https://unsloth.ai/docs/basics/inference-and-deployment"
+                                href="/docs#operate"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-primary underline"

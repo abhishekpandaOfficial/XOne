@@ -56,7 +56,7 @@ import { psSingle, shSingle } from "../components/usage-examples";
 import { useSettingsPanelPrefsStore } from "../stores/settings-panel-prefs-store";
 import { ggufVariantDisplayLabel } from "@/features/hub";
 
-const DOCS_URL = "https://unsloth.ai/docs/integrations/unsloth-start";
+const DOCS_URL = "/docs#mcp";
 const EXAMPLE_MODEL_REPO = "unsloth/gemma-4-E4B-it-GGUF";
 const EXAMPLE_MODEL_VARIANT = "UD-Q4_K_XL";
 const MODEL_RESULT_LIMIT = 7;
@@ -134,32 +134,32 @@ const SUPPORTED_AGENTS: AgentDetails[] = [
   {
     id: "claude",
     name: "Claude Code",
-    docsUrl: "https://unsloth.ai/docs/basics/claude-code",
+    docsUrl: "/docs#mcp",
     logo: "anthropic",
   },
   {
     id: "codex",
     name: "OpenAI Codex",
-    docsUrl: "https://unsloth.ai/docs/basics/codex",
+    docsUrl: "/docs#mcp",
     logo: "openai",
   },
   {
     id: "hermes",
     name: "Hermes Agent",
-    docsUrl: "https://unsloth.ai/docs/integrations/hermes-agent",
+    docsUrl: "/docs#mcp",
     icon: "hermes.svg",
     invertIconInDark: true,
   },
   {
     id: "openclaw",
     name: "OpenClaw",
-    docsUrl: "https://unsloth.ai/docs/integrations/openclaw",
+    docsUrl: "/docs#mcp",
     icon: "openclaw.svg",
   },
   {
     id: "opencode",
     name: "OpenCode",
-    docsUrl: "https://unsloth.ai/docs/integrations/opencode",
+    docsUrl: "/docs#mcp",
     icon: "opencode-light.svg",
     darkIcon: "opencode-dark.svg",
   },
@@ -458,12 +458,12 @@ const OPTION_ROWS: { flag: string; descKey: TranslationKey }[] = [
 
 const REMOTE_CMD_UNIX = `export UNSLOTH_STUDIO_URL=https://studio.example.com
 export UNSLOTH_API_KEY=sk-unsloth-...
-unsloth start claude`;
+xone start claude`;
 
 // PowerShell uses $env: assignments; export is POSIX-only.
 const REMOTE_CMD_WINDOWS = `$env:UNSLOTH_STUDIO_URL = "https://studio.example.com"
 $env:UNSLOTH_API_KEY = "sk-unsloth-..."
-unsloth start claude`;
+xone start claude`;
 
 // Independent alternatives, each with its own copy button (not one script).
 const PASSTHROUGH_EXAMPLES = [
@@ -754,7 +754,7 @@ export function AgentsTab() {
   const preferredVariant = knownVariants[selectedModel] ?? null;
   const selectedAgentDetails = detailsFor(selectedAgent);
   // A GGUF outside the active cache does not resolve by repo id, so name its
-  // snapshot path; `unsloth start` now also matches a path by the basename
+  // snapshot path; `xone start` now also matches a path by the basename
   // /v1/models advertises for it. The resident model is exempt: it already
   // loaded by id, and cached-gguf keeps the largest copy across caches, whose
   // snapshot could switch cache or quant under it.
@@ -771,7 +771,7 @@ export function AgentsTab() {
       ? `${modelId}:${selectedVariant}`
       : modelId;
   const commandModelArg = quoteShellArg(commandModel, isWindowsShell);
-  // A bare `unsloth start` attaches to whatever is loaded, which is the only way
+  // A bare `xone start` attaches to whatever is loaded, which is the only way
   // to reach a native-grant GGUF: naming it would switch the server to another model.
   const attachOnly = selectedModel === attachOnlyModel;
   const modelArgs = attachOnly
@@ -1074,7 +1074,7 @@ export function AgentsTab() {
     // modelKey both sides: discovery folds repo-id case, so an exact match
     // would retire a valid pick just for a different spelling.
     // A path is never in discoveredKeys (the catalog drops path ids and a scan
-    // root may not cover it), but `unsloth start --model <path>` is valid, so
+    // root may not cover it), but `xone start --model <path>` is valid, so
     // absence there is not evidence.
     if (
       looksLikePath(restored) ||
@@ -1239,7 +1239,7 @@ export function AgentsTab() {
         className="text-sm text-muted-foreground leading-relaxed"
       >
         {/* The chip is the docs entry point, so no separate link is needed.
-            No aria-label: it would replace the visible "unsloth start" as the
+            No aria-label: it would replace the visible "xone start" as the
             accessible name, leaving voice control unable to target it. */}
         <a
           href={DOCS_URL}
@@ -1248,7 +1248,7 @@ export function AgentsTab() {
           title={t("settings.agents.readDocs")}
           className="rounded bg-muted px-1 py-0.5 font-mono text-[0.85em] text-foreground underline decoration-border decoration-dotted underline-offset-2 transition-colors hover:decoration-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring dark:bg-white/[0.08]"
         >
-          unsloth start
+          xone start
         </a>{" "}
         {t("settings.agents.intro")}
       </p>

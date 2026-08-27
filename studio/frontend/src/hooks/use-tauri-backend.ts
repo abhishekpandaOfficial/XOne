@@ -109,8 +109,8 @@ function externalConflictMessage(preflight: DesktopPreflightResult) {
   }
 
   return preflight.port
-    ? `An XOne server for this install is already running from a terminal on port ${preflight.port}. Stop that server, or run \`unsloth studio update\` from that terminal before using the desktop app.`
-    : "An XOne server for this install is already running from a terminal. Stop that server, or run `unsloth studio update` from that terminal before using the desktop app.";
+    ? `An XOne server for this install is already running from a terminal on port ${preflight.port}. Stop that server, or run \`xone studio update\` from that terminal before using the desktop app.`
+    : "An XOne server for this install is already running from a terminal. Stop that server, or run `xone studio update` from that terminal before using the desktop app.";
 }
 
 async function waitForManagedServerPort(

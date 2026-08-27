@@ -111,13 +111,13 @@ const ADV = {
 } as const;
 
 const DOC_LINKS = [
-  { label: "Claude Code", href: "https://unsloth.ai/docs/basics/claude-code" },
-  { label: "Codex", href: "https://unsloth.ai/docs/basics/codex" },
-  { label: "OpenClaw", href: "https://unsloth.ai/docs/integrations/openclaw" },
-  { label: "OpenCode", href: "https://unsloth.ai/docs/integrations/opencode" },
+  { label: "Claude Code", href: "/docs#mcp" },
+  { label: "Codex", href: "/docs#mcp" },
+  { label: "OpenClaw", href: "/docs#mcp" },
+  { label: "OpenCode", href: "/docs#mcp" },
   {
     label: "Hermes Agent",
-    href: "https://unsloth.ai/docs/integrations/hermes-agent",
+    href: "/docs#mcp",
   },
 ];
 

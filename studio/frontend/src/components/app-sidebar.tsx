@@ -801,10 +801,10 @@ export function AppSidebar() {
       ? // The gate is all-or-nothing across mlx, mlx-lm and mlx-vlm, and a resolver
         // backtrack leaves a stack that is present but unusable. Naming the package
         // that is missing, too old, or refusing to import is what makes this
-        // actionable to someone whose `unsloth studio update` has already run.
+        // actionable to someone whose `xone studio update` has already run.
         chatOnlyDetail
-        ? `Training needs MLX: ${chatOnlyDetail}. Run \`unsloth studio update\` to enable Train.`
-        : "Training needs MLX. Run `unsloth studio update` to enable Train."
+        ? `Training needs MLX: ${chatOnlyDetail}. Run \`xone studio update\` to enable Train.`
+        : "Training needs MLX. Run `xone studio update` to enable Train."
       : chatOnlyReason === "intel_mac"
         ? "Training needs Apple Silicon or a GPU. Intel Macs are chat-only."
         : chatOnlyReason === "no_gpu"

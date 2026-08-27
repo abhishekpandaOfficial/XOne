@@ -194,7 +194,7 @@ export async function transcribeAudioBlob(
     const detail = await sttErrorDetail(response);
     if (response.status === 501) {
       throw new Error(
-        "Speech-to-text is not available on this server. Run `unsloth studio update` to install it.",
+          "Speech-to-text is not available on this server. Run `xone studio update` to install it.",
       );
     }
     throw sttRequestError(response.status, detail);

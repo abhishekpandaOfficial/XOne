@@ -159,7 +159,7 @@ export function TrainingMemoryParams(): ReactElement {
               size. Larger images use up more context. Does not upscale or
               change aspect ratio.{" "}
               <a
-                href="https://unsloth.ai/docs/basics/vision-fine-tuning"
+                href="/docs#train"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary underline"
@@ -207,7 +207,7 @@ export function TrainingMemoryParams(): ReactElement {
           <>
             {t("studio.params.gradCheckpointTooltip")}{" "}
             <a
-              href="https://unsloth.ai/docs/get-started/fine-tuning-llms-guide/lora-hyperparameters-guide"
+              href="/docs#train"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary underline"

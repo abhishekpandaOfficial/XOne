@@ -52,7 +52,7 @@ export function QuantPicker({ value, onChange, sizes }: QuantPickerProps) {
             Lower quantization (Q2, Q3) = smaller files but reduced quality.
             Q4–Q5 is a good balance.{" "}
             <a
-              href="https://unsloth.ai/docs/basics/inference-and-deployment/saving-to-gguf"
+              href="/docs#train"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary underline"

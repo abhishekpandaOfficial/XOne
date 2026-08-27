@@ -159,7 +159,7 @@ export function TrainingHyperparametersSection({
                       : "studio.params.optimizerTooltip",
                   )}{" "}
                   <a
-                    href="https://unsloth.ai/docs/get-started/fine-tuning-llms-guide/lora-hyperparameters-guide"
+                    href="/docs#train"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-primary underline"
@@ -191,7 +191,7 @@ export function TrainingHyperparametersSection({
                 <>
                   {t("studio.params.lrSchedulerTooltip")}{" "}
                   <a
-                    href="https://unsloth.ai/docs/get-started/fine-tuning-llms-guide/lora-hyperparameters-guide"
+                    href="/docs#train"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-primary underline"
@@ -223,7 +223,7 @@ export function TrainingHyperparametersSection({
                 <>
                   {t("studio.params.batchSizeTooltip")}{" "}
                   <a
-                    href="https://unsloth.ai/docs/get-started/fine-tuning-llms-guide/lora-hyperparameters-guide"
+                    href="/docs#train"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-primary underline"
@@ -244,7 +244,7 @@ export function TrainingHyperparametersSection({
                 <>
                   {t("studio.params.gradAccumTooltip")}{" "}
                   <a
-                    href="https://unsloth.ai/docs/get-started/fine-tuning-llms-guide/lora-hyperparameters-guide"
+                    href="/docs#train"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-primary underline"
@@ -265,7 +265,7 @@ export function TrainingHyperparametersSection({
                 <>
                   {t("studio.params.weightDecayTooltip")}{" "}
                   <a
-                    href="https://unsloth.ai/docs/get-started/fine-tuning-llms-guide/lora-hyperparameters-guide"
+                    href="/docs#train"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-primary underline"
@@ -294,7 +294,7 @@ export function TrainingHyperparametersSection({
                 <>
                   {t("studio.params.warmupStepsTooltip")}{" "}
                   <a
-                    href="https://unsloth.ai/docs/get-started/fine-tuning-llms-guide/lora-hyperparameters-guide"
+                    href="/docs#train"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-primary underline"
@@ -316,7 +316,7 @@ export function TrainingHyperparametersSection({
                   <>
                     {t("studio.params.scheduleEpochsTooltip")}{" "}
                     <a
-                      href="https://unsloth.ai/docs/get-started/fine-tuning-llms-guide/lora-hyperparameters-guide"
+                      href="/docs#train"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-primary underline"
@@ -338,7 +338,7 @@ export function TrainingHyperparametersSection({
                 <>
                   {t("studio.params.saveStepsTooltip")}{" "}
                   <a
-                    href="https://unsloth.ai/docs/get-started/fine-tuning-llms-guide/lora-hyperparameters-guide"
+                      href="/docs#train"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-primary underline"

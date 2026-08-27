@@ -17,7 +17,7 @@ import { type ReactElement, useEffect, useRef, useState } from "react";
 // resolves to the curl command below.
 const STUDIO_INSTALL_UNIX_CMD = "curl -fsSL https://unsloth.ai/install.sh | sh";
 const STUDIO_INSTALL_WINDOWS_CMD = "irm https://unsloth.ai/install.ps1 | iex";
-const RELEASE_NOTES_URL = "https://unsloth.ai/docs/new/changelog";
+const RELEASE_NOTES_URL = "/docs#operate";
 const EASE_OUT_QUART: [number, number, number, number] = [0.165, 0.84, 0.44, 1];
 
 function installCommandForDevice(deviceType: DeviceType): string {

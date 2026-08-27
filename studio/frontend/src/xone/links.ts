@@ -9,6 +9,7 @@ export const XONE_LINKS = {
   studioLicense:
     "https://github.com/abhishekpandaOfficial/XOne/blob/xone/main/studio/LICENSE.AGPL-3.0",
   upstream: "https://github.com/unslothai/unsloth",
-  upstreamDocs: "https://unsloth.ai/docs",
-  upstreamChangelog: "https://unsloth.ai/docs/new/changelog",
+  docs: "/docs",
+  upstreamDocs: "/docs",
+  upstreamChangelog: "/docs#operate",
 } as const;

@@ -168,7 +168,7 @@ async function offerLocalDictation(): Promise<void> {
     if (engine && !engine.available) {
       toast.error("Local transcription isn't installed on this server.", {
         description:
-          "Run `unsloth studio update` to install it, then choose a model in Voice settings.",
+          "Run `xone studio update` to install it, then choose a model in Voice settings.",
       });
       return;
     }
