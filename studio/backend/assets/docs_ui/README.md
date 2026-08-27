@@ -4,8 +4,9 @@ FastAPI's built-in `/docs` and `/redoc` pages load their bundles from `cdn.jsdel
 start Swagger with an inline script. Those pages sit on the same origin as the frontend, and
 `localStorage` is origin-scoped rather than path-scoped, so anything executing there can read
 the access and refresh tokens `frontend/src/features/auth/session.ts` stores and call the API
-as that user. `main.py` re-registers both pages on FastAPI's own paths against the files in
-this directory, so `script-src` stays `'self'` and the docs work with no network.
+as that user. `main.py` re-registers both pages under `/api/docs` and `/api/redoc` against
+the files in this directory, so `script-src` stays `'self'`, the API docs work with no
+network, and `/docs` remains the XOne product documentation route.
 
 | file | package | version | licence |
 | --- | --- | --- | --- |
@@ -19,6 +20,6 @@ The bytes are the published releases, unmodified, so they carry no Unsloth licen
 
 1. Download the files for the new version from `https://cdn.jsdelivr.net/npm/<package>@<version>/...`.
 2. Refresh the version, source URL and every sha256 in `docs_ui_manifest.json`.
-3. Run `pytest tests/test_docs_ui_assets.py tests/test_middleware.py` and open `/docs` and
-   `/redoc` in a browser. Swagger's inline init is matched by a marker in `main.py`; if
+3. Run `pytest tests/test_docs_ui_assets.py tests/test_middleware.py` and open `/api/docs` and
+   `/api/redoc` in a browser. Swagger's inline init is matched by a marker in `main.py`; if
    upstream retemplates that page the route raises rather than serving a blank one.
