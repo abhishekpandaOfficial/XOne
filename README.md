@@ -95,14 +95,18 @@ Verify downloads with the published [SHA256SUMS.txt](https://github.com/abhishek
 ### macOS, Linux, and WSL
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/abhishekpandaOfficial/XOne/main/install.sh | sh
+git clone https://github.com/abhishekpandaOfficial/XOne.git
+cd XOne
+./install.sh --local
 xone studio
 ```
 
 ### Windows PowerShell
 
 ```powershell
-irm https://raw.githubusercontent.com/abhishekpandaOfficial/XOne/main/install.ps1 | iex
+git clone https://github.com/abhishekpandaOfficial/XOne.git
+cd XOne
+.\install.ps1 --local
 xone studio
 ```
 

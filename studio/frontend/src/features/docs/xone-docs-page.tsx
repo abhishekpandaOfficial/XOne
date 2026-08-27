@@ -42,11 +42,15 @@ export function XOneDocsPage() {
           <section id="overview" className="xone-docs-hero"><div><span className="xone-docs-kicker"><GitBranch size={14} /> XONE DOCS · PRIVATE AI OPERATIONS</span><h1>One control plane for models, knowledge, and agents.</h1><p>XOne is a local AI workspace for running models, grounding answers in private data, connecting tools through MCP, and moving from experiment to an observable API.</p><div className="xone-docs-hero-actions"><Link to="/" className="xone-docs-primary"><Download size={16} /> Download XOne</Link><a href="#install" className="xone-docs-secondary"><Terminal size={16} /> Start from a terminal</a></div></div><div className="xone-docs-signal"><div className="xone-docs-signal-top"><span><i /> X1 CONTROL PLANE</span><code>LOCAL / READY</code></div><div className="xone-docs-signal-core"><img src={XONE_BRAND.icons.app} alt="" /><strong>Private by design</strong><small>Models, tools, and context remain observable.</small></div><div className="xone-docs-signal-grid"><span><CheckCircle2 /> Runtime</span><span><CheckCircle2 /> Retrieval</span><span><CheckCircle2 /> Tooling</span><span><CheckCircle2 /> API</span></div></div></section>
           <section className="xone-docs-section xone-docs-capabilities"><div className="xone-docs-section-heading"><span>THE OPERATING MODEL</span><h2>Designed for the complete local loop.</h2><p>Use the same workspace to discover a model, prepare context, call tools, evaluate outputs, and ship a controlled endpoint.</p></div><div className="xone-docs-capability-grid">{capabilities.map(([title, text, Icon]) => <article key={title}><Icon size={19} /><h3>{title}</h3><p>{text}</p><ArrowRight size={15} /></article>)}</div></section>
           <section id="install" className="xone-docs-section xone-docs-split"><div className="xone-docs-copy"><span className="xone-docs-kicker"><Download size={14} /> 01 · INSTALL & RUN</span><h2>Get a local control plane in minutes.</h2><p>Use the XOne CLI for a managed install, then open the web workspace or launch the desktop runtime. The command is intentionally named <code>xone</code> throughout the product.</p><div className="xone-docs-checks"><span><CheckCircle2 /> Local install and updates</span><span><CheckCircle2 /> API-compatible serving</span><span><CheckCircle2 /> Hardware-aware model loading</span></div></div><div className="xone-docs-code-stack"><CodeBlock>{`# macOS, Linux, or WSL
-curl -fsSL https://raw.githubusercontent.com/abhishekpandaOfficial/XOne/main/install.sh | sh
+git clone https://github.com/abhishekpandaOfficial/XOne.git
+cd XOne
+./install.sh --local
 
 # Start the local workspace
 xone studio`}</CodeBlock><CodeBlock>{`# Windows PowerShell
-irm https://raw.githubusercontent.com/abhishekpandaOfficial/XOne/main/install.ps1 | iex
+git clone https://github.com/abhishekpandaOfficial/XOne.git
+cd XOne
+.\\install.ps1 --local
 
 # Start the local workspace
 xone studio`}</CodeBlock></div></section>
