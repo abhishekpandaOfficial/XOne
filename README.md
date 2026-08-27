@@ -1,646 +1,234 @@
+<p align="center">
+  <img src="studio/src-tauri/icons/xone/icon.png" alt="XOne" width="96" />
+</p>
+
 <h1 align="center">XOne</h1>
 
-<p align="center"><strong>Private-alpha desktop experience for local AI workflows.</strong></p>
+<p align="center">
+  <strong>The local AI control plane for models, knowledge, agents, and production workflows.</strong>
+</p>
 
-XOne is an early-stage rebranded desktop distribution built from the Unsloth
-open-source project. The current work changes display identity and application
-shell metadata while deliberately retaining the proven `unsloth` Python packages,
-CLI, runtime APIs, model namespaces, data paths, and compatibility identifiers.
+<p align="center">
+  <a href="https://github.com/abhishekpandaOfficial/XOne/releases/latest">Download Desktop</a> ·
+  <a href="https://github.com/abhishekpandaOfficial/XOne/actions">Build Status</a> ·
+  <a href="https://github.com/abhishekpandaOfficial/XOne/issues">Support</a>
+</p>
 
-This branch is not a production release channel. XOne desktop auto-updates are
-disabled for the private alpha, and no XOne binaries are published from this
-README. Build and test the application from source before evaluating it.
+XOne brings local inference, private knowledge retrieval, Model Context Protocol
+(MCP) tools, training, export, and OpenAI-compatible serving into one observable
+workspace. **X1** is the compact mark; **XOne** is the product.
 
-## Project status
+## Product Surface
 
-- Display brand: XOne private alpha
-- Runtime foundation: Unsloth and its existing compatibility surfaces
-- Desktop updater: disabled; reviewed builds must be installed manually
-- Release claims: limited to functionality present in this checkout
+| Capability | What it provides |
+| --- | --- |
+| **Local inference** | Hardware-aware model loading, GGUF workflows, chat, vision, audio, and video capabilities. |
+| **Model operations** | Discover, download, inspect, load, unload, and monitor models from one hub. |
+| **Private knowledge** | Prepare documents and datasets for retrieval-augmented generation (RAG) with grounded context. |
+| **MCP and agents** | Connect coding agents and approved tools through explicit, reviewable capability boundaries. |
+| **Training** | Build datasets, run LoRA or QLoRA workflows, track metrics, and evaluate outputs. |
+| **Export and serving** | Export deployable artifacts and expose local models through an OpenAI-compatible API. |
+| **Desktop runtime** | X1-Studio manages the local backend and keeps model, credential, and runtime state close to the device. |
 
-## Open source and attribution
+## Download XOne Desktop
 
-XOne is derived from [Unsloth](https://github.com/unslothai/unsloth). Upstream
-copyright notices, SPDX headers, package names, licenses, and attribution are
-preserved. See [LICENSE](LICENSE), [COPYING](COPYING),
-[studio/LICENSE.AGPL-3.0](studio/LICENSE.AGPL-3.0), and the component-specific
-license and notice files throughout the repository.
+The latest release provides installers for the supported platforms:
 
-## Building and validation
+| Platform | Package |
+| --- | --- |
+| macOS Apple Silicon | [Download DMG](https://github.com/abhishekpandaOfficial/XOne/releases/latest/download/XOne-Desktop-macOS-Apple-Silicon.dmg) |
+| macOS Intel | [Download DMG](https://github.com/abhishekpandaOfficial/XOne/releases/latest/download/XOne-Desktop-macOS-Intel.dmg) |
+| Windows x64 | [Download installer](https://github.com/abhishekpandaOfficial/XOne/releases/latest/download/XOne-Desktop-Windows-x64.exe) |
+| Debian / Ubuntu x64 | [Download DEB](https://github.com/abhishekpandaOfficial/XOne/releases/latest/download/XOne-Desktop-Linux-x64.deb) |
+| Linux x64 | [Download AppImage](https://github.com/abhishekpandaOfficial/XOne/releases/latest/download/XOne-Desktop-Linux-x64.AppImage) |
 
-Frontend commands live in `studio/frontend`:
+Verify downloads with the published [SHA256SUMS.txt](https://github.com/abhishekpandaOfficial/XOne/releases/latest/download/SHA256SUMS.txt).
+
+### Installation
+
+- **macOS:** Open the DMG and drag `XOne.app` to Applications. Alpha builds may require **System Settings → Privacy & Security → Open Anyway**.
+- **Windows:** Run the x64 installer. Review the SmartScreen warning and verify the checksum before continuing.
+- **Debian / Ubuntu:** `sudo apt install ./XOne-Desktop-Linux-x64.deb`
+- **Linux AppImage:** `chmod +x XOne-Desktop-Linux-x64.AppImage && ./XOne-Desktop-Linux-x64.AppImage`
+
+## Quickstart
+
+### macOS, Linux, and WSL
 
 ```bash
-npm run build
-npm run typecheck
-npm run lint
-npm test
+curl -fsSL https://raw.githubusercontent.com/abhishekpandaOfficial/XOne/main/install.sh | sh
+xone studio
 ```
 
-Validate the native shell from `studio/src-tauri` with `cargo check` and the
-relevant Rust tests. XOne icon paths are centralized in
-`studio/frontend/src/xone/brand.ts`; environment overrides can supply final
-artwork without overwriting preserved upstream assets.
+### Windows PowerShell
 
-## Local architecture and backend connection
+```powershell
+irm https://raw.githubusercontent.com/abhishekpandaOfficial/XOne/main/install.ps1 | iex
+xone studio
+```
 
-XOne uses one local HTTP backend for both the web and desktop interfaces. The
-backend listens on `127.0.0.1:8888` by default, so it is not exposed to the
-network unless LAN or remote access is explicitly enabled.
-
-For browser development, Vite serves the React application on port `5173` and
-proxies `/api/*` and `/v1/*` to the backend. For the native application, the
-Tauri shell starts the managed backend, validates its health, receives its
-runtime port, and points frontend API requests directly to
-`http://127.0.0.1:<port>`.
-
-Run the complete desktop development stack from the repository root:
+The local service listens on `127.0.0.1:8888` by default. For a secure API-only session:
 
 ```bash
-cd studio
+xone studio --api-only --secure -p 8888
+```
+
+Useful local endpoints:
+
+- Health: `http://127.0.0.1:8888/api/health`
+- OpenAPI: `http://127.0.0.1:8888/openapi.json`
+- Swagger UI: `http://127.0.0.1:8888/docs`
+- ReDoc: `http://127.0.0.1:8888/redoc`
+
+## Models
+
+XOne supports a model workflow built around the task, hardware, and context window:
+
+1. Search the model hub or import a compatible local checkpoint.
+2. Start with a smaller chat or instruct model while validating prompts and data.
+3. Use quantization and runtime selection appropriate to the host hardware.
+4. Keep model identity, residency, loading state, and request activity observable.
+5. Scale to a larger or multimodal model when quality and context requirements justify it.
+
+Model files remain on the configured local cache unless the operator explicitly
+chooses another storage or provider boundary.
+
+## MCP and Agents
+
+MCP lets an agent call focused tools such as documentation search, repositories,
+files, or data systems. XOne keeps this integration explicit:
+
+```bash
+xone start claude
+xone start codex
+xone start opencode
+```
+
+Start with read-only servers, review tool permissions, keep credentials in the
+local credential store, and enable only the servers required by a workspace.
+The XOne Docs MCP preset is available from the MCP controls inside the workspace.
+
+## RAG and Private Knowledge
+
+RAG is a controlled pipeline, not a model setting:
+
+1. **Ingest:** collect authoritative PDFs, DOCX files, CSVs, URLs, or project data.
+2. **Prepare:** normalize content, preserve metadata, and define access scope.
+3. **Retrieve:** select the smallest relevant context for the request.
+4. **Generate:** answer with source-aware context and citations where available.
+5. **Evaluate:** measure retrieval quality, answer quality, latency, and drift independently.
+
+Keep sensitive sources local, separate tenant or project indexes, and avoid
+sending retrieved context to an external provider unless that boundary is deliberate.
+
+## Training and Export
+
+XOne supports a practical local lifecycle:
+
+- Prepare and validate datasets with explicit splits and schemas.
+- Use **LoRA** for efficient adapter training and **QLoRA** for lower-memory workflows.
+- Inspect training loss, evaluation behavior, checkpoints, and reproducibility metadata.
+- Export adapters, merged checkpoints, or GGUF artifacts for the target runtime.
+- Validate the exported artifact through the local chat and API paths before deployment.
+
+## API and Operations
+
+XOne exposes native `/api/*` endpoints and OpenAI-compatible `/v1/*` endpoints.
+A minimal local request looks like this:
+
+```bash
+curl http://127.0.0.1:8888/v1/chat/completions \\
+  -H 'Content-Type: application/json' \\
+  -d '{"model":"local-model","messages":[{"role":"user","content":"Hello"}]}'
+```
+
+Recommended production controls:
+
+- Keep the service on loopback unless network access is required.
+- Use HTTPS, authentication, strict CORS, and host policy for remote access.
+- Treat MCP tools and retrieved documents as separate security boundaries.
+- Do not place secrets in `VITE_*` variables or public frontend configuration.
+- Monitor health, request activity, model residency, latency, and resource usage.
+- Do not deploy the model runtime as a short-lived serverless function.
+
+## Architecture
+
+```text
+X1-Studio Desktop / XOne Web Portal
+                |
+          React + Vite UI
+                |
+       Local FastAPI control plane
+       /api/*          /v1/*
+                |
+  Model runtimes · RAG · MCP · Training · Export
+```
+
+| Layer | Technology |
+| --- | --- |
+| Web interface | React, TypeScript, Vite, Tailwind CSS, TanStack Router, Motion |
+| Desktop shell | Tauri 2 and Rust |
+| Backend | Python, FastAPI, Uvicorn, Pydantic, JWT, SQLite |
+| Model runtimes | Transformers, llama.cpp / GGUF, MLX on Apple Silicon |
+| Delivery | Vercel for the portal and GitHub Releases for desktop installers |
+
+## Development
+
+```bash
+# Frontend
+cd studio/frontend
+npm ci
+npm run dev -- --port 5173 --strictPort
+
+# Validation
+npm run typecheck
+npm run build
+npm test
+
+# Native desktop development
+cd ..
 npx --yes @tauri-apps/cli@2.10.1 dev
 ```
 
-To run the browser and backend separately, use two terminals from the
-repository root:
+Run backend development from the repository root with:
 
 ```bash
-# Terminal 1: local FastAPI backend
-./.venv/bin/unsloth studio --api-only -H 127.0.0.1 -p 8888
-
-# Terminal 2: React/Vite web interface
-cd studio/frontend
-npm run dev -- --port 5173 --strictPort
+./.venv/bin/xone studio --api-only -H 127.0.0.1 -p 8888
 ```
 
-Then open <http://127.0.0.1:5173/>. Backend health and generated API references
-are available at:
+Pull requests should include a concise change description, focused tests, and
+screenshots for user-facing changes. Keep credentials, model weights, generated
+binaries, and machine-specific state out of commits.
 
-- Health: <http://127.0.0.1:8888/api/health>
-- OpenAPI JSON: <http://127.0.0.1:8888/openapi.json>
-- Swagger UI: <http://127.0.0.1:8888/docs>
-- ReDoc: <http://127.0.0.1:8888/redoc>
+## Repository Structure
 
-### Technology stack
-
-- Web: React 19, TypeScript, Vite 8, Tailwind CSS 4, TanStack Router, Motion,
-  Recharts, and assistant-ui.
-- Desktop: Tauri 2 with a Rust native shell and the operating system WebView.
-- Backend: Python, FastAPI, Uvicorn, Pydantic, JWT authentication, and local
-  SQLite storage. Model execution is selected by platform and model type,
-  including PyTorch/Transformers, llama.cpp/GGUF, and MLX on Apple Silicon.
-- API styles: native XOne APIs under `/api/*`, plus OpenAI-compatible model APIs
-  under `/v1/*`.
-
-### Principal API endpoints
-
-The generated OpenAPI pages above are the source of truth. The main endpoint
-families currently registered by the backend are:
-
-| Area | Endpoint family | Purpose |
-| --- | --- | --- |
-| System | `/api/health`, `/api/liveness`, `/api/system` | Readiness, runtime, and hardware information |
-| Authentication | `/api/auth/*` | Local profile login, refresh, password setup, and API keys |
-| Chat | `/api/chat/*` | Threads, messages, projects, attachments, and research runs |
-| Inference | `/api/inference/*` | Model load/unload, generation, tokens, images, audio, and video |
-| OpenAI compatibility | `/v1/models`, `/v1/chat/completions`, `/v1/responses`, `/v1/embeddings` | Standard clients and agent integrations |
-| Training | `/api/train/*` | Fine-tuning jobs, progress, metrics, history, and diffusion training |
-| Models and Hub | `/api/models/*`, `/api/hub/*` | Discovery, downloads, local inventory, and model metadata |
-| Data and RAG | `/api/datasets/*`, `/api/data-recipe/*`, `/api/rag/*` | Dataset preparation and local knowledge bases |
-| Export | `/api/export/*` | Checkpoint loading and GGUF, LoRA, or merged-model export |
-| Settings and providers | `/api/settings/*`, `/api/providers/*`, `/api/mcp/servers/*` | Local configuration, model providers, credentials, and MCP servers |
-
-The login interface specifically calls `GET /api/auth/status`, followed by
-`POST /api/auth/login` for an existing local profile or
-`POST /api/auth/local-initial-password` for first-time local setup. Sessions
-use short-lived access tokens plus refresh tokens through
-`POST /api/auth/refresh`. Google and GitHub user login are visually reserved
-but are not presented as working authentication providers in this private
-alpha.
-
-## Publishing and deployment
-
-XOne has three deployment surfaces with different runtime requirements:
-
-| Surface | Recommended platform | What runs there |
-| --- | --- | --- |
-| Web | Vercel | The static Vite/React landing page and browser client |
-| Desktop | GitHub Releases built by GitHub Actions | Signed Tauri installers for macOS, Windows, and Linux |
-| Backend | The user's device by default; a dedicated GPU VM for an optional hosted service | FastAPI, model files, llama.cpp/MLX/PyTorch workers, training, and inference |
-
-### Deploy the web branch to Vercel
-
-1. Push the reviewed code to the `xone/main` branch of the XOne GitHub
-   repository.
-2. In Vercel, import `abhishekpandaOfficial/XOne` and select `xone/main` as the
-   production branch.
-3. Set **Root Directory** to `studio/frontend`. Vercel will use the checked-in
-   `vercel.json`, run `npm run build`, and publish `dist`.
-4. Leave `VITE_XONE_API_BASE` empty for the public landing-only deployment. To
-   enable the complete signed-in browser workspace, set it to the HTTPS origin
-   of a separately deployed XOne backend, then redeploy.
-5. Add the production domain and verify `/`, `/login`, and a deep application
-   route. Never put credentials in a `VITE_*` variable because those values are
-   compiled into the public browser bundle.
-
-Every pull request or non-production branch can remain a Vercel preview. The
-production deployment must track `xone/main`, never the upstream `main` branch.
-
-### Publish the desktop application
-
-Desktop packages are produced by the dedicated **Release XOne Desktop Alpha**
-GitHub Actions workflow and attached to GitHub Releases, not deployed to
-Vercel. It creates these stable filenames, which the portal links directly:
-
-- `XOne-Desktop-macOS-Apple-Silicon.dmg`
-- `XOne-Desktop-macOS-Intel.dmg`
-- `XOne-Desktop-Windows-x64.exe`
-- `XOne-Desktop-Linux-x64.deb`
-- `XOne-Desktop-Linux-x64.AppImage`
-- `SHA256SUMS.txt`
-
-To publish the first downloadable alpha:
-
-1. Make the GitHub repository public, or publish the assets from a separate
-   public download repository. GitHub requires authentication to download
-   assets from a private repository, so a private release cannot support public
-   portal downloads.
-2. In **GitHub → Settings → Actions → General → Workflow permissions**, allow
-   workflows to create repository content. The publish job itself requests only
-   `contents: write`.
-3. Merge the reviewed workflow into the branch that will be released. Open
-   **Actions → Release XOne Desktop Alpha → Run workflow**, select that branch,
-   enter a new SemVer such as `0.1.0-alpha.1`, and run it.
-4. Wait for all four platform builds and the publish job to pass. Confirm the
-   new normal release is marked **Latest**, contains exactly the five installers
-   plus `SHA256SUMS.txt`, and test one clean installation per platform.
-5. Redeploy the web portal if needed. Its `/releases/latest/download/<filename>`
-   links will automatically follow the newly published latest release, so the
-   site does not need a version edit for every desktop release.
-
-The alpha workflow uses ad-hoc signing on macOS and no certificate on Windows.
-Users may therefore see Gatekeeper or SmartScreen confirmation. Before calling
-the desktop build production-ready, configure Apple Developer ID signing and
-notarization plus a trusted Windows code-signing certificate. Auto-update stays
-disabled, and users install a later alpha manually from the release page.
-
-Installation:
-
-- macOS: download the correct Apple Silicon or Intel DMG, open it, and drag
-  X1-Studio into Applications. For the ad-hoc alpha, use **System Settings →
-  Privacy & Security → Open Anyway** if Gatekeeper blocks the first launch.
-- Windows: run the x64 EXE. Review the unsigned-alpha warning, then choose
-  **More info → Run anyway** only when the file came from the official XOne
-  release and its SHA-256 matches `SHA256SUMS.txt`.
-- Debian/Ubuntu: run
-  `sudo apt install ./XOne-Desktop-Linux-x64.deb`.
-- Other x64 Linux: run `chmod +x XOne-Desktop-Linux-x64.AppImage`, then launch
-  the AppImage.
-
-### Deploy the backend
-
-The default and recommended private architecture is the X1-Studio desktop app
-running its backend on the user's own machine. This keeps model weights,
-credentials, prompts, and generated media local while allowing hardware-aware
-model recommendations.
-
-Do not deploy the model backend as a Vercel Function. It needs persistent model
-storage, long-running streaming processes, optional GPU access, large uploads,
-and local subprocesses. For a managed remote edition, deploy the existing
-FastAPI service in a container on a dedicated GPU host such as RunPod, AWS EC2,
-Google Cloud, or Azure. Put it behind a stable HTTPS domain, persistent encrypted
-storage, authentication, and strict CORS/host policy. XOne's existing secure
-Cloudflare-tunnel mode is suitable for controlled testing; production should use
-a stable, access-controlled tunnel or reverse proxy.
-
-For a temporary secure backend test:
-
-```bash
-./.venv/bin/unsloth studio --api-only --secure -p 8888
+```text
+xone/
+├── studio/frontend/       React web and desktop interface
+├── studio/backend/        FastAPI control plane and runtime services
+├── studio/src-tauri/      Tauri shell, icons, and native packaging
+├── Python CLI package/     xone command implementation and compatibility layer
+├── tests/                  Integration, security, and regression tests
+├── scripts/                Build, packaging, and verification utilities
+└── .github/workflows/      CI and desktop release automation
 ```
 
-Use the emitted HTTPS origin as `VITE_XONE_API_BASE` in Vercel. The command
-retains the upstream executable name for installed-runtime compatibility; the
-equivalent `xone` CLI alias is available after installing this checkout.
+## Releases
 
-## Upstream Unsloth documentation (preserved)
+Desktop releases are built by the **Release XOne Desktop Alpha** workflow. Each
+release must publish all platform packages and `SHA256SUMS.txt`. The portal uses
+stable latest-release asset paths, so a new desktop release does not require a
+frontend version edit.
 
-The material below is retained as upstream documentation and attribution. Its
-download links, commands, domains, package names, and product claims refer to
-Unsloth—not to an XOne release.
+Before a production release, configure Apple Developer ID signing and notarization,
+a trusted Windows certificate, release monitoring, and a documented rollback plan.
 
-<h1 align="center" style="margin:0;">
-  <a href="https://unsloth.ai/docs"><picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/unslothai/unsloth/main/images/unsloth%20logo%20white%20text.png">
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/unslothai/unsloth/main/images/unsloth%20logo%20black%20text.png">
-    <img alt="Unsloth logo" src="https://raw.githubusercontent.com/unslothai/unsloth/main/images/unsloth%20logo%20black%20text.png" height="80" style="max-width:100%;">
-  </picture></a>
-</h1>
-<h3 align="center" style="margin: 0; margin-top: 0;">
-Unsloth is the first desktop app to run and train models.
-</h3>
+## License and Notices
 
-<p align="center">
-  <a href="#-features">Features</a> •
-  <a href="#-install">Quickstart</a> •
-  <a href="#-free-notebooks">Notebooks</a> •
-  <a href="https://unsloth.ai/docs">Documentation</a>
-</p>
+See [LICENSE](LICENSE), [COPYING](COPYING), and
+[studio/LICENSE.AGPL-3.0](studio/LICENSE.AGPL-3.0) for the applicable license terms
+and notices. Review component-specific notices before redistributing builds.
 
-<p align="center">
-  <a href="https://unsloth.ai/docs/desktop">
-    <img height="400" alt="unsloth desktop" src="https://unsloth.ai/cgi/image/unsloth_qwen3.8_final_ut2eqWnYJ-SLmu0s7x522.png?format=raw" />
-  </a>
-</p>
-
-## ⚡ Get started
-Download the native Unsloth Desktop app for your operating system:
-<table>
-  <tr>
-    <td><b>Platform</b></td>
-    <td><b>Link</b></td>
-  </tr>
-  <tr>
-    <td><b>Windows</b></td>
-    <td><a href='https://github.com/unslothai/unsloth/releases/download/v0.1.803-beta/Unsloth-Desktop-0_1_803_beta-Windows.exe'>Download</a></td>
-  </tr>
-  <tr>
-    <td><b>macOS</b></td>
-    <td><a href='https://github.com/unslothai/unsloth/releases/download/v0.1.803-beta/Unsloth-Desktop-0_1_803_beta-MacOS.dmg'>Download</a></td>
-  </tr>
-  <tr>
-    <td><b>Linux / Ubuntu (deb)</b></td>
-    <td><a href='https://github.com/unslothai/unsloth/releases/download/v0.1.803-beta/Unsloth-Desktop-0_1_803_beta-Ubuntu.deb'>Download</a></td>
-  </tr>
-  <tr>
-    <td><b>Linux (AppImage)</b></td>
-    <td><a href='https://github.com/unslothai/unsloth/releases/download/v0.1.803-beta/Unsloth-Desktop-0_1_803_beta-Linux.AppImage'>Download</a></td>
-  </tr>
-  <tr>
-    <td><b>Linux (Arm64)</b></td>
-    <td><a href='https://github.com/unslothai/unsloth/releases/download/v0.1.803-beta/Unsloth-Desktop-0_1_803_beta-ARM64.app.tar.gz'>Download</a></td>
-  </tr>
-</table>
-
-Download from [Unsloth](https://unsloth.ai/download) or [GitHub Releases](https://github.com/unslothai/unsloth/releases).
-
-Or if you prefer to install manually:
-
-#### macOS, Linux, WSL:
-```bash
-curl -fsSL https://unsloth.ai/install.sh | sh
-```
-#### Windows:
-```powershell
-irm https://unsloth.ai/install.ps1 | iex
-```
-#### Community:
-
-- [Discord](https://discord.gg/unsloth)
-- [𝕏 (Twitter)](https://x.com/UnslothAI)
-- [Reddit](https://reddit.com/r/unsloth)
-
-## ⭐ Features
-Unsloth works on **Windows, Linux, WSL** and **macOS**. We support **Multi GPU setups, NVIDIA, AMD, Intel GPUs, CPUs** and the **Vulkan** backend.
-
-### Run & Build with AI
-* Run and train LLMs, diffusion, embedding, audio models: [Qwen3.8](https://unsloth.ai/docs/models/qwen3.8), [Kimi K3](https://unsloth.ai/docs/models/kimi-k3), MiniMax-H3, [Muse Glimmer](https://unsloth.ai/docs/models/muse-glimmer), [DeepSeek-V4](https://unsloth.ai/docs/models/deepseek-v4), [Gemma 4](https://unsloth.ai/docs/models/gemma-4).
-* **Agents & Tools:** Use local models with [Claude Code](https://unsloth.ai/docs/basics/claude-code), [Codex](https://unsloth.ai/docs/basics/codex), and [MCP](https://unsloth.ai/docs/basics/mcp), including tool calling and code execution.
-* **Search & RAG:** Use private and unlimited web search, deep research, auto-compaction (rolling context window) and RAG.
-* **Image and video:** Run and train [image](https://unsloth.ai/docs/basics/diffusion-image) and video diffusion or multimodal models
-* **Remote & LAN:** Access your local models from any device on [LAN](https://unsloth.ai/docs/basics/lan) or remotely through secure [Cloudflare](https://unsloth.ai/docs/basics/how-to-serve-local-llms-anywhere-secure-remote-access-with-cloudflare-and-unsloth) HTTPS.
-* **Connect:** Serve models through an [OpenAI compatible API](https://unsloth.ai/docs/basics/api). Also connect your ChatGPT/Codex subscription and [cloud providers](https://unsloth.ai/docs/integrations/connections)
-
-
-### Train & Deploy
-* **Fine-tuning:** Train LLMs, diffusion, TTS, and embedding models 2× faster with 70% less VRAM with [no accuracy loss](https://unsloth.ai/blog#training)
-* **Complete support:** Supports [reinforcement learning](https://unsloth.ai/docs/get-started/reinforcement-learning-rl-guide), LoRA, QLoRA, full fine tuning, pretraining, RL, GRPO, DPO, and FP8.
-* **Export & Deploy:** [Export](https://unsloth.ai/docs/new/studio/export) or Deploy models with including [GGUF](https://unsloth.ai/docs/basics/inference-and-deployment/saving-to-gguf), NVFP4, FP8 and more formats.
-* **Datasets:** Build datasets from PDFs, CSVs, DOCX files, and more with [Data Recipes](https://unsloth.ai/docs/new/studio/data-recipe).
-  
-## 🚀 Unsloth Start
-
-[Unsloth Start](https://unsloth.ai/docs/integrations/unsloth-start) connects [Claude Code](https://unsloth.ai/docs/basics/claude-code), [Codex](https://unsloth.ai/docs/basics/codex) and other agents to local models with one command.
-
-```bash
-unsloth start claude --model unsloth/Qwen3.8-27B-GGUF:UD-Q4_K_XL
-```
-
-| Agent | Command |
-| --- | --- |
-| Claude Code | `unsloth start claude` |
-| OpenAI Codex | `unsloth start codex` |
-| Hermes Agent | `unsloth start hermes` |
-| OpenClaw | `unsloth start openclaw` |
-| OpenCode | `unsloth start opencode` |
-
-## 📥 Install
-Unsloth can be used in three ways: **[Unsloth Desktop](https://unsloth.ai/download)**, the desktop app; **[Unsloth Studio](https://unsloth.ai/docs/new/studio/)**, the web UI; or **Unsloth Core**, the code based version.
-
-### Unsloth Desktop (recommended)
-
-<table>
-  <tr>
-    <td><b>Platform</b></td>
-    <td><b>Link</b></td>
-  </tr>
-  <tr>
-    <td><b>Windows</b></td>
-    <td><a href='https://github.com/unslothai/unsloth/releases/download/v0.1.803-beta/Unsloth-Desktop-0_1_803_beta-Windows.exe'>Download</a></td>
-  </tr>
-  <tr>
-    <td><b>macOS</b></td>
-    <td><a href='https://github.com/unslothai/unsloth/releases/download/v0.1.803-beta/Unsloth-Desktop-0_1_803_beta-MacOS.dmg'>Download</a></td>
-  </tr>
-  <tr>
-    <td><b>Linux / Ubuntu (deb)</b></td>
-    <td><a href='https://github.com/unslothai/unsloth/releases/download/v0.1.803-beta/Unsloth-Desktop-0_1_803_beta-Ubuntu.deb'>Download</a></td>
-  </tr>
-  <tr>
-    <td><b>Linux (AppImage)</b></td>
-    <td><a href='https://github.com/unslothai/unsloth/releases/download/v0.1.803-beta/Unsloth-Desktop-0_1_803_beta-Linux.AppImage'>Download</a></td>
-  </tr>
-  <tr>
-    <td><b>Linux (Arm64)</b></td>
-    <td><a href='https://github.com/unslothai/unsloth/releases/download/v0.1.803-beta/Unsloth-Desktop-0_1_803_beta-ARM64.app.tar.gz'>Download</a></td>
-  </tr>
-</table>
-
-### Unsloth Studio (web UI)
-
-#### macOS, Linux, WSL:
-```bash
-curl -fsSL https://unsloth.ai/install.sh | sh
-```
-
-#### Windows:
-```powershell
-irm https://unsloth.ai/install.ps1 | iex
-```
-
-#### Launch
-```bash
-unsloth studio
-```
-
-#### HTTP Secure Deployment
-```bash
-unsloth studio --secure
-```
-
-#### Docker
-Use our [Docker image](https://hub.docker.com/r/unsloth/unsloth) ```unsloth/unsloth``` container. Run:
-```bash
-docker run -d -e JUPYTER_PASSWORD="mypassword" \
-  -p 8888:8888 -p 8000:8000 -p 2222:22 \
-  -v $(pwd)/work:/workspace/work \
-  --gpus all \
-  unsloth/unsloth
-```
-
-#### Remote HTTPS & LAN Access
-Server-side tools are on by default - so **be careful**! Keep your password safe, or use `--disable-tools` when exposing Unsloth.
-
-**Global HTTPS Access**:
-Creates a free Cloudflare link that serves Unsloth - you can access the link globally (even on your phone!)
-```bash
-unsloth studio --secure
-```
-`-H 0.0.0.0` and different ports also work:
-```bash
-unsloth studio -H 0.0.0.0 -p 8888
-```
-**LAN Access (home network)**: `Settings > API keys > LAN access`
-
-#### Password management & headless starts
-Headless starts:
-```bash
-UNSLOTH_STUDIO_PASSWORD='your-strong-password' unsloth studio --secure   # via env var
-```
-Reset your password:
-```bash
-unsloth studio reset-password
-```
-
-#### Developer, Nightly, Uninstall
-To see developer, nightly and uninstallation etc. instructions, see [advanced installation](#-advanced-installation).
-
-### Unsloth Core (code-based)
-#### Linux, WSL:
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-uv venv unsloth_env --python 3.13
-source unsloth_env/bin/activate
-uv pip install unsloth --torch-backend=auto
-```
-#### Windows:
-```powershell
-winget install -e --id Python.Python.3.13
-winget install --id=astral-sh.uv  -e
-uv venv unsloth_env --python 3.13
-.\unsloth_env\Scripts\activate
-uv pip install unsloth --torch-backend=auto
-```
-
-#### AMD, Intel, DGX Spark, Blackwell:
-See our [Blackwell guide](https://unsloth.ai/docs/blog/fine-tuning-llms-with-blackwell-rtx-50-series-and-unsloth) and [DGX Spark guide](https://unsloth.ai/docs/blog/fine-tuning-llms-with-nvidia-dgx-spark-and-unsloth). <br>
-To install Unsloth on **AMD** and **Intel** GPUs, follow our [AMD Guide](https://unsloth.ai/docs/basics/amd) and [Intel Guide](https://unsloth.ai/docs/get-started/install/intel).
-
-## 📒 Free Notebooks
-
-Train for free with our notebooks.
-Read our [guide](https://unsloth.ai/docs/get-started/fine-tuning-llms-guide). Add dataset, run, then deploy your trained model.
-
-| Model | Free Notebooks | Performance | Memory use |
-|-----------|---------|--------|----------|
-| **Unsloth Studio**      | [▶️ Start for free](https://colab.research.google.com/github/unslothai/unsloth/blob/main/studio/Unsloth_Studio_Colab.ipynb)               |  |  |
-| **Gemma 4 (E2B)**      | [▶️ Start for free](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Gemma4_(E2B)-Vision.ipynb)               | 1.5x faster | 50% less |
-| **Qwen3.5 (4B)**      | [▶️ Start for free](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Qwen3_5_(4B)_Vision.ipynb)               | 1.5x faster | 60% less |
-| **gpt-oss (20B)**      | [▶️ Start for free](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/gpt-oss-(20B)-Fine-tuning.ipynb)               | 2x faster | 70% less |
-| **Qwen3.5 GSPO**      | [▶️ Start for free](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Qwen3_5_(4B)_Vision_GRPO.ipynb)               | 2x faster | 70% less |
-| **gpt-oss (20B): GRPO**      | [▶️ Start for free](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/gpt-oss-(20B)-GRPO.ipynb)               | 2x faster | 80% less |
-| **Qwen3: Advanced GRPO**      | [▶️ Start for free](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Qwen3_(4B)-GRPO.ipynb)               | 2x faster | 70% less |
-| **embeddinggemma (300M)**    | [▶️ Start for free](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/EmbeddingGemma_(300M).ipynb)               | 2x faster | 20% less |
-| **Llama 3.1 (8B) Alpaca**      | [▶️ Start for free](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Llama3.1_(8B)-Alpaca.ipynb)               | 2x faster | 70% less |
-| **Llama 3.2 Conversational**      | [▶️ Start for free](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Llama3.2_(1B_and_3B)-Conversational.ipynb)               | 2x faster | 70% less |
-| **Orpheus-TTS (3B)**     | [▶️ Start for free](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Orpheus_(3B)-TTS.ipynb)               | 1.5x faster | 50% less |
-
-- See all our notebooks for: [Kaggle](https://github.com/unslothai/notebooks?tab=readme-ov-file#-kaggle-notebooks), [GRPO](https://unsloth.ai/docs/get-started/unsloth-notebooks#grpo-reasoning-rl-notebooks), [TTS](https://unsloth.ai/docs/get-started/unsloth-notebooks#text-to-speech-tts-notebooks), [embedding](https://unsloth.ai/docs/new/embedding-finetuning) & [Vision](https://unsloth.ai/docs/get-started/unsloth-notebooks#vision-multimodal-notebooks)
-- See [all our models](https://unsloth.ai/docs/get-started/unsloth-model-catalog) and [all our notebooks](https://unsloth.ai/docs/get-started/unsloth-notebooks)
-- See detailed documentation for Unsloth [here](https://unsloth.ai/docs)
-
-## 🦥 Unsloth News
-- **AMD training**: Train, run RL, chat and deploy on AMD GPUs across Windows, WSL and Linux. [Guide](https://unsloth.ai/docs/basics/amd)
-- **Local models for any agent**: Use `unsloth start` with Claude Code, Codex, Hermes, OpenCode, OpenClaw and more through Unsloth's OpenAI- and Anthropic-compatible APIs. [Guide](https://unsloth.ai/docs/basics/api)
-- **GLM-5.2**: Run Z.ai's 744B-parameter, 1M-context open model locally with Unsloth Dynamic GGUFs. [Guide](https://unsloth.ai/docs/models/glm-5.2)
-- **DeepSeek-V4**: Run DeepSeek-V4-Flash locally with corrected multi-turn and tool-calling behavior. [Guide](https://unsloth.ai/docs/models/deepseek-v4)
-- **Gemma 4**: Run and train Gemma 4 text, image and audio models with QAT, MTP, GGUF and MLX support. [Guide](https://unsloth.ai/docs/models/gemma-4)
-- **MCP servers**: Connect local models to files, apps, databases and external tools through Model Context Protocol. [Guide](https://unsloth.ai/docs/basics/mcp)
-- **New models**: [Qwen-AgentWorld](https://huggingface.co/unsloth/Qwen-AgentWorld-35B-A3B-GGUF), [Ornith](https://huggingface.co/unsloth/models?search=ornith), [Kimi K2.7 Code](https://unsloth.ai/docs/models/kimi-k2.7-code) and [MiniMax M3](https://unsloth.ai/docs/models/minimax-m3)
-
-<details>
-  <summary>More News</summary>
-
-  - **Connections**: Mix local models with API providers (OpenAI, Anthropic) or servers (vLLM, Ollama) in the same interface. [Guide](https://unsloth.ai/docs/integrations/connections)
-  - **Introducing Unsloth Studio**: our new web UI for running and training LLMs. [Blog](https://unsloth.ai/docs/new/studio)
-  - **DiffusionGemma**: Run and fine-tune Google's diffusion language model with 1.8x faster inference in Unsloth Studio. [Guide](https://unsloth.ai/docs/models/diffusiongemma)
-  - **Qwen3.6**: Run and train Qwen3.6 with MTP for 1.4-2.2x faster inference and NVFP4 quants for supported GPUs. [Guide](https://unsloth.ai/docs/models/qwen3.6)
-  - Train **MoE LLMs 12x faster** with 35% less VRAM - DeepSeek, GLM, Qwen and gpt-oss. [Blog](https://unsloth.ai/docs/new/faster-moe)
-  - **Embedding models**: Unsloth now supports ~1.8-3.3x faster embedding fine-tuning. [Blog](https://unsloth.ai/docs/new/embedding-finetuning) • [Notebooks](https://unsloth.ai/docs/get-started/unsloth-notebooks#embedding-models)
-  - New **7x longer context RL** vs. all other setups, via our new batching algorithms. [Blog](https://unsloth.ai/docs/new/grpo-long-context)
-  - New RoPE & MLP **Triton Kernels** & **Padding Free + Packing**: 3x faster training & 30% less VRAM. [Blog](https://unsloth.ai/docs/new/3x-faster-training-packing)
-  - **500K Context**: Training a 20B model with >500K context is now possible on an 80GB GPU. [Blog](https://unsloth.ai/docs/blog/500k-context-length-fine-tuning)
-  - **FP8 & Vision RL**: You can now do FP8 & VLM GRPO on consumer GPUs. [FP8 Blog](https://unsloth.ai/docs/get-started/reinforcement-learning-rl-guide/fp8-reinforcement-learning) • [Vision RL](https://unsloth.ai/docs/get-started/reinforcement-learning-rl-guide/vision-reinforcement-learning-vlm-rl)
-
-</details>
-
-## 📥 Advanced Installation
-The below advanced instructions are for Unsloth Studio. For Unsloth Core advanced installation, [view our docs](https://unsloth.ai/docs/get-started/install/pip-install#advanced-pip-installation).
-
-#### Developer / Nightly / Experimental installs: macOS, Linux, WSL:
-The developer install builds from the `main` branch, which is the latest (nightly) source.
-```bash
-git clone https://github.com/unslothai/unsloth
-cd unsloth
-./install.sh --local
-unsloth studio -p 8888
-```
-To install into an isolated location, set `UNSLOTH_STUDIO_HOME`:
-```bash
-UNSLOTH_STUDIO_HOME="$PWD/.studio" ./install.sh --local
-UNSLOTH_STUDIO_HOME="$PWD/.studio" unsloth studio -p 8888
-```
-Then to update:
-```bash
-cd unsloth && git pull
-./install.sh --local
-unsloth studio -p 8888
-```
-
-#### Developer / Nightly / Experimental installs: Windows PowerShell:
-The developer install builds from the `main` branch, which is the latest (nightly) source.
-```powershell
-git clone https://github.com/unslothai/unsloth.git
-cd unsloth
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\install.ps1 --local
-unsloth studio -p 8888
-```
-To install into an isolated location, set `UNSLOTH_STUDIO_HOME`:
-```powershell
-$env:UNSLOTH_STUDIO_HOME="$PWD\.studio"; .\install.ps1 --local
-$env:UNSLOTH_STUDIO_HOME="$PWD\.studio"; unsloth studio -p 8888
-```
-Then to update:
-```powershell
-cd unsloth; git pull
-.\install.ps1 --local
-unsloth studio -p 8888
-```
-
-#### Advanced launch options
-
-Skip PyTorch (GGUF-only mode):
-```bash
-curl -fsSL https://unsloth.ai/install.sh | UNSLOTH_NO_TORCH=1 sh
-```
-```powershell
-$env:UNSLOTH_NO_TORCH=1; irm https://unsloth.ai/install.ps1 | iex
-```
-
-Skip the post-install prompt that starts Unsloth (useful for automated installs):
-```bash
-curl -fsSL https://unsloth.ai/install.sh | UNSLOTH_SKIP_AUTOSTART=1 sh
-```
-```powershell
-$env:UNSLOTH_SKIP_AUTOSTART=1; irm https://unsloth.ai/install.ps1 | iex
-```
-
-Pinning the Python version:
-```bash
-curl -fsSL https://unsloth.ai/install.sh | UNSLOTH_PYTHON=3.12 sh
-```
-```powershell
-$env:UNSLOTH_PYTHON='3.12'; irm https://unsloth.ai/install.ps1 | iex
-```
-
-Install to a custom location with `UNSLOTH_STUDIO_HOME`:
-```bash
-curl -fsSL https://unsloth.ai/install.sh | UNSLOTH_STUDIO_HOME=/abs/path sh
-```
-```powershell
-$env:UNSLOTH_STUDIO_HOME='C:\path'; irm https://unsloth.ai/install.ps1 | iex
-```
-
-Point the frontend build at a corporate npm mirror/proxy with `UNSLOTH_NPM_REGISTRY`:
-```bash
-UNSLOTH_NPM_REGISTRY=https://artifactory.example.com/api/npm/npm/ ./install.sh --local
-```
-```powershell
-$env:UNSLOTH_NPM_REGISTRY='https://artifactory.example.com/api/npm/npm/'; .\install.ps1 --local
-```
-
-Cap Unsloth's native CPU thread pools on high-core hosts: `UNSLOTH_CPU_THREADS=8 unsloth studio -p 8888`.
-
-#### Vulkan, custom llama.cpp backends:
-
-You can force the backend during installation: 
-```bash
-export UNSLOTH_LLAMA_CPP_BACKEND=vulkan   # or cpu, cuda, rocm, auto
-curl -fsSL https://unsloth.ai/install.sh | sh
-```
-```powershell
-$env:UNSLOTH_LLAMA_CPP_BACKEND="vulkan"   # or cpu, cuda, rocm, auto
-irm https://unsloth.ai/install.ps1 | iex
-```
-
-#### Uninstall
-
-**MacOS, WSL, Linux:** `curl -fsSL https://raw.githubusercontent.com/unslothai/unsloth/main/scripts/uninstall.sh | sh`
-
-**Windows (PowerShell):** `irm https://raw.githubusercontent.com/unslothai/unsloth/main/scripts/uninstall.ps1 | iex`
-
-For more info, [see our docs](https://unsloth.ai/docs/new/studio/install#uninstall).
-
-#### Deleting model files
-
-You can delete old model files either from the bin icon in model search or by removing the relevant cached model folder from the default Hugging Face cache directory. By default, HF uses:
-
-**MacOS, Linux, WSL:** `~/.cache/huggingface/hub/`
-
-**Windows:** `%USERPROFILE%\.cache\huggingface\hub\`
-
-## 💚 Community and Links
-| Type                                                                                                                                      | Links                                                                          |
-| ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| <img width="16" src="https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/66e3d80db9971f10a9757c99_Symbol.svg" />  **Discord**                       | [Join Discord server](https://discord.com/invite/unsloth)                          |
-| <img width="15" src="https://redditinc.com/hs-fs/hubfs/Reddit%20Inc/Brand/Reddit_Logo.png" />  **r/unsloth Reddit**                       | [Join Reddit community](https://reddit.com/r/unsloth)                          |
-| 📚 **Documentation & Wiki**                                                                                                               | [Read Our Docs](https://unsloth.ai/docs)                                       |
-| <img width="13" src="https://upload.wikimedia.org/wikipedia/commons/0/09/X_(formerly_Twitter)_logo_late_2025.svg" />  **Twitter (aka X)** | [Follow us on X](https://twitter.com/unslothai)                                |
-| 🔮 **Our Models**                                                                                                                         | [Unsloth Catalog](https://unsloth.ai/docs/get-started/unsloth-model-catalog)   |
-| ✍️ **Blog**                                                                                                                               | [Read our Blogs](https://unsloth.ai/blog)                                      |
-
-### Citation
-
-You can cite the Unsloth repo as follows:
-```bibtex
-@software{unsloth,
-  author = {Daniel Han, Michael Han and Unsloth team},
-  title = {Unsloth},
-  url = {https://github.com/unslothai/unsloth},
-  year = {2023}
-}
-```
-If you trained a model with 🦥Unsloth, you can use this cool sticker!   <img src="https://raw.githubusercontent.com/unslothai/unsloth/main/images/made with unsloth.png" width="200" align="center" />
-
-### License
-Unsloth uses a dual-licensing model of Apache 2.0 and AGPL-3.0. The core Unsloth package remains licensed under **[Apache 2.0](https://github.com/unslothai/unsloth?tab=Apache-2.0-1-ov-file)**, while certain optional components, such as the Unsloth Studio UI are licensed under the open-source license **[AGPL-3.0](https://github.com/unslothai/unsloth?tab=AGPL-3.0-2-ov-file)**.
-
-This structure helps support ongoing Unsloth development while keeping the project open source and enabling the broader ecosystem to continue growing.
-
-### Thank You to
-- The [llama.cpp library](https://github.com/ggml-org/llama.cpp) that lets users run and save models with Unsloth
-- The Hugging Face team and their libraries: [transformers](https://github.com/huggingface/transformers) and [TRL](https://github.com/huggingface/trl)
-- The Pytorch and [Torch AO](https://github.com/unslothai/unsloth/pull/3391) team for their contributions
-- NVIDIA for their [NeMo DataDesigner](https://github.com/NVIDIA-NeMo/DataDesigner) library and their contributions
-- And of course for every single person who has contributed or has used Unsloth!
+<footer>
+  XOne includes open-source components and technical foundations originally developed with Unsloth AI. See the repository notices for attribution and licensing details.
+</footer>
