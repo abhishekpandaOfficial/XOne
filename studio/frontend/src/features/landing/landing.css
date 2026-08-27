@@ -225,3 +225,26 @@
 @media (prefers-reduced-motion: reduce) {
   .xone-landing *, .xone-landing *::before, .xone-landing *::after { scroll-behavior: auto !important; animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
 }
+.xone-theme-toggle { display: inline-grid; width: 34px; height: 34px; place-items: center; padding: 0; border: 1px solid rgba(255,255,255,.14); border-radius: 9px; color: #d8d9e3; background: rgba(255,255,255,.05); cursor: pointer; }
+.xone-theme-toggle svg { width: 16px; height: 16px; }
+.xone-theme-toggle:hover { border-color: rgba(255,255,255,.3); background: rgba(255,255,255,.1); }
+:root.light .xone-landing { --xl-bg: #f5f7f8; --xl-panel: rgba(255,255,255,.86); --xl-border: rgba(20,31,43,.14); --xl-muted: #5f6975; --xl-violet: #6554c8; --xl-cyan: #087f8d; color: #15212d; background: #f5f7f8; }
+:root.light .xone-landing .xone-nav { border-color: rgba(20,31,43,.12); background: linear-gradient(180deg, rgba(245,247,248,.94), rgba(245,247,248,.72)); }
+:root.light .xone-landing .xone-nav nav, :root.light .xone-landing .xone-trust-row, :root.light .xone-landing .xone-footer { color: #63707d; }
+:root.light .xone-landing .xone-nav nav a:hover, :root.light .xone-landing .xone-text-link:hover, :root.light .xone-landing .xone-footer a:hover { color: #14202b; }
+:root.light .xone-landing .xone-brand-link > small { border-color: rgba(20,31,43,.14); color: #66717c; }
+:root.light .xone-landing .xone-eyebrow { border-color: rgba(101,84,200,.22); color: #5b4daf; background: rgba(101,84,200,.08); }
+:root.light .xone-landing .xone-hero h1 span, :root.light .xone-landing .xone-identity-sticky h2 em { background-image: linear-gradient(105deg, #15212d 2%, #6554c8 55%, #087f8d); }
+:root.light .xone-landing .xone-hero-copy > p, :root.light .xone-landing .xone-section-heading p, :root.light .xone-landing .xone-card-copy p, :root.light .xone-landing .xone-desktop-copy > p, :root.light .xone-landing .xone-download-copy > p { color: #596674; }
+:root.light .xone-landing .xone-console, :root.light .xone-landing .xone-feature-card, :root.light .xone-landing .xone-capability-grid article, :root.light .xone-landing .xone-media-grid > article, :root.light .xone-landing .xone-code-card, :root.light .xone-landing .xone-doc-links { border-color: rgba(20,31,43,.14); background: linear-gradient(145deg, rgba(255,255,255,.94), rgba(235,240,243,.9)); box-shadow: 0 25px 65px rgba(30,47,62,.12), inset 0 1px rgba(255,255,255,.8); }
+:root.light .xone-landing .xone-console-bar, :root.light .xone-landing .xone-media-toolbar, :root.light .xone-landing .xone-code-title { border-color: rgba(20,31,43,.1); color: #63707d; }
+:root.light .xone-landing .xone-metric-strip, :root.light .xone-landing .xone-metric-strip > div, :root.light .xone-landing .xone-desktop-window, :root.light .xone-landing .xone-auth-card { background: #edf1f3; }
+:root.light .xone-landing .xone-metric-strip strong, :root.light .xone-landing .xone-floating-card strong, :root.light .xone-landing .xone-card-copy h3, :root.light .xone-landing .xone-capability-grid h3, :root.light .xone-landing .xone-desktop-window-body strong { color: #182633; }
+:root.light .xone-landing .xone-trace-row, :root.light .xone-landing .xone-router-preview, :root.light .xone-landing .xone-token-preview, :root.light .xone-landing .xone-audio-workflow, :root.light .xone-landing .xone-video-workflow { border-color: rgba(20,31,43,.12); background: rgba(235,240,243,.78); }
+:root.light .xone-landing .xone-floating-card, :root.light .xone-landing .xone-orbit-node, :root.light .xone-landing .xone-platform-list > a, :root.light .xone-landing .xone-install-guide article { border-color: rgba(20,31,43,.14); color: #263542; background: rgba(255,255,255,.82); box-shadow: 0 12px 30px rgba(30,47,62,.1); }
+:root.light .xone-landing .xone-download-section, :root.light .xone-landing .xone-desktop-story, :root.light .xone-landing .xone-auth-section { border-color: rgba(20,31,43,.1); background: #eaf0f2; }
+:root.light .xone-landing .xone-button-ghost { border-color: rgba(20,31,43,.16); color: #1e2c38 !important; background: rgba(255,255,255,.65); }
+:root.light .xone-landing .xone-button-ghost:hover { border-color: rgba(20,31,43,.28); background: #fff; }
+:root.light .xone-landing .xone-theme-toggle { border-color: rgba(20,31,43,.16); color: #5b4daf; background: rgba(255,255,255,.72); }
+:root.light .xone-landing .xone-theme-toggle:hover { border-color: rgba(20,31,43,.3); background: #fff; }
+:root.light .xone-landing .xone-ambient::after { background-image: linear-gradient(rgba(20,31,43,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(20,31,43,.045) 1px, transparent 1px); }

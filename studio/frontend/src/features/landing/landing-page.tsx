@@ -31,6 +31,7 @@ import {
   Zap,
 } from "lucide-react";
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
+import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 import { type CSSProperties, type ReactNode, useEffect, useState } from "react";
 import {
   detectDesktopTarget,
@@ -316,10 +317,11 @@ export function LandingPage() {
           <a href="#platform">Platform</a>
           <a href="#intelligence">Engine</a>
           <a href="#downloads">Download</a>
-          <a href="#docs">Docs</a>
+          <Link to="/docs">Docs</Link>
         </nav>
         <div className="xone-nav-actions">
           <Link to="/login" className="xone-text-link">Sign in</Link>
+          <AnimatedThemeToggler className="xone-theme-toggle" aria-label="Toggle light and dark mode" />
           <a href="#downloads" className="xone-button xone-button-light">Get XOne <ArrowRight size={15} /></a>
         </div>
       </header>

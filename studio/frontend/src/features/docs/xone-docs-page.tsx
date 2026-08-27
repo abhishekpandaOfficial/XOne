@@ -7,6 +7,7 @@ import {
   ServerCog, ShieldCheck, Terminal, Workflow,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 import { XONE_BRAND, XONE_LINKS } from "@/xone";
 import "./xone-docs.css";
 
@@ -33,7 +34,7 @@ export function XOneDocsPage() {
     <div className="xone-docs-page">
       <header className="xone-docs-header">
         <Link to="/" className="xone-docs-brand" aria-label="XOne home"><img src={XONE_BRAND.icons.app} alt="" /><span>XOne</span></Link>
-        <div className="xone-docs-header-actions"><Link to="/" className="xone-docs-header-link">Product</Link><a href={XONE_LINKS.repository} target="_blank" rel="noreferrer" className="xone-docs-header-link">Source <ArrowRight size={14} /></a><Link to="/login" className="xone-docs-header-button">Open workspace <ChevronRight size={15} /></Link></div>
+        <div className="xone-docs-header-actions"><Link to="/" className="xone-docs-header-link">Product</Link><a href={XONE_LINKS.repository} target="_blank" rel="noreferrer" className="xone-docs-header-link">Source <ArrowRight size={14} /></a><AnimatedThemeToggler className="xone-docs-theme-toggle" aria-label="Toggle light and dark mode" /><Link to="/login" className="xone-docs-header-button">Open workspace <ChevronRight size={15} /></Link></div>
       </header>
       <div className="xone-docs-layout">
         <aside className="xone-docs-sidebar"><span className="xone-docs-eyebrow">X1 SYSTEM DOCUMENTATION</span><strong>Build on your own infrastructure.</strong><nav aria-label="XOne documentation sections">{sections.map(([label, href, Icon]) => <a href={href} key={label}><Icon size={15} />{label}<ChevronRight size={13} /></a>)}</nav><div className="xone-docs-sidebar-note"><ShieldCheck size={15} /><span>Local-first by default. Cloud connectivity is opt-in.</span></div></aside>
