@@ -48,11 +48,17 @@ test("the dedicated XOne workflow publishes every stable portal asset", async ()
 
 test("XOne Docs is first-party and documents the local operating loop", async () => {
   const route = await readSource("../src/app/routes/docs.tsx");
+  const aliasRoute = await readSource("../src/app/routes/doc.tsx");
+  const root = await readSource("../src/app/routes/__root.tsx");
   const docs = await readSource("../src/features/docs/xone-docs-page.tsx");
   assert.match(route, /path: "\/docs"/);
+  assert.match(aliasRoute, /path: "\/doc"/);
+  assert.match(root, /location\.pathname === "\/docs"/);
+  assert.match(root, /location\.pathname === "\/doc"/);
   assert.match(docs, /MCP & AGENTS/);
   assert.match(docs, /RAG & KNOWLEDGE/);
   assert.match(docs, /xone studio --api-only --secure/);
+  assert.match(aliasRoute, /redirect\(\{ to: "\/docs" \}\)/);
   assert.doesNotMatch(docs, /unsloth studio|unsloth start/);
 });
 
