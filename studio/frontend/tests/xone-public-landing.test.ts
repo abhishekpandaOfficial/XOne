@@ -42,6 +42,7 @@ test("public sign-in redirects into a local desktop download notice", async () =
   const docs = await readSource("../src/features/docs/xone-docs-page.tsx");
   const landingCss = await readSource("../src/features/landing/landing.css");
   const docsCss = await readSource("../src/features/docs/xone-docs.css");
+  const rootRoute = await readSource("../src/app/routes/__root.tsx");
   assert.match(loginRoute, /isLocalWorkspaceHost/);
   assert.match(loginRoute, /notice: "cloud-coming-soon"/);
   assert.match(loginRoute, /host === "localhost"/);
@@ -54,10 +55,11 @@ test("public sign-in redirects into a local desktop download notice", async () =
   assert.doesNotMatch(docs, /to="\/login"/);
   assert.doesNotMatch(docs, /Open workspace/);
   assert.match(docs, /Download Desktop/);
-  assert.match(landingCss, /\.xone-nav \{ position: fixed/);
-  assert.match(landingCss, /padding-top: 82px/);
+  assert.match(landingCss, /\.xone-nav \{ position: sticky/);
+  assert.match(landingCss, /overflow: visible/);
   assert.match(landingCss, /xone-cloud-notice/);
-  assert.match(docsCss, /\.xone-docs-header\{position:fixed!important/);
+  assert.match(docsCss, /\.xone-docs-header\{position:sticky!important/);
+  assert.match(rootRoute, /overflow-y-auto overflow-x-hidden/);
 });
 
 test("XOne defaults to light mode on first paint and first store read", async () => {
