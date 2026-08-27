@@ -7,11 +7,11 @@
 // allows script-src 'self'.
 try {
   // Storage reads get their own guards so a blocked localStorage (private
-  // browsing) still resolves a mode from the OS preference.
-  var theme = "system";
+  // browsing) still paints the product default: light mode.
+  var theme = "light";
   var palette = null;
   try {
-    theme = localStorage.getItem("theme") || "system";
+    theme = localStorage.getItem("theme") || "light";
     palette = localStorage.getItem("palette");
   } catch (e) {}
   var dark =

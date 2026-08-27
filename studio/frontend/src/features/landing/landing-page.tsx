@@ -2,7 +2,7 @@
 // Copyright 2026-present the Unsloth AI Inc. team. All rights reserved. See /studio/LICENSE.AGPL-3.0
 
 import { Link } from "@tanstack/react-router";
-import { GithubIcon, GoogleIcon } from "@hugeicons/core-free-icons";
+import { GithubIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ArrowRight,
@@ -10,7 +10,6 @@ import {
   BarChart3,
   BookOpen,
   Check,
-  ChevronRight,
   CircleDot,
   Clapperboard,
   Command,
@@ -28,6 +27,7 @@ import {
   Terminal,
   WandSparkles,
   Workflow,
+  X,
   Zap,
 } from "lucide-react";
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
@@ -88,6 +88,55 @@ function CopyCommand({ value, label }: { value: string; label: string }) {
       {copied ? <Check size={14} /> : <Copy size={14} />}
       {copied ? "Copied" : label}
     </button>
+  );
+}
+
+function CloudComingSoonNotice({
+  downloadHref,
+  onClose,
+}: {
+  downloadHref: string;
+  onClose: () => void;
+}) {
+  return (
+    <motion.div
+      className="xone-cloud-notice-backdrop"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      role="presentation"
+    >
+      <motion.section
+        className="xone-cloud-notice"
+        initial={{ opacity: 0, y: 22, scale: 0.96 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.48, ease: [0.22, 1, 0.36, 1] }}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="xone-cloud-notice-title"
+      >
+        <button type="button" className="xone-cloud-notice-close" onClick={onClose} aria-label="Close cloud version notice">
+          <X size={16} />
+        </button>
+        <div className="xone-cloud-notice-orbit" aria-hidden="true"><i /><i /><i /></div>
+        <div className="xone-cloud-notice-icon" aria-hidden="true"><MonitorUp /><ShieldCheck /></div>
+        <span className="xone-status-chip">CLOUD VERSION COMING SOON</span>
+        <h2 id="xone-cloud-notice-title">Use XOne Desktop for your private local workspace.</h2>
+        <p>
+          Hosted cloud access is not open yet. Download the desktop app to run XOne locally,
+          keep your private data on your machine, and use the local runtime without waiting for cloud access.
+        </p>
+        <div className="xone-cloud-notice-points">
+          <span><Check size={14} /> Private data stays local</span>
+          <span><Check size={14} /> Managed desktop runtime</span>
+          <span><Check size={14} /> Local models, agents, and API</span>
+        </div>
+        <div className="xone-cloud-notice-actions">
+          <a className="xone-button xone-button-primary" href={downloadHref}>Download Desktop <Download size={16} /></a>
+          <a className="xone-button xone-button-ghost" href="#downloads" onClick={onClose}>View all builds <ArrowRight size={16} /></a>
+        </div>
+      </motion.section>
+    </motion.div>
   );
 }
 
@@ -284,6 +333,7 @@ function IdentityChapterVisual({ index }: { index: number }) {
 
 export function LandingPage() {
   const [recommendedTarget, setRecommendedTarget] = useState<DesktopTarget | null>(null);
+  const [showCloudNotice, setShowCloudNotice] = useState(false);
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 115, damping: 28, mass: 0.32 });
@@ -302,11 +352,32 @@ export function LandingPage() {
   const recommended = XONE_DESKTOP_DOWNLOADS.find(
     (download) => download.id === recommendedTarget,
   );
+  const primaryDownloadHref = recommended?.href ?? XONE_LATEST_RELEASE_URL;
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    setShowCloudNotice(params.get("notice") === "cloud-coming-soon");
+  }, []);
+
+  function dismissCloudNotice() {
+    setShowCloudNotice(false);
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.href);
+    url.searchParams.delete("notice");
+    window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+  }
 
   return (
     <div className="xone-landing">
       <motion.div className="xone-scroll-progress" style={{ scaleX: progress }} aria-hidden="true" />
       <div className="xone-ambient" aria-hidden="true"><i /><i /><i /></div>
+      {showCloudNotice && (
+        <CloudComingSoonNotice
+          downloadHref={primaryDownloadHref}
+          onClose={dismissCloudNotice}
+        />
+      )}
       <header className="xone-nav">
         <a href="#top" className="xone-brand-link" aria-label="XOne home">
           <BrandMark />
@@ -320,9 +391,8 @@ export function LandingPage() {
           <Link to="/docs">Docs</Link>
         </nav>
         <div className="xone-nav-actions">
-          <Link to="/login" className="xone-text-link">Sign in</Link>
           <AnimatedThemeToggler className="xone-theme-toggle" aria-label="Toggle light and dark mode" />
-          <a href="#downloads" className="xone-button xone-button-light">Get XOne <ArrowRight size={15} /></a>
+          <a href="#downloads" className="xone-button xone-button-light">Download Desktop <Download size={15} /></a>
         </div>
       </header>
 
@@ -341,8 +411,13 @@ export function LandingPage() {
               XOne brings model operations, token intelligence, and live analytics together—on your machine.
             </p>
             <div className="xone-hero-actions">
-              <a href="#downloads" className="xone-button xone-button-primary">Download XOne <Download size={16} /></a>
-              <Link to="/login" className="xone-button xone-button-ghost">Open local workspace <ChevronRight size={16} /></Link>
+              <a href="#downloads" className="xone-button xone-button-primary">Download Desktop <Download size={16} /></a>
+              <a href="#live-preview" className="xone-button xone-button-ghost">Watch live preview <ArrowRight size={16} /></a>
+            </div>
+            <div className="xone-hero-live-preview" aria-label="Live desktop preview">
+              <span><CircleDot size={12} /> Live desktop preview</span>
+              <div aria-hidden="true"><i /><i /><i /></div>
+              <code>models · files · agents · local API</code>
             </div>
             <div className="xone-trust-row">
               <span><ShieldCheck size={15} /> Local-first</span>
@@ -351,6 +426,7 @@ export function LandingPage() {
             </div>
           </motion.div>
           <motion.div
+            id="live-preview"
             className="xone-hero-visual"
             style={{ y: heroMarkY, rotate: heroMarkRotate }}
             initial={{ opacity: 0, scale: 0.965, y: 20 }}
@@ -504,7 +580,7 @@ export function LandingPage() {
               </p>
               <div className="xone-download-actions">
                 {recommended && (
-                  <a className="xone-button xone-button-primary" href={recommended.href}>Download recommended <Download size={16} /></a>
+                  <a className="xone-button xone-button-primary" href={recommended.href}>Download Desktop <Download size={16} /></a>
                 )}
                 <a className="xone-button xone-button-ghost" href={XONE_LATEST_RELEASE_URL} target="_blank" rel="noreferrer">Release notes <ArrowRight size={16} /></a>
                 <a className="xone-button xone-button-ghost" href="#docs">Build from source <Terminal size={16} /></a>
@@ -561,20 +637,6 @@ export function LandingPage() {
           </div>
         </section>
 
-        <section className="xone-section xone-auth-section">
-          <div>
-            <BrandMark />
-            <span>YOUR LOCAL WORKSPACE</span>
-            <h2>One identity surface.<br />No false promises.</h2>
-            <p>Use your device-local password today. Google, GitHub, and email accounts will activate only when the cloud identity service and provider credentials are configured.</p>
-          </div>
-          <div className="xone-auth-card">
-            <div className="xone-auth-provider-row"><button disabled aria-label="Google login coming soon"><HugeiconsIcon icon={GoogleIcon} size={17} /> Google <small>Coming soon</small></button><button disabled aria-label="GitHub login coming soon"><HugeiconsIcon icon={GithubIcon} size={17} /> GitHub <small>Coming soon</small></button></div>
-            <div className="xone-auth-divider"><span>available now</span></div>
-            <Link to="/login" className="xone-button xone-button-primary">Continue with local password <ArrowRight size={16} /></Link>
-            <p><LockKeyhole size={13} /> Credentials stay with this XOne installation.</p>
-          </div>
-        </section>
       </main>
 
       <footer className="xone-footer">

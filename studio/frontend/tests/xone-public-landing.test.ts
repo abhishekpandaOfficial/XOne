@@ -27,10 +27,46 @@ test("the landing page uses stable official release downloads and honest signing
   assert.match(downloads, /XOne-Desktop-Linux-x64\.AppImage/);
   assert.match(downloads, /SHA256SUMS\.txt/);
   assert.match(source, /detectDesktopTarget/);
+  assert.match(source, /Download Desktop/);
+  assert.match(source, /Live desktop preview/);
   assert.match(source, /System Settings → Privacy &amp; Security → Open Anyway/);
   assert.match(source, /More info → Run anyway/);
-  assert.match(source, /Google[\s\S]*Coming soon/);
-  assert.match(source, /GitHub[\s\S]*Coming soon/);
+  assert.doesNotMatch(source, /to="\/login"/);
+  assert.doesNotMatch(source, /Open local workspace/);
+  assert.doesNotMatch(source, /xone-auth-section/);
+});
+
+test("public sign-in redirects into a local desktop download notice", async () => {
+  const loginRoute = await readSource("../src/app/routes/login.tsx");
+  const landing = await readSource("../src/features/landing/landing-page.tsx");
+  const docs = await readSource("../src/features/docs/xone-docs-page.tsx");
+  const landingCss = await readSource("../src/features/landing/landing.css");
+  const docsCss = await readSource("../src/features/docs/xone-docs.css");
+  assert.match(loginRoute, /isLocalWorkspaceHost/);
+  assert.match(loginRoute, /notice: "cloud-coming-soon"/);
+  assert.match(loginRoute, /host === "localhost"/);
+  assert.match(loginRoute, /\^192\\\.168\\\./);
+  assert.match(landing, /CloudComingSoonNotice/);
+  assert.match(landing, /CLOUD VERSION COMING SOON/);
+  assert.match(landing, /Private data stays local/);
+  assert.match(landing, /Download Desktop/);
+  assert.doesNotMatch(landing, /Sign in/);
+  assert.doesNotMatch(docs, /to="\/login"/);
+  assert.doesNotMatch(docs, /Open workspace/);
+  assert.match(docs, /Download Desktop/);
+  assert.match(landingCss, /\.xone-nav \{ position: fixed/);
+  assert.match(landingCss, /padding-top: 82px/);
+  assert.match(landingCss, /xone-cloud-notice/);
+  assert.match(docsCss, /\.xone-docs-header\{position:fixed!important/);
+});
+
+test("XOne defaults to light mode on first paint and first store read", async () => {
+  const boot = await readSource("../public/theme-boot.js");
+  const themeStore = await readSource("../src/features/settings/stores/theme-store.ts");
+  assert.match(boot, /var theme = "light"/);
+  assert.match(boot, /localStorage\.getItem\("theme"\) \|\| "light"/);
+  assert.match(themeStore, /return "light";/);
+  assert.match(themeStore, /function getServerSnapshot\(\): Theme \{\n  return "light";\n\}/);
 });
 
 test("the dedicated XOne workflow publishes every stable portal asset", async () => {
