@@ -859,7 +859,7 @@ _CSP_SCRIPT_NONCE_HEADER = "x-internal-script-nonce"
 _ARTIFACT_PREVIEW_FRAME_PATH = "/api/inference/artifact-preview-frame"
 _DOCS_FONT_CSS = "https://fonts.googleapis.com"
 _DOCS_FONT_FILES = "https://fonts.gstatic.com"
-_DOCS_PATHS = frozenset({"/docs", "/docs/oauth2-redirect", "/redoc"})
+_DOCS_PATHS = frozenset({"/api/docs", "/api/docs/oauth2-redirect", "/api/redoc"})
 _DOCS_ASSETS_URL = "/docs-assets"
 _DOCS_ASSETS_DIR = Path(__file__).parent / "assets" / "docs_ui"
 
@@ -973,10 +973,11 @@ class SecurityHeadersMiddleware:
 app.add_middleware(SecurityHeadersMiddleware)
 
 
-# Swagger UI and ReDoc, on FastAPI's own paths but served entirely from this origin.
+# Swagger UI and ReDoc, under /api so /docs can belong to the XOne product
+# documentation in the frontend while these pages remain same-origin.
 # FastAPI's built-in pages load ~2.3 MB of JavaScript from cdn.jsdelivr.net and start it with
-# an inline script. localStorage is origin-scoped, not path-scoped, so anything running on
-# /docs can read the Studio tokens session.ts keeps there and call the API as that user. The
+# an inline script. localStorage is origin-scoped, not path-scoped, so anything running on an
+# API docs page can read the Studio tokens session.ts keeps there and call the API as that user. The
 # bundles are vendored under assets/docs_ui (pinned + digest-checked by
 # tests/test_docs_ui_assets.py) and the inline init runs off the same per-response nonce the
 # bootstrap script uses, so script-src stays 'self' and works offline as a bonus.
@@ -1018,26 +1019,26 @@ if _DOCS_ASSETS_DIR.is_dir():
         """
         return f"{request.scope.get('root_path', '').rstrip('/')}{path}"
 
-    @app.get("/docs", include_in_schema = False)
+    @app.get("/api/docs", include_in_schema = False)
     async def swagger_ui_html(request: Request):
         assets = _docs_url(request, _DOCS_ASSETS_URL)
         html = get_swagger_ui_html(
             openapi_url = _docs_url(request, app.openapi_url),
             title = f"{app.title} - Swagger UI",
-            oauth2_redirect_url = _docs_url(request, "/docs/oauth2-redirect"),
+            oauth2_redirect_url = _docs_url(request, "/api/docs/oauth2-redirect"),
             swagger_js_url = f"{assets}/swagger-ui-bundle.js",
             swagger_css_url = f"{assets}/swagger-ui.css",
             swagger_favicon_url = f"{assets}/favicon-32x32.png",
         ).body.decode()
         return _nonced_docs_response(html, tag = _SWAGGER_INIT_TAG)
 
-    @app.get("/docs/oauth2-redirect", include_in_schema = False)
+    @app.get("/api/docs/oauth2-redirect", include_in_schema = False)
     async def swagger_ui_redirect():
         # This page is nothing but an inline script, so it needs the nonce too.
         html = get_swagger_ui_oauth2_redirect_html().body.decode()
         return _nonced_docs_response(html, tag = _OAUTH2_REDIRECT_TAG)
 
-    @app.get("/redoc", include_in_schema = False)
+    @app.get("/api/redoc", include_in_schema = False)
     async def redoc_html(request: Request):
         assets = _docs_url(request, _DOCS_ASSETS_URL)
         # ReDoc's bundle carries no inline init, so this one needs no nonce.

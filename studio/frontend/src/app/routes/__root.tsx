@@ -246,7 +246,13 @@ export const Route = createRootRoute({
   beforeLoad: async ({ location }) => {
     // The public web landing page must render even when a local backend is not
     // running. Native XOne still resolves its device capabilities normally.
-    if (location.pathname === "/" && !isTauri) return;
+    if (
+      !isTauri &&
+      (location.pathname === "/" ||
+        location.pathname === "/docs" ||
+        location.pathname === "/doc")
+    )
+      return;
     // Fetch platform info before the chat-only guard. fetchDeviceType caches,
     // so later navigations are instant.
     await fetchDeviceType();
@@ -263,7 +269,13 @@ export const Route = createRootRoute({
   component: RootLayout,
 });
 
-const HIDDEN_NAVBAR_ROUTES = ["/", "/login", "/change-password"];
+const HIDDEN_NAVBAR_ROUTES = [
+  "/",
+  "/docs",
+  "/doc",
+  "/login",
+  "/change-password",
+];
 
 // Fallback when no matched route declares a `staticData.title`.
 const DEFAULT_DOCUMENT_TITLE = XONE_BRAND.name;

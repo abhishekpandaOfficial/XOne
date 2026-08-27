@@ -22,6 +22,7 @@ import { Route as changePasswordRoute } from "./routes/change-password";
 import { Route as settingsRoute } from "./routes/settings";
 import { Route as studioRoute } from "./routes/studio";
 import { Route as docsRoute } from "./routes/docs";
+import { Route as docRoute } from "./routes/doc";
 
 const routeTree = rootRoute.addChildren([
   indexRoute,
@@ -40,6 +41,7 @@ const routeTree = rootRoute.addChildren([
   dataRecipeRoute,
   apiMonitorRoute,
   docsRoute,
+  docRoute,
 ]);
 
 function DefaultNotFound() {
