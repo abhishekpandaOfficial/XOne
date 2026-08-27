@@ -148,20 +148,54 @@ production deployment must track `xone/main`, never the upstream `main` branch.
 
 ### Publish the desktop application
 
-Desktop packages should be produced by GitHub Actions and attached to GitHub
-Releases, not deployed to Vercel. Tauri builds separate platform artifacts:
+Desktop packages are produced by the dedicated **Release XOne Desktop Alpha**
+GitHub Actions workflow and attached to GitHub Releases, not deployed to
+Vercel. It creates these stable filenames, which the portal links directly:
 
-- macOS: signed and notarized `.dmg` for Apple Silicon, with an Intel build when
-  Intel support is required.
-- Windows: signed NSIS `.exe` installer.
-- Linux: `.deb` and AppImage artifacts.
+- `XOne-Desktop-macOS-Apple-Silicon.dmg`
+- `XOne-Desktop-macOS-Intel.dmg`
+- `XOne-Desktop-Windows-x64.exe`
+- `XOne-Desktop-Linux-x64.deb`
+- `XOne-Desktop-Linux-x64.AppImage`
+- `SHA256SUMS.txt`
 
-Before publishing, configure the repository's protected release environment,
-Apple signing/notarization credentials, Windows code-signing credentials, and
-Tauri updater signing keys. The current release workflow is inherited from the
-upstream project and still contains upstream release/version assumptions; it
-must not be dispatched as an XOne public release until a dedicated XOne release
-channel and signing identity have been reviewed.
+To publish the first downloadable alpha:
+
+1. Make the GitHub repository public, or publish the assets from a separate
+   public download repository. GitHub requires authentication to download
+   assets from a private repository, so a private release cannot support public
+   portal downloads.
+2. In **GitHub → Settings → Actions → General → Workflow permissions**, allow
+   workflows to create repository content. The publish job itself requests only
+   `contents: write`.
+3. Merge the reviewed workflow into the branch that will be released. Open
+   **Actions → Release XOne Desktop Alpha → Run workflow**, select that branch,
+   enter a new SemVer such as `0.1.0-alpha.1`, and run it.
+4. Wait for all four platform builds and the publish job to pass. Confirm the
+   new normal release is marked **Latest**, contains exactly the five installers
+   plus `SHA256SUMS.txt`, and test one clean installation per platform.
+5. Redeploy the web portal if needed. Its `/releases/latest/download/<filename>`
+   links will automatically follow the newly published latest release, so the
+   site does not need a version edit for every desktop release.
+
+The alpha workflow uses ad-hoc signing on macOS and no certificate on Windows.
+Users may therefore see Gatekeeper or SmartScreen confirmation. Before calling
+the desktop build production-ready, configure Apple Developer ID signing and
+notarization plus a trusted Windows code-signing certificate. Auto-update stays
+disabled, and users install a later alpha manually from the release page.
+
+Installation:
+
+- macOS: download the correct Apple Silicon or Intel DMG, open it, and drag
+  X1-Studio into Applications. For the ad-hoc alpha, use **System Settings →
+  Privacy & Security → Open Anyway** if Gatekeeper blocks the first launch.
+- Windows: run the x64 EXE. Review the unsigned-alpha warning, then choose
+  **More info → Run anyway** only when the file came from the official XOne
+  release and its SHA-256 matches `SHA256SUMS.txt`.
+- Debian/Ubuntu: run
+  `sudo apt install ./XOne-Desktop-Linux-x64.deb`.
+- Other x64 Linux: run `chmod +x XOne-Desktop-Linux-x64.AppImage`, then launch
+  the AppImage.
 
 ### Deploy the backend
 

@@ -1,0 +1,282 @@
+name: Release XOne Desktop Alpha
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "SemVer without a leading v, for example 0.1.0-alpha.1"
+        required: true
+        default: "0.1.0-alpha.1"
+        type: string
+      release_notes:
+        description: "Short release summary"
+        required: true
+        default: "First XOne Desktop alpha for local AI workflows."
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-xone-desktop
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    name: Validate release request
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      tag: ${{ steps.version.outputs.tag }}
+    steps:
+      - name: Validate version
+        id: version
+        shell: bash
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          import re
+          import sys
+
+          version = os.environ["INPUT_VERSION"].strip()
+          semver = re.compile(
+              r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)"
+              r"(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?"
+              r"(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$"
+          )
+          if not semver.fullmatch(version):
+              sys.exit(f"Invalid SemVer: {version!r}. Use a value such as 0.1.0-alpha.1")
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              print(f"version={version}", file=output)
+              print(f"tag=xone-v{version}", file=output)
+          PY
+
+      - name: Refuse an existing tag or release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          set -euo pipefail
+          if gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${RELEASE_TAG}" >/dev/null 2>&1; then
+            echo "Tag ${RELEASE_TAG} already exists. Choose a new version." >&2
+            exit 1
+          fi
+
+  build:
+    name: Build ${{ matrix.label }}
+    needs: validate
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: macOS Apple Silicon
+            runner: macos-latest
+            rust_target: aarch64-apple-darwin
+            bundles: dmg
+            asset_kind: macos-arm64
+          - label: macOS Intel
+            runner: macos-latest
+            rust_target: x86_64-apple-darwin
+            bundles: dmg
+            asset_kind: macos-x64
+          - label: Windows x64
+            runner: windows-latest
+            rust_target: x86_64-pc-windows-msvc
+            bundles: nsis
+            asset_kind: windows-x64
+          - label: Linux x64
+            runner: ubuntu-22.04
+            rust_target: x86_64-unknown-linux-gnu
+            bundles: deb,appimage
+            asset_kind: linux-x64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 75
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install Linux desktop dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev \
+            libxdo-dev libssl-dev patchelf xdg-utils \
+            gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-libav
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            studio/package-lock.json
+            studio/frontend/package-lock.json
+
+      - name: Setup Python for cross-platform staging
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.13"
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8
+        with:
+          toolchain: stable
+          targets: ${{ matrix.rust_target }}
+
+      - name: Cache Rust build
+        uses: swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6
+        with:
+          workspaces: studio/src-tauri -> target
+
+      - name: Install locked JavaScript dependencies
+        run: |
+          npm ci --prefix studio
+          npm ci --prefix studio/frontend
+
+      - name: Create release version override
+        shell: bash
+        env:
+          RELEASE_VERSION: ${{ needs.validate.outputs.version }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import pathlib
+
+          config = {"version": os.environ["RELEASE_VERSION"]}
+          path = pathlib.Path("studio/src-tauri/tauri.release-version.conf.json")
+          path.write_text(json.dumps(config, indent=2) + "\n", encoding="utf-8")
+          PY
+
+      - name: Build XOne bundles
+        id: tauri
+        uses: tauri-apps/tauri-action@84b9d35b5fc46c1e45415bdb6144030364f7ebc5 # v0.6.2
+        env:
+          # Ad-hoc signing keeps Apple Silicon bundles structurally signed. Public,
+          # warning-free macOS distribution still requires Apple credentials and
+          # notarization; see studio/src-tauri/icons/xone/README.md.
+          APPLE_SIGNING_IDENTITY: ${{ runner.os == 'macOS' && '-' || '' }}
+        with:
+          projectPath: studio
+          tauriScript: npx --prefix . tauri
+          args: >-
+            --target ${{ matrix.rust_target }}
+            --bundles ${{ matrix.bundles }}
+            --config src-tauri/tauri.alpha-release.conf.json
+            --config src-tauri/tauri.release-version.conf.json
+
+      - name: Stage stable portal asset names
+        shell: bash
+        env:
+          ARTIFACT_PATHS: ${{ steps.tauri.outputs.artifactPaths }}
+          ASSET_KIND: ${{ matrix.asset_kind }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import os
+          import pathlib
+          import shutil
+          import sys
+
+          paths = [pathlib.Path(value) for value in json.loads(os.environ["ARTIFACT_PATHS"])]
+          paths = [path for path in paths if path.is_file()]
+          kind = os.environ["ASSET_KIND"]
+          mappings = {
+              "macos-arm64": [(".dmg", "XOne-Desktop-macOS-Apple-Silicon.dmg")],
+              "macos-x64": [(".dmg", "XOne-Desktop-macOS-Intel.dmg")],
+              "windows-x64": [("-setup.exe", "XOne-Desktop-Windows-x64.exe")],
+              "linux-x64": [
+                  (".deb", "XOne-Desktop-Linux-x64.deb"),
+                  (".AppImage", "XOne-Desktop-Linux-x64.AppImage"),
+              ],
+          }
+          output = pathlib.Path(os.environ["RUNNER_TEMP"], "xone-release-assets")
+          output.mkdir(parents=True, exist_ok=True)
+          staged = []
+          for suffix, name in mappings[kind]:
+              matches = [path for path in paths if path.name.endswith(suffix)]
+              if len(matches) != 1:
+                  sys.exit(f"Expected one {suffix} artifact for {kind}, found: {matches}")
+              shutil.copy2(matches[0], output / name)
+              staged.append(name)
+          print("\n".join(staged))
+          PY
+
+      - name: Upload platform bundles
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: xone-release-${{ matrix.asset_kind }}
+          path: ${{ runner.temp }}/xone-release-assets/*
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 2
+
+  publish:
+    name: Publish GitHub Release
+    needs: [validate, build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - name: Download all platform bundles
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          pattern: xone-release-*
+          path: ${{ runner.temp }}/xone-release-assets
+          merge-multiple: true
+
+      - name: Validate assets and generate checksums
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/xone-release-assets"
+          expected=(
+            XOne-Desktop-macOS-Apple-Silicon.dmg
+            XOne-Desktop-macOS-Intel.dmg
+            XOne-Desktop-Windows-x64.exe
+            XOne-Desktop-Linux-x64.deb
+            XOne-Desktop-Linux-x64.AppImage
+          )
+          for asset in "${expected[@]}"; do
+            test -s "$asset" || { echo "Missing release asset: $asset" >&2; exit 1; }
+          done
+          test "$(find . -maxdepth 1 -type f | wc -l | tr -d ' ')" = "${#expected[@]}"
+          sha256sum "${expected[@]}" > SHA256SUMS.txt
+
+      - name: Publish normal release for stable latest-download URLs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ needs.validate.outputs.tag }}
+          RELEASE_VERSION: ${{ needs.validate.outputs.version }}
+          RELEASE_NOTES: ${{ inputs.release_notes }}
+        run: |
+          set -euo pipefail
+          notes="$RUNNER_TEMP/xone-release-notes.md"
+          cat > "$notes" <<EOF
+          # XOne Desktop ${RELEASE_VERSION}
+
+          ${RELEASE_NOTES}
+
+          This is an early XOne alpha. The binaries are reproducibly built by GitHub Actions.
+          macOS uses ad-hoc signing and Windows is unsigned until production signing credentials
+          are configured, so the operating system may request explicit confirmation.
+
+          Verify the downloaded file against \`SHA256SUMS.txt\` before installing.
+          EOF
+          gh release create "$RELEASE_TAG" \
+            "$RUNNER_TEMP/xone-release-assets"/* \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "XOne Desktop ${RELEASE_VERSION}" \
+            --notes-file "$notes" \
+            --latest

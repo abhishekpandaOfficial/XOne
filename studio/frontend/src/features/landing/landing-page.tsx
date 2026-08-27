@@ -31,52 +31,22 @@ import {
   Zap,
 } from "lucide-react";
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
-import { type CSSProperties, type ReactNode, useEffect, useMemo, useState } from "react";
-import { XONE_BRAND, XONE_LINKS } from "@/xone";
+import { type CSSProperties, type ReactNode, useEffect, useState } from "react";
+import {
+  detectDesktopTarget,
+  type DesktopTarget,
+  XONE_BRAND,
+  XONE_CHECKSUMS_URL,
+  XONE_DESKTOP_DOWNLOADS,
+  XONE_LATEST_RELEASE_URL,
+  XONE_LINKS,
+} from "@/xone";
 import "./landing.css";
-
-type Platform = "mac" | "windows" | "linux" | "unknown";
-
-const RELEASES_URL = "https://github.com/abhishekpandaOfficial/XOne/releases";
 const SOURCE_SETUP = `git clone --branch xone/main https://github.com/abhishekpandaOfficial/XOne.git
 cd XOne
 ./install.sh --local
 xone studio`;
 
-const PLATFORM_OPTIONS: Array<{
-  id: Exclude<Platform, "unknown">;
-  name: string;
-  detail: string;
-  formats: string;
-}> = [
-  {
-    id: "mac",
-    name: "macOS",
-    detail: "Apple Silicon and Intel",
-    formats: ".dmg",
-  },
-  {
-    id: "windows",
-    name: "Windows",
-    detail: "Windows 10 and later",
-    formats: ".exe",
-  },
-  {
-    id: "linux",
-    name: "Linux",
-    detail: "Ubuntu and compatible distros",
-    formats: ".deb · AppImage",
-  },
-];
-
-function detectPlatform(): Platform {
-  if (typeof navigator === "undefined") return "unknown";
-  const value = `${navigator.platform ?? ""} ${navigator.userAgent ?? ""}`;
-  if (/Mac|iPhone|iPad/i.test(value)) return "mac";
-  if (/Win/i.test(value)) return "windows";
-  if (/Linux|X11/i.test(value)) return "linux";
-  return "unknown";
-}
 
 function BrandMark({ className = "" }: { className?: string }) {
   return (
@@ -312,17 +282,24 @@ function IdentityChapterVisual({ index }: { index: number }) {
 }
 
 export function LandingPage() {
-  const [platform, setPlatform] = useState<Platform>("unknown");
+  const [recommendedTarget, setRecommendedTarget] = useState<DesktopTarget | null>(null);
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 115, damping: 28, mass: 0.32 });
   const heroMarkY = useTransform(scrollYProgress, [0, 0.22], [0, reduceMotion ? 0 : 130]);
   const heroMarkRotate = useTransform(scrollYProgress, [0, 0.22], [0, reduceMotion ? 0 : 12]);
-  useEffect(() => setPlatform(detectPlatform()), []);
+  useEffect(() => {
+    let active = true;
+    void detectDesktopTarget().then((target) => {
+      if (active) setRecommendedTarget(target);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
 
-  const recommended = useMemo(
-    () => PLATFORM_OPTIONS.find((option) => option.id === platform),
-    [platform],
+  const recommended = XONE_DESKTOP_DOWNLOADS.find(
+    (download) => download.id === recommendedTarget,
   );
 
   return (
@@ -516,30 +493,50 @@ export function LandingPage() {
         <section id="downloads" className="xone-section xone-download-section">
           <div className="xone-download-shell">
             <div className="xone-download-copy">
-              <span className="xone-status-chip">PRIVATE ALPHA · SOURCE AVAILABLE</span>
-              <h2>{recommended ? `XOne for ${recommended.name}` : "XOne Desktop for every workstation"}</h2>
+              <span className="xone-status-chip">DESKTOP ALPHA · GITHUB RELEASES</span>
+              <h2>{recommended ? `XOne for ${recommended.platform}` : "XOne Desktop for every workstation"}</h2>
               <p>
                 {recommended
-                  ? `We detected ${recommended.name}. ${recommended.detail} builds will appear in the XOne release channel after they are signed and reviewed.`
-                  : "Choose macOS, Windows, or Linux. Signed XOne binaries will appear in the release channel after review."}
+                  ? `Recommended for this device: ${recommended.architecture} ${recommended.format}. You can choose another build at any time.`
+                  : "Choose the macOS, Windows, or Linux build that matches your processor and package manager."}
               </p>
               <div className="xone-download-actions">
-                <a className="xone-button xone-button-primary" href={RELEASES_URL} target="_blank" rel="noreferrer">View release channel <ArrowRight size={16} /></a>
+                {recommended && (
+                  <a className="xone-button xone-button-primary" href={recommended.href}>Download recommended <Download size={16} /></a>
+                )}
+                <a className="xone-button xone-button-ghost" href={XONE_LATEST_RELEASE_URL} target="_blank" rel="noreferrer">Release notes <ArrowRight size={16} /></a>
                 <a className="xone-button xone-button-ghost" href="#docs">Build from source <Terminal size={16} /></a>
               </div>
-              <small>No XOne binary assets are published yet. This page will never redirect you to an unverified installer.</small>
+              <small>Downloads come directly from the official XOne GitHub Release. Verify the file with <a href={XONE_CHECKSUMS_URL}>SHA256SUMS.txt</a>.</small>
             </div>
             <div className="xone-platform-list">
-              {PLATFORM_OPTIONS.map((option) => (
-                <a key={option.id} href={RELEASES_URL} target="_blank" rel="noreferrer" className={platform === option.id ? "is-recommended" : ""}>
+              {XONE_DESKTOP_DOWNLOADS.map((download) => (
+                <a key={download.id} href={download.href} className={recommendedTarget === download.id ? "is-recommended" : ""}>
                   <span className="xone-platform-icon"><Laptop size={20} /></span>
-                  <span><strong>{option.name}</strong><small>{option.detail}</small></span>
-                  <span className="xone-platform-format">{option.formats}</span>
-                  {platform === option.id && <em>Recommended</em>}
+                  <span><strong>{download.platform}</strong><small>{download.architecture}</small></span>
+                  <span className="xone-platform-format">{download.format}</span>
+                  {recommendedTarget === download.id && <em>Recommended</em>}
                   <Download size={17} />
                 </a>
               ))}
             </div>
+          </div>
+          <div className="xone-install-guide">
+            <article>
+              <span>01 · macOS</span>
+              <h3>Open the DMG</h3>
+              <p>Drag X1-Studio to Applications, then open it. Alpha builds are ad-hoc signed, so macOS may require <strong>System Settings → Privacy &amp; Security → Open Anyway</strong>.</p>
+            </article>
+            <article>
+              <span>02 · Windows</span>
+              <h3>Run the installer</h3>
+              <p>Open the downloaded EXE and complete setup. The alpha is currently unsigned, so review the publisher warning before choosing <strong>More info → Run anyway</strong>.</p>
+            </article>
+            <article>
+              <span>03 · Linux</span>
+              <h3>Install or run</h3>
+              <p>Install the DEB with <code>sudo apt install ./XOne-Desktop-Linux-x64.deb</code>, or mark the AppImage executable and launch it.</p>
+            </article>
           </div>
         </section>
 

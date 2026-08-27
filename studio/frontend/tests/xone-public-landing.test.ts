@@ -16,13 +16,34 @@ test("the web root is public while native XOne keeps its workspace redirect", as
   assert.match(source, /isAuthFlow: true/);
 });
 
-test("the landing page is honest about downloads and future identity providers", async () => {
+test("the landing page uses stable official release downloads and honest signing guidance", async () => {
   const source = await readSource("../src/features/landing/landing-page.tsx");
-  assert.match(source, /No XOne binary assets are published yet/);
-  assert.match(source, /This page will never redirect you to an unverified installer/);
+  const downloads = await readSource("../src/xone/desktop-downloads.ts");
+  assert.match(downloads, /XONE_LATEST_RELEASE_URL}\/download\/\$\{filename}/);
+  assert.match(downloads, /XOne-Desktop-macOS-Apple-Silicon\.dmg/);
+  assert.match(downloads, /XOne-Desktop-macOS-Intel\.dmg/);
+  assert.match(downloads, /XOne-Desktop-Windows-x64\.exe/);
+  assert.match(downloads, /XOne-Desktop-Linux-x64\.deb/);
+  assert.match(downloads, /XOne-Desktop-Linux-x64\.AppImage/);
+  assert.match(downloads, /SHA256SUMS\.txt/);
+  assert.match(source, /detectDesktopTarget/);
+  assert.match(source, /System Settings → Privacy &amp; Security → Open Anyway/);
+  assert.match(source, /More info → Run anyway/);
   assert.match(source, /Google[\s\S]*Coming soon/);
   assert.match(source, /GitHub[\s\S]*Coming soon/);
-  assert.match(source, /Apple Silicon and Intel/);
+});
+
+test("the dedicated XOne workflow publishes every stable portal asset", async () => {
+  const workflow = await readSource("../../../.github/workflows/release-xone-desktop.yml");
+  assert.match(workflow, /workflow_dispatch:/);
+  assert.match(workflow, /XOne-Desktop-macOS-Apple-Silicon\.dmg/);
+  assert.match(workflow, /XOne-Desktop-macOS-Intel\.dmg/);
+  assert.match(workflow, /XOne-Desktop-Windows-x64\.exe/);
+  assert.match(workflow, /XOne-Desktop-Linux-x64\.deb/);
+  assert.match(workflow, /XOne-Desktop-Linux-x64\.AppImage/);
+  assert.match(workflow, /SHA256SUMS\.txt/);
+  assert.match(workflow, /gh release create/);
+  assert.match(workflow, /--latest/);
 });
 
 test("local password recovery is discoverable without the old password", async () => {
