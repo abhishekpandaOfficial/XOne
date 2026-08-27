@@ -5,6 +5,10 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
+      "source": "/downloads/:filename",
+      "destination": "https://github.com/abhishekpandaOfficial/XOne/releases/latest/download/:filename"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

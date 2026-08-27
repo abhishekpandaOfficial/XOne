@@ -21,7 +21,7 @@ export const XONE_RELEASES_URL = "https://github.com/abhishekpandaOfficial/XOne/
 export const XONE_LATEST_RELEASE_URL = `${XONE_RELEASES_URL}/latest`;
 
 const latestAsset = (filename: string) =>
-  `${XONE_LATEST_RELEASE_URL}/download/${filename}`;
+  `/downloads/${encodeURIComponent(filename)}`;
 
 export const XONE_CHECKSUMS_URL = latestAsset("SHA256SUMS.txt");
 

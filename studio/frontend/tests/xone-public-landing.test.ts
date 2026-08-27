@@ -19,7 +19,7 @@ test("the web root is public while native XOne keeps its workspace redirect", as
 test("the landing page uses stable official release downloads and honest signing guidance", async () => {
   const source = await readSource("../src/features/landing/landing-page.tsx");
   const downloads = await readSource("../src/xone/desktop-downloads.ts");
-  assert.match(downloads, /XONE_LATEST_RELEASE_URL}\/download\/\$\{filename}/);
+  assert.match(downloads, /\/downloads\/\$\{encodeURIComponent\(filename\)\}/);
   assert.match(downloads, /XOne-Desktop-macOS-Apple-Silicon\.dmg/);
   assert.match(downloads, /XOne-Desktop-macOS-Intel\.dmg/);
   assert.match(downloads, /XOne-Desktop-Windows-x64\.exe/);
