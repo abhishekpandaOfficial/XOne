@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="studio/src-tauri/icons/xone/icon.png" alt="XOne" width="96" />
+  <img src="studio/frontend/public/xone/xone-pulse.gif" alt="XOne animated mark" width="112" />
 </p>
 
 <h1 align="center">XOne</h1>
@@ -14,33 +14,72 @@
   <a href="https://github.com/abhishekpandaOfficial/XOne/issues">Support</a>
 </p>
 
+<p align="center">
+  <img src="https://img.shields.io/github/v/release/abhishekpandaOfficial/XOne?display_name=tag&sort=semver&color=79d8cc&label=latest%20release" alt="Latest release" />
+  <img src="https://img.shields.io/github/actions/workflow/status/abhishekpandaOfficial/XOne/release-xone-desktop.yml?label=desktop%20release&color=79d8cc" alt="Desktop release workflow" />
+  <img src="https://img.shields.io/github/license/abhishekpandaOfficial/XOne?color=79d8cc" alt="License" />
+  <img src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-121820?color=79d8cc" alt="Supported platforms" />
+</p>
+
+<p align="center">
+  <code>LOCAL-FIRST</code>&nbsp;&nbsp; <code>MODEL-AGNOSTIC</code>&nbsp;&nbsp; <code>MCP-READY</code>&nbsp;&nbsp; <code>OPENAI-COMPATIBLE</code>
+</p>
+
 XOne brings local inference, private knowledge retrieval, Model Context Protocol
 (MCP) tools, training, export, and OpenAI-compatible serving into one observable
 workspace. **X1** is the compact mark; **XOne** is the product.
 
+<p align="center">
+  <img src="studio/src-tauri/icons/xone/icon.png" alt="XOne application icon" width="48" />
+  <br />
+  <sub>One workspace. Observable local intelligence.</sub>
+</p>
+
+## Technology Stack
+
+<p>
+  <img src="https://img.shields.io/badge/React_19-20232A?logo=react&logoColor=61DAFB" alt="React 19" />
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white" alt="Vite" />
+  <img src="https://img.shields.io/badge/Tauri_2-FFC131?logo=tauri&logoColor=111820" alt="Tauri 2" />
+  <img src="https://img.shields.io/badge/Rust-000000?logo=rust&logoColor=white" alt="Rust" />
+  <img src="https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white" alt="Python" />
+  <img src="https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white" alt="FastAPI" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/SQLite-003B57?logo=sqlite&logoColor=white" alt="SQLite" />
+</p>
+
+| Domain             | Stack                                                             |
+| ------------------ | ----------------------------------------------------------------- |
+| Web and desktop UI | React 19, TypeScript, Vite, Tailwind CSS, TanStack Router, Motion |
+| Native application | Tauri 2, Rust, operating-system WebView                           |
+| Control plane      | Python, FastAPI, Uvicorn, Pydantic, JWT, SQLite                   |
+| Model execution    | Transformers, llama.cpp / GGUF, MLX on Apple Silicon              |
+| Delivery           | Vercel portal, GitHub Actions, GitHub Releases                    |
+
 ## Product Surface
 
-| Capability | What it provides |
-| --- | --- |
-| **Local inference** | Hardware-aware model loading, GGUF workflows, chat, vision, audio, and video capabilities. |
-| **Model operations** | Discover, download, inspect, load, unload, and monitor models from one hub. |
-| **Private knowledge** | Prepare documents and datasets for retrieval-augmented generation (RAG) with grounded context. |
-| **MCP and agents** | Connect coding agents and approved tools through explicit, reviewable capability boundaries. |
-| **Training** | Build datasets, run LoRA or QLoRA workflows, track metrics, and evaluate outputs. |
-| **Export and serving** | Export deployable artifacts and expose local models through an OpenAI-compatible API. |
-| **Desktop runtime** | X1-Studio manages the local backend and keeps model, credential, and runtime state close to the device. |
+| Capability             | What it provides                                                                                        |
+| ---------------------- | ------------------------------------------------------------------------------------------------------- |
+| **Local inference**    | Hardware-aware model loading, GGUF workflows, chat, vision, audio, and video capabilities.              |
+| **Model operations**   | Discover, download, inspect, load, unload, and monitor models from one hub.                             |
+| **Private knowledge**  | Prepare documents and datasets for retrieval-augmented generation (RAG) with grounded context.          |
+| **MCP and agents**     | Connect coding agents and approved tools through explicit, reviewable capability boundaries.            |
+| **Training**           | Build datasets, run LoRA or QLoRA workflows, track metrics, and evaluate outputs.                       |
+| **Export and serving** | Export deployable artifacts and expose local models through an OpenAI-compatible API.                   |
+| **Desktop runtime**    | X1-Studio manages the local backend and keeps model, credential, and runtime state close to the device. |
 
 ## Download XOne Desktop
 
 The latest release provides installers for the supported platforms:
 
-| Platform | Package |
-| --- | --- |
+| Platform            | Package                                                                                                                     |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | macOS Apple Silicon | [Download DMG](https://github.com/abhishekpandaOfficial/XOne/releases/latest/download/XOne-Desktop-macOS-Apple-Silicon.dmg) |
-| macOS Intel | [Download DMG](https://github.com/abhishekpandaOfficial/XOne/releases/latest/download/XOne-Desktop-macOS-Intel.dmg) |
-| Windows x64 | [Download installer](https://github.com/abhishekpandaOfficial/XOne/releases/latest/download/XOne-Desktop-Windows-x64.exe) |
-| Debian / Ubuntu x64 | [Download DEB](https://github.com/abhishekpandaOfficial/XOne/releases/latest/download/XOne-Desktop-Linux-x64.deb) |
-| Linux x64 | [Download AppImage](https://github.com/abhishekpandaOfficial/XOne/releases/latest/download/XOne-Desktop-Linux-x64.AppImage) |
+| macOS Intel         | [Download DMG](https://github.com/abhishekpandaOfficial/XOne/releases/latest/download/XOne-Desktop-macOS-Intel.dmg)         |
+| Windows x64         | [Download installer](https://github.com/abhishekpandaOfficial/XOne/releases/latest/download/XOne-Desktop-Windows-x64.exe)   |
+| Debian / Ubuntu x64 | [Download DEB](https://github.com/abhishekpandaOfficial/XOne/releases/latest/download/XOne-Desktop-Linux-x64.deb)           |
+| Linux x64           | [Download AppImage](https://github.com/abhishekpandaOfficial/XOne/releases/latest/download/XOne-Desktop-Linux-x64.AppImage) |
 
 Verify downloads with the published [SHA256SUMS.txt](https://github.com/abhishekpandaOfficial/XOne/releases/latest/download/SHA256SUMS.txt).
 
@@ -164,13 +203,13 @@ X1-Studio Desktop / XOne Web Portal
   Model runtimes · RAG · MCP · Training · Export
 ```
 
-| Layer | Technology |
-| --- | --- |
-| Web interface | React, TypeScript, Vite, Tailwind CSS, TanStack Router, Motion |
-| Desktop shell | Tauri 2 and Rust |
-| Backend | Python, FastAPI, Uvicorn, Pydantic, JWT, SQLite |
-| Model runtimes | Transformers, llama.cpp / GGUF, MLX on Apple Silicon |
-| Delivery | Vercel for the portal and GitHub Releases for desktop installers |
+| Layer          | Technology                                                       |
+| -------------- | ---------------------------------------------------------------- |
+| Web interface  | React, TypeScript, Vite, Tailwind CSS, TanStack Router, Motion   |
+| Desktop shell  | Tauri 2 and Rust                                                 |
+| Backend        | Python, FastAPI, Uvicorn, Pydantic, JWT, SQLite                  |
+| Model runtimes | Transformers, llama.cpp / GGUF, MLX on Apple Silicon             |
+| Delivery       | Vercel for the portal and GitHub Releases for desktop installers |
 
 ## Development
 
